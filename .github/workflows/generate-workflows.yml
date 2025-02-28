@@ -60,7 +60,7 @@ jobs:
       - name: Checkout private-downstream-ci
         uses: actions/checkout@v4
         with:
-          repository: ecmwf-actions/private-downstream-ci
+          repository: ecmwf/private-downstream-ci
           ref: main
           token: ${{ secrets.REBUILD_PUSH_TOKEN }}
           path: private-downstream-ci

@@ -365,8 +365,7 @@ class Workflow:
                     needs.append("clang-format")
                     s = {
                         "uses": (
-                            "ecmwf-actions/reusable-workflows/"
-                            "build-package-with-config@v2"
+                            "ecmwf/reusable-workflows/build-package-with-config@v2"
                         ),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
@@ -378,9 +377,9 @@ class Workflow:
                         },
                     }
                     if not self.private:
-                        s["with"][
-                            "codecov_token"
-                        ] = "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
+                        s["with"]["codecov_token"] = (
+                            "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
+                        )
                         s["with"]["codecov_upload"] = (
                             "${{ contains(needs.setup.outputs.trigger_pkgs, "
                             "github.job) && inputs.codecov_upload }}"
@@ -398,8 +397,7 @@ class Workflow:
                             "name": "Build dependencies",
                             "id": "build-deps",
                             "uses": (
-                                "ecmwf-actions/reusable-workflows/"
-                                "build-package-with-config@v2"
+                                "ecmwf/reusable-workflows/build-package-with-config@v2"
                             ),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
@@ -412,16 +410,16 @@ class Workflow:
                             },
                         }
                         if self.private:
-                            s["with"][
-                                "github_token"
-                            ] = "${{ secrets.GH_REPO_READ_TOKEN }}"
+                            s["with"]["github_token"] = (
+                                "${{ secrets.GH_REPO_READ_TOKEN }}"
+                            )
                         if build_package_python:
                             s["with"]["python_version"] = build_package_python
                         steps.append(s)
                         for path in mkdir:
                             steps.append({"run": f"mkdir -p {path}"})
                         ci_python_step = {
-                            "uses": "ecmwf-actions/reusable-workflows/ci-python@v2",
+                            "uses": "ecmwf/reusable-workflows/ci-python@v2",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "lib_path": (
@@ -452,18 +450,18 @@ class Workflow:
                                 "&& needs.setup.outputs.py_codecov_platform "
                                 "== matrix.name }}"
                             )
-                            ci_python_step["with"][
-                                "codecov_token"
-                            ] = "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
+                            ci_python_step["with"]["codecov_token"] = (
+                                "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
+                            )
                         else:
-                            ci_python_step["with"][
-                                "github_token"
-                            ] = "${{ secrets.GH_REPO_READ_TOKEN }}"
+                            ci_python_step["with"]["github_token"] = (
+                                "${{ secrets.GH_REPO_READ_TOKEN }}"
+                            )
                         steps.append(ci_python_step)
                     else:
                         # pure python package
                         ci_python_step = {
-                            "uses": "ecmwf-actions/reusable-workflows/ci-python@v2",
+                            "uses": "ecmwf/reusable-workflows/ci-python@v2",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "checkout": True,
@@ -489,13 +487,13 @@ class Workflow:
                                 "&& needs.setup.outputs.py_codecov_platform "
                                 "== matrix.name }}"
                             )
-                            ci_python_step["with"][
-                                "codecov_token"
-                            ] = "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
+                            ci_python_step["with"]["codecov_token"] = (
+                                "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
+                            )
                         else:
-                            ci_python_step["with"][
-                                "github_token"
-                            ] = "${{ secrets.GH_REPO_READ_TOKEN }}"
+                            ci_python_step["with"]["github_token"] = (
+                                "${{ secrets.GH_REPO_READ_TOKEN }}"
+                            )
                         steps.append(ci_python_step)
             if self.wf_type == "build-package-hpc":
                 runs_on = [
@@ -504,7 +502,7 @@ class Workflow:
                     "hpc",
                 ]
                 s = {
-                    "uses": "ecmwf-actions/reusable-workflows/ci-hpc@v2",
+                    "uses": "ecmwf/reusable-workflows/ci-hpc@v2",
                     "with": {
                         "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
                         "github_token": "${{ secrets.GH_REPO_READ_TOKEN }}",
@@ -580,7 +578,7 @@ class Workflow:
                 "name": "checkout reusable wfs repo",
                 "uses": "actions/checkout@v4",
                 "with": {
-                    "repository": "ecmwf-actions/downstream-ci",
+                    "repository": "ecmwf/downstream-ci",
                     "ref": downstream_ci_ref,
                 },
             }
@@ -714,7 +712,7 @@ def main():
         print("=" * 10)
         with open(PurePath(args.output, name + ".yml"), "w") as f:
             f.write(
-                f"{'#\n'*3}# This is a file generated by generate-workflows.py - DO NOT EDIT!!\n{'#\n'*3}"
+                f"{'#\n' * 3}# This is a file generated by generate-workflows.py - DO NOT EDIT!!\n{'#\n' * 3}"
             )
             yaml.dump(
                 wf,
