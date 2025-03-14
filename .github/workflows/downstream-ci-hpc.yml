@@ -753,8 +753,9 @@ jobs:
     - eccodes-python
     - eccodes
     - ecbuild
+    - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.cfgrib_matrix && (needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.cfgrib)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'cfgrib') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.cfgrib_matrix && (needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.cfgrib)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'cfgrib') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.cfgrib_matrix) }}
@@ -775,7 +776,9 @@ jobs:
         dependencies: |-
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.ecbuild }}
-        python_dependencies: ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
         python_requirements: ci/requirements-tests.in
   earthkit:
     name: earthkit
@@ -790,11 +793,12 @@ jobs:
     - odc
     - eckit
     - ecbuild
+    - findlibs
     - earthkit-geo
     - earthkit-meteo
     - earthkit-regrid
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit_matrix) }}
@@ -824,6 +828,7 @@ jobs:
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
@@ -840,8 +845,9 @@ jobs:
     - odc
     - eckit
     - ecbuild
+    - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-data_matrix) }}
@@ -870,6 +876,7 @@ jobs:
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
         python_toml_opt_dep_sections: all,test,ci
   earthkit-geo:
     name: earthkit-geo
@@ -1248,8 +1255,9 @@ jobs:
     needs:
     - eccodes
     - ecbuild
+    - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.eccodes-python_matrix && (needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes-python)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'eccodes-python') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.eccodes-python_matrix && (needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.eccodes-python)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'eccodes-python') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.eccodes-python_matrix) }}
@@ -1271,7 +1279,7 @@ jobs:
         dependencies: |-
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.ecbuild }}
-        python_dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
   ecflow:
     name: ecflow
     needs:
@@ -1478,8 +1486,9 @@ jobs:
     - eccodes
     - eckit
     - ecbuild
+    - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pygribjump_matrix && (needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.pygribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pygribjump') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pygribjump_matrix && (needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pygribjump') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pygribjump_matrix) }}
@@ -1504,7 +1513,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
-        python_dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
         python_toml_opt_dep_sections: dev
   infero:
     name: infero
@@ -1770,8 +1779,9 @@ jobs:
     - eccodes-python
     - eccodes
     - ecbuild
+    - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pdbufr_matrix && (needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.pdbufr)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pdbufr') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pdbufr_matrix && (needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pdbufr)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pdbufr') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pdbufr_matrix) }}
@@ -1792,7 +1802,9 @@ jobs:
         dependencies: |-
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.ecbuild }}
-        python_dependencies: ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
         python_requirements: tests/downstream-ci-requirements.txt
   plume:
     name: plume
@@ -1834,8 +1846,9 @@ jobs:
     - eccodes
     - eckit
     - ecbuild
+    - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyfdb_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.pyfdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyfdb') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyfdb_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pyfdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyfdb') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pyfdb_matrix) }}
@@ -1859,15 +1872,16 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
-        python_dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
   pyodc:
     name: pyodc
     needs:
     - odc
     - eckit
     - ecbuild
+    - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyodc_matrix && (needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.pyodc)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyodc') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyodc_matrix && (needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pyodc)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyodc') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pyodc_matrix) }}
@@ -1889,7 +1903,7 @@ jobs:
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
-        python_dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
   skinnywms:
     name: skinnywms
     needs:
