@@ -308,6 +308,9 @@ libaec:
 mars-server-bundle:
   type: cmake
   private: true
+  private-downstream-ci:
+    optional_matrix:
+      - gnu@rocky-9.5
 
 metkit:
   type: cmake
@@ -431,12 +434,12 @@ covjsonkit:
     config_path: ""
 
 danu:
-   type: python
-   master_branch: main
-   requirements_path: requirements.txt
-   test_cmd: "python -m pytest"
-   conda_deps: "'numpy<2' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics"
-   downstream-ci:
-     config_path: ""
-   downstream-ci-hpc:
-     config_path: ".github/ci-hpc-config.yml" 
+  type: python
+  master_branch: main
+  requirements_path: requirements.txt
+  test_cmd: "python -m pytest"
+  conda_deps: "'numpy<2' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics"
+  downstream-ci:
+    config_path: ""
+  downstream-ci-hpc:
+    config_path: ".github/ci-hpc-config.yml"
