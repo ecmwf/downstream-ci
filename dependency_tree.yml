@@ -181,6 +181,19 @@ anemoi-inference:
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
       python -m coverage report
 
+anemoi-plugins:
+  type: python
+  master_branch: main
+  develop_branch: main
+  toml_opt_dep_sections: all,tests
+  deps:
+    - anemoi-utils
+  downstream-ci:
+    config_path: ""
+    test_cmd: |
+      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      python -m coverage report
+
 cascade:
   type: python
   master_branch: main
