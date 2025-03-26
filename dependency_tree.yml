@@ -318,6 +318,22 @@ libaec:
   deps:
     - ecbuild
 
+mars-client-cpp:
+  type: cmake
+  private: true
+  deps:
+    - ecbuild
+    - libaec
+    - eccodes
+    - eckit
+    - odc
+    - metkit
+    - atlas
+    - atlas-orca
+    - mir
+    - fdb
+    - gribjump
+
 mars-server-bundle:
   type: cmake
   private: true
