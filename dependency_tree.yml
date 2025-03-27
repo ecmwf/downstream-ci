@@ -346,6 +346,9 @@ mars-client-cpp:
     - mir
     - fdb
     - gribjump
+  downstream-ci-hpc:
+    skip:
+      - nvidia-22.11
 
 mars-server-bundle:
   type: cmake
