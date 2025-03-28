@@ -289,6 +289,12 @@ findlibs:
   downstream-ci:
     config_path: ""
 
+dhskit:
+  type: cmake
+  private: true
+  deps:
+    - eckit
+
 gribjump:
   type: cmake
   deps:
