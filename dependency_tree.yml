@@ -45,6 +45,7 @@ earthkit-data:
     - multiurl
     - pdbufr
     - pyodc
+    - earthkit-utils
   downstream-ci:
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
@@ -65,6 +66,8 @@ earthkit-meteo:
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
+  deps:
+    - earthkit-utils
 
 earthkit-regrid:
   type: python
@@ -81,6 +84,13 @@ earthkit-time:
     test_cmd: |
       python -m pytest --cov=./ --cov-report=xml
       python -m coverage report
+
+earthkit-utils:
+  type: python
+  master_branch: main
+  requirements_path: tests/downstream-ci-requirements.txt
+  downstream-ci:
+    config_path: ""
 
 anemoi-datasets:
   type: python
