@@ -372,7 +372,6 @@ mars-server:
   deps:
     - dhskit
     - eccodes
-    - eckit
     - odc
     - metkit
     - fdb
