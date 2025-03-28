@@ -311,7 +311,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: add-odc-as-dep-to-metkit
     - name: Run setup script
       id: setup
       env:
@@ -1430,10 +1430,11 @@ jobs:
     needs:
     - metkit
     - eccodes
+    - odc
     - eckit
     - ecbuild
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.fdb_matrix && (needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'fdb') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.fdb_matrix && (needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'fdb') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.fdb_matrix) }}
@@ -1454,6 +1455,7 @@ jobs:
         dependencies: |-
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
@@ -1488,10 +1490,11 @@ jobs:
     - fdb
     - metkit
     - eccodes
+    - odc
     - eckit
     - ecbuild
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.gribjump_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.gribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'gribjump') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.gribjump_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.gribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'gribjump') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.gribjump_matrix) }}
@@ -1513,6 +1516,7 @@ jobs:
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
@@ -1523,11 +1527,12 @@ jobs:
     - fdb
     - metkit
     - eccodes
+    - odc
     - eckit
     - ecbuild
     - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pygribjump_matrix && (needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pygribjump') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pygribjump_matrix && (needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pygribjump') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pygribjump_matrix) }}
@@ -1550,6 +1555,7 @@ jobs:
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
@@ -1613,10 +1619,11 @@ jobs:
     name: metkit
     needs:
     - eccodes
+    - odc
     - eckit
     - ecbuild
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.metkit_matrix && (needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.metkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'metkit') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.metkit_matrix && (needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.metkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'metkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.metkit_matrix) }}
@@ -1636,6 +1643,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: |-
           ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
@@ -1679,6 +1687,7 @@ jobs:
     - atlas-orca
     - fdb
     - metkit
+    - odc
     - mir
     - atlas
     - fckit
@@ -1686,7 +1695,7 @@ jobs:
     - eccodes
     - ecbuild
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.multio_matrix && (needs.setup.outputs.atlas-orca || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.mir || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.multio)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'multio') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.multio_matrix && (needs.setup.outputs.atlas-orca || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.odc || needs.setup.outputs.mir || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.multio)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'multio') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.multio_matrix) }}
@@ -1709,6 +1718,7 @@ jobs:
           ${{ needs.setup.outputs.atlas-orca }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.mir }}
           ${{ needs.setup.outputs.atlas }}
           ${{ needs.setup.outputs.fckit }}
@@ -1723,6 +1733,7 @@ jobs:
     - atlas-orca
     - fdb
     - metkit
+    - odc
     - mir
     - atlas
     - fckit
@@ -1730,7 +1741,7 @@ jobs:
     - eccodes
     - ecbuild
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pymultio_matrix && (needs.setup.outputs.multio || needs.setup.outputs.atlas-orca || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.mir || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.pymultio)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pymultio') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pymultio_matrix && (needs.setup.outputs.multio || needs.setup.outputs.atlas-orca || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.odc || needs.setup.outputs.mir || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.pymultio)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pymultio') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pymultio_matrix) }}
@@ -1753,6 +1764,7 @@ jobs:
           ${{ needs.setup.outputs.atlas-orca }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.mir }}
           ${{ needs.setup.outputs.atlas }}
           ${{ needs.setup.outputs.fckit }}
@@ -1884,11 +1896,12 @@ jobs:
     - fdb
     - metkit
     - eccodes
+    - odc
     - eckit
     - ecbuild
     - findlibs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyfdb_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pyfdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyfdb') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyfdb_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pyfdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyfdb') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pyfdb_matrix) }}
@@ -1910,6 +1923,7 @@ jobs:
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
