@@ -370,8 +370,9 @@ mars-server:
   type: cmake
   private: true
   deps:
-    - dhskit
+    - eckit
     - eccodes
+    - dhskit
     - odc
     - metkit
     - fdb
