@@ -327,6 +327,9 @@ mars-client:
     - atlas
     - mir
     - fdb
+  downstream-ci-hpc:
+    skip:
+      - nvidia-22.11
 
 mars-client-cpp:
   type: cmake
