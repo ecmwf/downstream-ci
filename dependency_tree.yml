@@ -359,6 +359,7 @@ metkit:
   deps:
     - eccodes
     - eckit
+    - odc
 
 mir:
   type: cmake
