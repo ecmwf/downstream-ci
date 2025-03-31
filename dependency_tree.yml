@@ -372,7 +372,6 @@ mars-server:
   deps:
     - eccodes
     - dhskit
-    - odc
     - metkit
     - fdb
   downstream-ci-hpc:
