@@ -204,7 +204,13 @@ anemoi-plugins:
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
       python -m coverage report
 
-cascade:
+conflator:
+  type: python
+  master_branch: main
+  downstream-ci:
+    config_path: ""
+
+earthkit-workflows:
   type: python
   master_branch: main
   private: true
@@ -213,12 +219,6 @@ cascade:
     config_path: ""
   deps:
     - earthkit-data
-
-conflator:
-  type: python
-  master_branch: main
-  downstream-ci:
-    config_path: ""
 
 ecbuild:
   type: cmake
