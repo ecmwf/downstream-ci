@@ -482,7 +482,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.conflator }}
             optional_matrix: null
           earthkit-workflows:ecmwf/earthkit-workflows:
-            path: ''
+            path: .github/ci-config.yml
             python: true
             master_branch: main
             develop_branch: develop
