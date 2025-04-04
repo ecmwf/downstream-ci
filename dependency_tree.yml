@@ -379,6 +379,8 @@ mars-server-bundle:
   type: cmake
   private: true
   private-downstream-ci:
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_REPO_READ_TOKEN }}
     optional_matrix:
       - gnu@rocky-9.5
 
