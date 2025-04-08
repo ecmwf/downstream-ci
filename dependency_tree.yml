@@ -533,3 +533,6 @@ hermes-server:
     - eccodes
     - metkit
     - mars-client-cpp
+  downstream-ci-hpc:
+    skip:
+      - nvidia-22.11
