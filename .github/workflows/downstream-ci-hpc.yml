@@ -1852,7 +1852,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.pymultio_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
-      FINDLIBS_DISABLE_PACKAGE: true
+      FINDLIBS_DISABLE_PACKAGE: 'yes'
     runs-on:
     - self-hosted
     - linux
