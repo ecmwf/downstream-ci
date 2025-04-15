@@ -100,7 +100,7 @@ name: downstream-ci
       fdb:
         required: false
         type: string
-      polytope-feature:
+      polytope:
         required: false
         type: string
       findlibs:
@@ -110,9 +110,6 @@ name: downstream-ci
         required: false
         type: string
       pygribjump:
-        required: false
-        type: string
-      polytope:
         required: false
         type: string
       infero:
@@ -246,8 +243,8 @@ jobs:
       fckit_matrix: ${{ steps.setup.outputs.fckit }}
       fdb: ${{ steps.prepare-inputs.outputs.fdb }}
       fdb_matrix: ${{ steps.setup.outputs.fdb }}
-      polytope-feature: ${{ steps.prepare-inputs.outputs.polytope-feature }}
-      polytope-feature_matrix: ${{ steps.setup.outputs.polytope-feature }}
+      polytope: ${{ steps.prepare-inputs.outputs.polytope }}
+      polytope_matrix: ${{ steps.setup.outputs.polytope }}
       findlibs: ${{ steps.prepare-inputs.outputs.findlibs }}
       findlibs_matrix: ${{ steps.setup.outputs.findlibs }}
       gribjump: ${{ steps.prepare-inputs.outputs.gribjump }}
@@ -326,7 +323,7 @@ jobs:
         echo eckit="${{ inputs.eckit }}" >> $GITHUB_OUTPUT
         echo fckit="${{ inputs.fckit }}" >> $GITHUB_OUTPUT
         echo fdb="${{ inputs.fdb }}" >> $GITHUB_OUTPUT
-        echo polytope-feature="${{ inputs.polytope-feature }}" >> $GITHUB_OUTPUT
+        echo polytope="${{ inputs.polytope }}" >> $GITHUB_OUTPUT
         echo findlibs="${{ inputs.findlibs }}" >> $GITHUB_OUTPUT
         echo gribjump="${{ inputs.gribjump }}" >> $GITHUB_OUTPUT
         echo pygribjump="${{ inputs.pygribjump }}" >> $GITHUB_OUTPUT
@@ -556,12 +553,12 @@ jobs:
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.fdb }}
             optional_matrix: null
-          polytope-feature:ecmwf/polytope-feature:
+          polytope:ecmwf/polytope:
             path: .github/ci-config.yml
             python: true
             master_branch: master
             develop_branch: develop
-            input: ${{ steps.prepare-inputs.outputs.polytope-feature }}
+            input: ${{ steps.prepare-inputs.outputs.polytope }}
             optional_matrix: null
           findlibs:ecmwf/findlibs:
             path: ''
@@ -1707,8 +1704,8 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
-  polytope-feature:
-    name: polytope-feature
+  polytope:
+    name: polytope
     needs:
     - pygribjump
     - gribjump
@@ -1722,10 +1719,10 @@ jobs:
     - conflator
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope-feature_matrix && (needs.setup.outputs.pygribjump || needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.conflator || needs.setup.outputs.polytope-feature)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope-feature') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope_matrix && (needs.setup.outputs.pygribjump || needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.conflator || needs.setup.outputs.polytope)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope') }}
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.setup.outputs.polytope-feature_matrix) }}
+      matrix: ${{ fromJson(needs.setup.outputs.polytope_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
