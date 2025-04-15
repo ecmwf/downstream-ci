@@ -112,7 +112,7 @@ name: downstream-ci
       pygribjump:
         required: false
         type: string
-      polytope-feature:
+      polytope:
         required: false
         type: string
       infero:

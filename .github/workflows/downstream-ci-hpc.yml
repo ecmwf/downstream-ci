@@ -108,7 +108,7 @@ name: downstream-ci-hpc
       pygribjump:
         required: false
         type: string
-      polytope-feature:
+      polytope:
         required: false
         type: string
       infero:

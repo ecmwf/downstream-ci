@@ -279,7 +279,7 @@ fdb:
   deps:
     - metkit
 
-polytope-feature:
+polytope:
   type: python
   deps:
     - pygribjump
