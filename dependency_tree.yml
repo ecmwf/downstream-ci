@@ -279,6 +279,12 @@ fdb:
   deps:
     - metkit
 
+polytope-feature:
+  type: python
+  deps:
+    - pygribjump
+    - conflator
+
 findlibs:
   type: python
   master_branch: master
