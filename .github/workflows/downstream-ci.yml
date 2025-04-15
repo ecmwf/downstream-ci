@@ -100,6 +100,9 @@ name: downstream-ci
       fdb:
         required: false
         type: string
+      polytope-feature:
+        required: false
+        type: string
       findlibs:
         required: false
         type: string
@@ -243,6 +246,8 @@ jobs:
       fckit_matrix: ${{ steps.setup.outputs.fckit }}
       fdb: ${{ steps.prepare-inputs.outputs.fdb }}
       fdb_matrix: ${{ steps.setup.outputs.fdb }}
+      polytope-feature: ${{ steps.prepare-inputs.outputs.polytope-feature }}
+      polytope-feature_matrix: ${{ steps.setup.outputs.polytope-feature }}
       findlibs: ${{ steps.prepare-inputs.outputs.findlibs }}
       findlibs_matrix: ${{ steps.setup.outputs.findlibs }}
       gribjump: ${{ steps.prepare-inputs.outputs.gribjump }}
@@ -321,6 +326,7 @@ jobs:
         echo eckit="${{ inputs.eckit }}" >> $GITHUB_OUTPUT
         echo fckit="${{ inputs.fckit }}" >> $GITHUB_OUTPUT
         echo fdb="${{ inputs.fdb }}" >> $GITHUB_OUTPUT
+        echo polytope-feature="${{ inputs.polytope-feature }}" >> $GITHUB_OUTPUT
         echo findlibs="${{ inputs.findlibs }}" >> $GITHUB_OUTPUT
         echo gribjump="${{ inputs.gribjump }}" >> $GITHUB_OUTPUT
         echo pygribjump="${{ inputs.pygribjump }}" >> $GITHUB_OUTPUT
@@ -345,7 +351,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/add_polytope
     - name: Run setup script
       id: setup
       env:
@@ -549,6 +555,13 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.fdb }}
+            optional_matrix: null
+          polytope-feature:ecmwf/polytope-feature:
+            path: .github/ci-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.polytope-feature }}
             optional_matrix: null
           findlibs:ecmwf/findlibs:
             path: ''
@@ -1694,6 +1707,56 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+  polytope-feature:
+    name: polytope-feature
+    needs:
+    - pygribjump
+    - gribjump
+    - fdb
+    - metkit
+    - eccodes
+    - odc
+    - eckit
+    - ecbuild
+    - findlibs
+    - conflator
+    - setup
+    - python-qa
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope-feature_matrix && (needs.setup.outputs.pygribjump || needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.conflator || needs.setup.outputs.polytope-feature)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope-feature') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.polytope-feature_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on: ${{ matrix.labels }}
+    steps:
+    - name: Build dependencies
+      id: build-deps
+      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      with:
+        repository: ${{ matrix.owner_repo_ref }}
+        codecov_upload: false
+        build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
+        build_config: ${{ matrix.config_path }}
+        build_dependencies: |-
+          ${{ needs.setup.outputs.gribjump }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+    - uses: ecmwf/reusable-workflows/ci-python@v2
+      with:
+        repository: ${{ matrix.owner_repo_ref }}
+        lib_path: ${{ steps.build-deps.outputs.lib_path }}
+        bin_paths: ${{ steps.build-deps.outputs.bin_paths }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.pygribjump || (needs.setup.outputs.use_master == 'True' && 'pygribjump:ecmwf/gribjump@master') || 'pygribjump:ecmwf/gribjump@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@develop' }}
+        codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
+        codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   findlibs:
     name: findlibs
     needs:
