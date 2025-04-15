@@ -419,6 +419,8 @@ pymultio:
   type: python
   repo: ecmwf/multio
   toml_opt_dep_sections: dev
+  env:
+    FINDLIBS_DISABLE_PACKAGE: "yes"
   deps:
     - multio
   downstream-ci:

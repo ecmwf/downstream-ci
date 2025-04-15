@@ -342,7 +342,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/pymultio-from-ci
     - name: Run setup script
       id: setup
       env:
@@ -1964,6 +1964,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.pymultio_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+      FINDLIBS_DISABLE_PACKAGE: 'yes'
     runs-on: ${{ matrix.labels }}
     steps:
     - name: Build dependencies
