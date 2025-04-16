@@ -278,6 +278,7 @@ fdb:
   type: cmake
   deps:
     - metkit
+  build-python-package: 3.11
 
 findlibs:
   type: python
