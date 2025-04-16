@@ -207,6 +207,7 @@ anemoi-plugins:
 conflator:
   type: python
   master_branch: main
+  develop_branch: main
   downstream-ci:
     config_path: ""
 
