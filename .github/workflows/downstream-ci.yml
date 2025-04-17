@@ -884,7 +884,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -912,7 +912,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1500,7 +1500,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1522,7 +1522,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1580,7 +1580,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1603,7 +1603,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1627,7 +1627,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1650,7 +1650,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1678,7 +1678,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1733,7 +1733,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1809,7 +1809,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1834,7 +1834,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1859,7 +1859,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1889,7 +1889,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1926,7 +1926,7 @@ jobs:
       CTEST_PARALLEL_LEVEL: 1
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -2033,7 +2033,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -2102,7 +2102,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep
+    - uses: ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
