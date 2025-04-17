@@ -465,7 +465,7 @@ jobs:
             path: .github/ci-hpc-config.yml
             python: true
             master_branch: main
-            develop_branch: develop
+            develop_branch: main
             input: ${{ steps.prepare-inputs.outputs.conflator }}
             optional_matrix: null
           earthkit-workflows:ecmwf/earthkit-workflows:
@@ -1620,7 +1620,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.pygribjump || (needs.setup.outputs.use_master == 'True' && 'pygribjump:ecmwf/gribjump@master') || 'pygribjump:ecmwf/gribjump@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
-          ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@develop' }}
+          ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@main' }}
   findlibs:
     name: findlibs
     needs:
