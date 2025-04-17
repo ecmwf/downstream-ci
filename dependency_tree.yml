@@ -282,6 +282,7 @@ fdb:
 
 polytope:
   type: python
+  master_branch: main
   deps:
     - pygribjump
     - conflator
