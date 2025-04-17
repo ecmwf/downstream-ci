@@ -278,7 +278,8 @@ fdb:
   type: cmake
   deps:
     - metkit
-  build-python-package: 3.11
+  build-package-python: 3.11
+  conda_deps: "pytest"
 
 findlibs:
   type: python

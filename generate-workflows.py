@@ -365,7 +365,7 @@ class Workflow:
                     needs.append("clang-format")
                     s = {
                         "uses": (
-                            "ecmwf/reusable-workflows/build-package-with-config@v2"
+                            "ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep"
                         ),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
@@ -388,6 +388,8 @@ class Workflow:
                         s["with"]["github_token"] = "${{ secrets.GH_REPO_READ_TOKEN }}"
                     if build_package_python:
                         s["with"]["python_version"] = build_package_python
+                    if conda_deps:
+                        s["with"]["conda_install"] = conda_deps
                     steps.append(s)
                 if pkg_conf.get("type", "cmake") == "python":
                     needs.append("python-qa")
