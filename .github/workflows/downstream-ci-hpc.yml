@@ -537,7 +537,7 @@ jobs:
           polytope:ecmwf/polytope:
             path: .github/ci-hpc-config.yml
             python: true
-            master_branch: master
+            master_branch: main
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.polytope }}
             optional_matrix: null
