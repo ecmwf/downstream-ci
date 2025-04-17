@@ -365,7 +365,7 @@ class Workflow:
                     needs.append("clang-format")
                     s = {
                         "uses": (
-                            "ecmwf/reusable-workflows/build-package-with-config@build-package-python-dep"
+                            "ecmwf/reusable-workflows/build-package-with-config@build-package-python-deps"
                         ),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
