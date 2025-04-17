@@ -554,7 +554,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.fdb }}
             optional_matrix: null
           polytope:ecmwf/polytope:
-            path: .github/ci-config.yml
+            path: ''
             python: true
             master_branch: main
             develop_branch: develop
