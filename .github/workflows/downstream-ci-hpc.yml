@@ -1565,6 +1565,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
         conda_deps: pytest
+        python_version: 3.11
   findlibs:
     name: findlibs
     needs:
