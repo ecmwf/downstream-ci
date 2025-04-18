@@ -523,6 +523,8 @@ class Workflow:
                     )
                 if conda_deps:
                     s["with"]["conda_deps"] = conda_deps
+                if build_package_python:
+                    s["with"]["python_version"] = build_package_python
                 steps.append(s)
             self.add_job(Job(package, needs, condition, strategy, env, runs_on, steps))
 
