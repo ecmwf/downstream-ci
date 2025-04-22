@@ -525,6 +525,8 @@ class Workflow:
                     s["with"]["conda_deps"] = conda_deps
                 if build_package_python:
                     s["with"]["python_version"] = build_package_python
+                    if pkg_conf.get("type", "cmake") == "cmake":
+                        s["with"]["cmake_python"] = True
                 steps.append(s)
             self.add_job(Job(package, needs, condition, strategy, env, runs_on, steps))
 
