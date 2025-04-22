@@ -504,7 +504,7 @@ class Workflow:
                     "hpc",
                 ]
                 s = {
-                    "uses": "ecmwf/reusable-workflows/ci-hpc@v2",
+                    "uses": "ecmwf/reusable-workflows/ci-hpc@build-package-python-deps",
                     "with": {
                         "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
                         "github_token": "${{ secrets.GH_REPO_READ_TOKEN }}",
