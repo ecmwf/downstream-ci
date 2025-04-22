@@ -217,6 +217,14 @@ earthkit-workflows:
   deps:
     - earthkit-data
 
+anemoi-cascade:
+  type: python
+  master_branch: main
+  toml_opt_dep_sections: tests
+  deps:
+    - earthkit-workflows
+    - anemoi-inference
+
 ecbuild:
   type: cmake
 
