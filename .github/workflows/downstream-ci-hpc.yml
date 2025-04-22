@@ -1566,6 +1566,7 @@ jobs:
         python_dependencies: ''
         conda_deps: pytest
         python_version: 3.11
+        cmake_python: true
   findlibs:
     name: findlibs
     needs:
