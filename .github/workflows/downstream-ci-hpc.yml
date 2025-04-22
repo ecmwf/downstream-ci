@@ -72,6 +72,9 @@ name: downstream-ci-hpc
       earthkit-workflows:
         required: false
         type: string
+      anemoi-cascade:
+        required: false
+        type: string
       ecbuild:
         required: false
         type: string
@@ -208,6 +211,8 @@ jobs:
       conflator_matrix: ${{ steps.setup.outputs.conflator }}
       earthkit-workflows: ${{ steps.prepare-inputs.outputs.earthkit-workflows }}
       earthkit-workflows_matrix: ${{ steps.setup.outputs.earthkit-workflows }}
+      anemoi-cascade: ${{ steps.prepare-inputs.outputs.anemoi-cascade }}
+      anemoi-cascade_matrix: ${{ steps.setup.outputs.anemoi-cascade }}
       ecbuild: ${{ steps.prepare-inputs.outputs.ecbuild }}
       ecbuild_matrix: ${{ steps.setup.outputs.ecbuild }}
       eccodes: ${{ steps.prepare-inputs.outputs.eccodes }}
@@ -291,6 +296,7 @@ jobs:
         echo anemoi-plugins="${{ inputs.anemoi-plugins }}" >> $GITHUB_OUTPUT
         echo conflator="${{ inputs.conflator }}" >> $GITHUB_OUTPUT
         echo earthkit-workflows="${{ inputs.earthkit-workflows }}" >> $GITHUB_OUTPUT
+        echo anemoi-cascade="${{ inputs.anemoi-cascade }}" >> $GITHUB_OUTPUT
         echo ecbuild="${{ inputs.ecbuild }}" >> $GITHUB_OUTPUT
         echo eccodes="${{ inputs.eccodes }}" >> $GITHUB_OUTPUT
         echo eccodes-python="${{ inputs.eccodes-python }}" >> $GITHUB_OUTPUT
@@ -323,7 +329,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: add/anemoi-cascade
     - name: Run setup script
       id: setup
       env:
@@ -468,6 +474,13 @@ jobs:
             master_branch: main
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.earthkit-workflows }}
+            optional_matrix: null
+          anemoi-cascade:ecmwf/anemoi-cascade:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.anemoi-cascade }}
             optional_matrix: null
           ecbuild:ecmwf/ecbuild:
             path: .github/ci-hpc-config.yml
@@ -1344,6 +1357,63 @@ jobs:
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+        python_toml_opt_dep_sections: tests
+  anemoi-cascade:
+    name: anemoi-cascade
+    needs:
+    - earthkit-workflows
+    - earthkit-data
+    - cfgrib
+    - multiurl
+    - pdbufr
+    - eccodes-python
+    - eccodes
+    - pyodc
+    - odc
+    - eckit
+    - ecbuild
+    - findlibs
+    - earthkit-utils
+    - anemoi-inference
+    - anemoi-utils
+    - anemoi-transform
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-cascade_matrix && (needs.setup.outputs.earthkit-workflows || needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.earthkit-utils || needs.setup.outputs.anemoi-inference || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-cascade)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-cascade') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.anemoi-cascade_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on:
+    - self-hosted
+    - linux
+    - hpc
+    steps:
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-workflows || (needs.setup.outputs.use_master == 'True' && 'earthkit-workflows:ecmwf/earthkit-workflows@main') || 'earthkit-workflows:ecmwf/earthkit-workflows@develop' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
+          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
+          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+          ${{ needs.setup.outputs.anemoi-inference || (needs.setup.outputs.use_master == 'True' && 'anemoi-inference:ecmwf/anemoi-inference@main') || 'anemoi-inference:ecmwf/anemoi-inference@main' }}
+          ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
+          ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
         python_toml_opt_dep_sections: tests
   ecbuild:
     name: ecbuild
