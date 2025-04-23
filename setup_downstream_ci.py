@@ -146,8 +146,7 @@ def get_ci_group_pkgs(ci_group: str, dep_tree: dict) -> list[str]:
         return ci_groups[ci_group]
 
     print(
-        f"::error::CI group {ci_group} not found in "
-        "ecmwf-actions/downstream-ci/ci-groups.yml"
+        f"::error::CI group {ci_group} not found in ecmwf/downstream-ci/ci-groups.yml"
     )
     sys.exit(1)
 
@@ -172,6 +171,7 @@ print("use_master: ", use_master)
 
 for owner_repo, val in ci_config.items():
     pkg_name = None
+    print("inspecting ", owner_repo, val)
     if ":" in owner_repo:
         pkg_name, owner_repo = owner_repo.split(":")
 
@@ -180,6 +180,7 @@ for owner_repo, val in ci_config.items():
     else:
         subdir = ""
         owner, repo = owner_repo.split("/", maxsplit=1)
+    print("  subdir of", owner_repo, "=", subdir)
 
     if not pkg_name:
         pkg_name = repo
@@ -218,10 +219,11 @@ for owner_repo, val in ci_config.items():
             d for d in matrices[pkg_name]["include"] if d["name"] not in pkg_skip
         ]
     repo_subdir = f"{repo}/{subdir}" if subdir else repo
+    print("repo_subdir=", repo_subdir)
     for index, item in enumerate(matrices[pkg_name]["include"]):
-        matrices[pkg_name]["include"][index][
-            "owner_repo_ref"
-        ] = f"{pkg_name}:{owner}/{repo_subdir}@{ref}"
+        matrices[pkg_name]["include"][index]["owner_repo_ref"] = (
+            f"{pkg_name}:{owner}/{repo_subdir}@{ref}"
+        )
         matrices[pkg_name]["include"][index]["config_path"] = path
 
     if val.get("python", False) is True:

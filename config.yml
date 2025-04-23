@@ -1,6 +1,6 @@
 downstream-ci: &downstream_ci
   type: build-package
-  repo: ecmwf-actions/downstream-ci
+  repo: ecmwf/downstream-ci
   inputs:
     codecov_upload:
       description: Whether to upload code coverage
@@ -73,12 +73,20 @@ downstream-ci: &downstream_ci
   optional_matrix:
     name:
       - gnu@debian-12
+      - gnu@rocky-9.5
       - clang@macos-13-arm
       - clang@macos-13-x86
     include:
       - name: gnu@debian-12
         labels: [self-hosted, platform-builder-debian-12]
         os: debian-12
+        compiler: gnu
+        compiler_cc: gcc
+        compiler_cxx: g++
+        compiler_fc: gfortran
+      - name: gnu@rocky-9.5
+        labels: [self-hosted, platform-builder-rocky-9.5]
+        os: rocky-9.5
         compiler: gnu
         compiler_cc: gcc
         compiler_cxx: g++
@@ -107,7 +115,7 @@ downstream-ci: &downstream_ci
 
 downstream-ci-hpc: &downstream_ci_hpc
   type: build-package-hpc
-  repo: ecmwf-actions/downstream-ci
+  repo: ecmwf/downstream-ci
   python_jobs:
     - gnu-8.5.0
   python_versions:
@@ -161,11 +169,11 @@ downstream-ci-hpc: &downstream_ci_hpc
 
 private-downstream-ci:
   <<: *downstream_ci
-  repo: ecmwf-actions/private-downstream-ci
+  repo: ecmwf/private-downstream-ci
   private: true
   inputs: []
 
 private-downstream-ci-hpc:
   <<: *downstream_ci_hpc
-  repo: ecmwf-actions/private-downstream-ci
+  repo: ecmwf/private-downstream-ci
   private: true

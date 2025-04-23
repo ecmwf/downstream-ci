@@ -45,6 +45,7 @@ earthkit-data:
     - multiurl
     - pdbufr
     - pyodc
+    - earthkit-utils
   downstream-ci:
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
@@ -65,6 +66,8 @@ earthkit-meteo:
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
+  deps:
+    - earthkit-utils
 
 earthkit-regrid:
   type: python
@@ -82,6 +85,13 @@ earthkit-time:
       python -m pytest --cov=./ --cov-report=xml
       python -m coverage report
 
+earthkit-utils:
+  type: python
+  master_branch: main
+  requirements_path: tests/downstream-ci-requirements.txt
+  downstream-ci:
+    config_path: ""
+
 earthkit-hydro:
   type: python
   master_branch: main
@@ -93,7 +103,6 @@ earthkit-hydro:
       echo $(pwd)
       python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
       python -m coverage report
-
 
 anemoi-datasets:
   type: python
@@ -194,17 +203,31 @@ anemoi-inference:
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
       python -m coverage report
 
-cascade:
+anemoi-plugins:
   type: python
   master_branch: main
+  develop_branch: main
+  toml_opt_dep_sections: all,tests
+  deps:
+    - anemoi-utils
   downstream-ci:
     config_path: ""
+    test_cmd: |
+      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      python -m coverage report
 
 conflator:
   type: python
   master_branch: main
   downstream-ci:
     config_path: ""
+
+earthkit-workflows:
+  type: python
+  master_branch: main
+  toml_opt_dep_sections: tests
+  deps:
+    - earthkit-data
 
 ecbuild:
   type: cmake
@@ -227,6 +250,7 @@ eccodes-python:
     ECCODES_PYTHON_TRACE_LIB_SEARCH: 1
   deps:
     - eccodes
+    - findlibs
 
 ecflow:
   type: cmake
@@ -274,6 +298,12 @@ findlibs:
   downstream-ci:
     config_path: ""
 
+dhskit:
+  type: cmake
+  private: true
+  deps:
+    - eckit
+
 gribjump:
   type: cmake
   deps:
@@ -288,6 +318,7 @@ pygribjump:
   toml_opt_dep_sections: dev
   deps:
     - gribjump
+    - findlibs
   downstream-ci:
     config_path: ".github/ci-config-pygribjump.yml"
   downstream-ci-hpc:
@@ -312,15 +343,66 @@ libaec:
   deps:
     - ecbuild
 
+mars-client:
+  type: cmake
+  private: true
+  deps:
+    - odc
+    - metkit
+    - atlas
+    - mir
+    - fdb
+  downstream-ci-hpc:
+    skip:
+      - nvidia-22.11
+
+mars-client-cpp:
+  type: cmake
+  private: true
+  deps:
+    - ecbuild
+    - libaec
+    - eccodes
+    - eckit
+    - odc
+    - metkit
+    - atlas
+    - atlas-orca
+    - mir
+    - fdb
+    - gribjump
+  downstream-ci-hpc:
+    skip:
+      - nvidia-22.11
+
+mars-server:
+  type: cmake
+  private: true
+  deps:
+    - eccodes
+    - dhskit
+    - metkit
+    - fdb
+  downstream-ci-hpc:
+    skip:
+      - nvidia-22.11
+
 mars-server-bundle:
   type: cmake
   private: true
+  private-downstream-ci:
+    optional_matrix:
+      - gnu@rocky-9.5
+  private-downstream-ci-hpc:
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_REPO_READ_TOKEN }}
 
 metkit:
   type: cmake
   deps:
     - eccodes
     - eckit
+    - odc
 
 mir:
   type: cmake
@@ -345,12 +427,18 @@ multio:
     - metkit
     - mir
 
-multio-python:
+pymultio:
   type: python
-  master_branch: main
-  develop_branch: develop
+  repo: ecmwf/multio
+  toml_opt_dep_sections: dev
+  env:
+    FINDLIBS_DISABLE_PACKAGE: "yes"
   deps:
     - multio
+  downstream-ci:
+    config_path: ".github/ci-config-pymultio.yml"
+  downstream-ci-hpc:
+    config_path: ".github/ci-hpc-config-pymultio.yml"
 
 multiurl:
   type: python
@@ -400,6 +488,7 @@ pyfdb:
   type: python
   deps:
     - fdb
+    - findlibs
   downstream-ci:
     env:
       FDB5_CONFIG: >
@@ -410,6 +499,7 @@ pyodc:
   type: python
   deps:
     - odc
+    - findlibs
 
 skinnywms:
   type: python
@@ -436,12 +526,27 @@ covjsonkit:
     config_path: ""
 
 danu:
-   type: python
-   master_branch: main
-   requirements_path: requirements.txt
-   test_cmd: "python -m pytest"
-   conda_deps: "'numpy<2' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics"
-   downstream-ci:
-     config_path: ""
-   downstream-ci-hpc:
-     config_path: ".github/ci-hpc-config.yml" 
+  type: python
+  master_branch: main
+  requirements_path: requirements.txt
+  test_cmd: "python -m pytest"
+  conda_deps: "'numpy<2' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics"
+  downstream-ci:
+    config_path: ""
+  downstream-ci-hpc:
+    config_path: ".github/ci-hpc-config.yml"
+
+hermes-server:
+  type: cmake
+  master_branch: develop
+  develop_branch: develop
+  private: true
+  deps:
+    - eckit
+    - dhskit
+    - eccodes
+    - metkit
+    - mars-client-cpp
+  downstream-ci-hpc:
+    skip:
+      - nvidia-22.11
