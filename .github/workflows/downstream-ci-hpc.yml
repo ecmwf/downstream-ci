@@ -1587,11 +1587,11 @@ jobs:
     - eccodes
     - odc
     - eckit
-    - ecbuild
     - findlibs
     - conflator
+    - ecbuild
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope_matrix && (needs.setup.outputs.pygribjump || needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.conflator || needs.setup.outputs.polytope)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope_matrix && (needs.setup.outputs.pygribjump || needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.findlibs || needs.setup.outputs.conflator || needs.setup.outputs.ecbuild || needs.setup.outputs.polytope)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.polytope_matrix) }}
