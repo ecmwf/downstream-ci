@@ -286,6 +286,7 @@ polytope:
   deps:
     - pygribjump
     - conflator
+    - ecbuild
   downstream-ci:
     config_path: ".github/ci-config.yml"
     test_cmd: | 
