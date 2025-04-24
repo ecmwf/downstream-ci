@@ -98,6 +98,7 @@ earthkit-hydro:
   toml_opt_dep_sections: all
   deps:
     - earthkit-data
+  conda_deps: "rust"
   downstream-ci:
     test_cmd: | 
       echo $(pwd)
