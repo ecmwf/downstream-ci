@@ -99,6 +99,8 @@ earthkit-hydro:
   deps:
     - earthkit-data
   conda_deps: "rust"
+  env:
+    CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
     test_cmd: | 
       echo $(pwd)
