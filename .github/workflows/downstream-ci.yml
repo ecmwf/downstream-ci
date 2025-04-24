@@ -1263,6 +1263,7 @@ jobs:
           echo $(pwd)
           python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
           python -m coverage report
+        conda_install: rust
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-datasets:
