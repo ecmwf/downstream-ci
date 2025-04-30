@@ -354,7 +354,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: feature/add-plume-ee-plugin
+        ref: main
     - name: Run setup script
       id: setup
       env:
