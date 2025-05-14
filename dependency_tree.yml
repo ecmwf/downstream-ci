@@ -504,9 +504,16 @@ pyfdb:
       - data/fdb
 pyodc:
   type: python
+  repo: ecmwf/odc
   deps:
     - odc
     - findlibs
+  env:
+    FINDLIBS_DISABLE_PACKAGE: "yes"
+  downstream-ci:
+    config_path: ".github/ci-config-pyodc.yml"
+  downstream-ci-hpc:
+    config_path: ".github/ci-hpc-config-pyodc.yml"
 
 skinnywms:
   type: python
