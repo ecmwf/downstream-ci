@@ -102,6 +102,7 @@ earthkit-hydro:
   env:
     CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
+    config_path: ""
     test_cmd: | 
       echo $(pwd)
       python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
