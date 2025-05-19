@@ -37,7 +37,7 @@ def get_package_deps(
         if not (dep in deps):
             deps.append(dep)
 
-        if not dep_tree.get('shallow_deps', False) and dep in dep_tree:
+        if not dep_tree[package].get('shallow_deps', False) and dep in dep_tree:
             get_package_deps(dep, dep_tree, wf_name, deps)
 
     return deps
