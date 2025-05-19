@@ -34,10 +34,10 @@ def get_package_deps(
     )
 
     for dep in direct_deps:
-        if dep in deps:
-            deps.remove(dep)
-        deps.append(dep)
-        if dep in dep_tree:
+        if not (dep in deps):
+            deps.append(dep)
+
+        if not dep_tree.get('shallow_deps', False) and dep in dep_tree:
             get_package_deps(dep, dep_tree, wf_name, deps)
 
     return deps
