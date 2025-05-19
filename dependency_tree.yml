@@ -96,9 +96,8 @@ earthkit-hydro:
   type: python
   master_branch: main
   toml_opt_dep_sections: all
-  deps:
+  shallow_deps:
     - earthkit-data
-  shallow_deps: True
   conda_deps: "rust"
   env:
     CARGO_TARGET_DIR: /var/tmp
