@@ -98,6 +98,7 @@ earthkit-hydro:
   toml_opt_dep_sections: all
   deps:
     - earthkit-data
+  shallow_deps: True
   conda_deps: "rust"
   env:
     CARGO_TARGET_DIR: /var/tmp
