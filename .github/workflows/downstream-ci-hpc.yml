@@ -766,7 +766,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -797,7 +797,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -829,7 +829,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -873,7 +873,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -924,7 +924,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -960,7 +960,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -986,7 +986,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1011,7 +1011,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1036,7 +1036,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1060,7 +1060,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1098,7 +1098,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1138,7 +1138,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1165,7 +1165,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1190,7 +1190,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1218,7 +1218,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1247,7 +1247,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1277,7 +1277,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1309,7 +1309,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1337,7 +1337,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1362,7 +1362,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1398,7 +1398,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1435,7 +1435,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1460,7 +1460,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1488,7 +1488,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1515,7 +1515,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1541,7 +1541,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1568,7 +1568,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1594,7 +1594,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1625,7 +1625,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1654,7 +1654,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1685,7 +1685,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1723,7 +1723,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1758,7 +1758,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1786,7 +1786,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1814,7 +1814,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1847,7 +1847,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1887,7 +1887,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1933,7 +1933,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1969,7 +1969,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -1995,7 +1995,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2025,7 +2025,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2058,7 +2058,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2086,7 +2086,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2117,7 +2117,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2151,7 +2151,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2178,7 +2178,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2202,7 +2202,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2226,7 +2226,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2250,7 +2250,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
@@ -2274,7 +2274,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
