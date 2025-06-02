@@ -354,7 +354,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: migratePyodc
     - name: Run setup script
       id: setup
       env:
@@ -671,8 +671,8 @@ jobs:
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.pyfdb }}
             optional_matrix: null
-          pyodc:ecmwf/pyodc:
-            path: .github/ci-config.yml
+          pyodc:ecmwf/odc:
+            path: .github/ci-config-pyodc.yml
             python: true
             master_branch: master
             develop_branch: develop
@@ -1041,7 +1041,7 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/odc@master') || 'pyodc:ecmwf/odc@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
@@ -1100,7 +1100,7 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/odc@master') || 'pyodc:ecmwf/odc@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         toml_opt_dep_sections: all,test,ci
@@ -1269,7 +1269,7 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/odc@master') || 'pyodc:ecmwf/odc@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         toml_opt_dep_sections: all
@@ -1568,7 +1568,7 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/odc@master') || 'pyodc:ecmwf/odc@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         toml_opt_dep_sections: tests
@@ -2285,6 +2285,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.pyodc_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+      FINDLIBS_DISABLE_PACKAGE: 'yes'
     runs-on: ${{ matrix.labels }}
     steps:
     - name: Build dependencies
