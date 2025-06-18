@@ -245,7 +245,6 @@ eccodes:
       - ecbuild
   downstream-ci:
     deps:
-      - libaec
       - ecbuild
 
 eccodes-python:
@@ -344,12 +343,6 @@ kronos:
   deps:
     - ecbuild
 
-libaec:
-  type: cmake
-  input: false
-  deps:
-    - ecbuild
-
 mars-client:
   type: cmake
   private: true
@@ -368,7 +361,6 @@ mars-client-cpp:
   private: true
   deps:
     - ecbuild
-    - libaec
     - eccodes
     - eckit
     - odc
