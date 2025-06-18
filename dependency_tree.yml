@@ -103,7 +103,7 @@ earthkit-hydro:
     CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
     config_path: ""
-    test_cmd: | 
+    test_cmd: |
       echo $(pwd)
       python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
       python -m coverage report
@@ -474,8 +474,13 @@ pgen:
   type: cmake
   private: true
   deps:
-    - mir
+    - eccodes
+    - eckit
+    - odc
     - metkit
+    - atlas
+    - atlas-orca
+    - mir
   downstream-ci-hpc:
     skip:
       - nvidia-22.11
