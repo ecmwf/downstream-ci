@@ -354,7 +354,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: add-atlas-orca-to-pgen
+        ref: main
     - name: Run setup script
       id: setup
       env:
