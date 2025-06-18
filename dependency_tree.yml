@@ -96,12 +96,13 @@ earthkit-hydro:
   type: python
   master_branch: main
   toml_opt_dep_sections: all
-  deps:
+  shallow_deps:
     - earthkit-data
   conda_deps: "rust"
   env:
     CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
+    config_path: ""
     test_cmd: |
       echo $(pwd)
       python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
@@ -300,6 +301,9 @@ findlibs:
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
+    test_cmd: |
+      FINDLIBS_DISABLE_PACKAGE=no pytest --cov=./ --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 dhskit:
   type: cmake
@@ -491,6 +495,10 @@ plume:
     - eckit
     - atlas
     - fckit
+
+plume-plugin-extreme-events:
+  type: cmake
+  master_branch: main
 
 pyfdb:
   type: python
