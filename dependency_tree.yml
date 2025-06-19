@@ -243,10 +243,12 @@ eccodes:
       - aec
     deps:
       - ecbuild
+      - eckit
   downstream-ci:
     deps:
       - libaec
       - ecbuild
+      - eckit
 
 eccodes-python:
   type: python
