@@ -518,8 +518,6 @@ class Workflow:
                         "python_dependencies": "\n".join(python_deps),
                     },
                 }
-                if test_cmd:
-                    s["with"]["test_cmd"] = test_cmd
                 if pkg_conf.get("requirements_path"):
                     s["with"]["python_requirements"] = pkg_conf.get(
                         "requirements_path")
