@@ -1621,9 +1621,6 @@ jobs:
           ${{ needs.setup.outputs.pygribjump || (needs.setup.outputs.use_master == 'True' && 'pygribjump:ecmwf/gribjump@master') || 'pygribjump:ecmwf/gribjump@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@main' }}
-        test_cmd: |
-          python -m pip install -r ./tests/requirements_test.txt
-          python -m pytest -m 'not fdb' tests
   findlibs:
     name: findlibs
     needs:
@@ -2243,6 +2240,5 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        test_cmd: python -m pytest
         python_requirements: requirements.txt
         conda_deps: '''numpy<2'' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics'
