@@ -1621,8 +1621,6 @@ jobs:
           ${{ needs.setup.outputs.pygribjump || (needs.setup.outputs.use_master == 'True' && 'pygribjump:ecmwf/gribjump@master') || 'pygribjump:ecmwf/gribjump@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@master') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@main' }}
-        test_cmd: |
-          python -m pytest -m 'not fdb' tests
   findlibs:
     name: findlibs
     needs:
