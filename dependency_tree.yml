@@ -290,7 +290,7 @@ polytope:
     config_path: ".github/ci-config.yml"
     test_cmd: | 
       python -m pip install -r ./tests/requirements_test.txt
-      python -m pytest -m "not fdb" tests --cov=./ --cov-report=xml
+      python -m pytest -m 'not fdb' tests --cov=./ --cov-report=xml
       python -m coverage report
 
 findlibs:
