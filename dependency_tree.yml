@@ -230,7 +230,7 @@ earthkit-workflows:
   type: python
   master_branch: main
   toml_opt_dep_sections: tests
-  deps:
+  shallow_deps:
     - earthkit-data
 
 ecbuild:
