@@ -141,6 +141,9 @@ name: downstream-ci-hpc
       plume-plugin-extreme-events:
         required: false
         type: string
+      plume-plugin-wind-farm:
+        required: false
+        type: string
       pyfdb:
         required: false
         type: string
@@ -260,6 +263,8 @@ jobs:
       plume_matrix: ${{ steps.setup.outputs.plume }}
       plume-plugin-extreme-events: ${{ steps.prepare-inputs.outputs.plume-plugin-extreme-events }}
       plume-plugin-extreme-events_matrix: ${{ steps.setup.outputs.plume-plugin-extreme-events }}
+      plume-plugin-wind-farm: ${{ steps.prepare-inputs.outputs.plume-plugin-wind-farm }}
+      plume-plugin-wind-farm_matrix: ${{ steps.setup.outputs.plume-plugin-wind-farm }}
       pyfdb: ${{ steps.prepare-inputs.outputs.pyfdb }}
       pyfdb_matrix: ${{ steps.setup.outputs.pyfdb }}
       pyodc: ${{ steps.prepare-inputs.outputs.pyodc }}
@@ -324,6 +329,7 @@ jobs:
         echo pdbufr="${{ inputs.pdbufr }}" >> $GITHUB_OUTPUT
         echo plume="${{ inputs.plume }}" >> $GITHUB_OUTPUT
         echo plume-plugin-extreme-events="${{ inputs.plume-plugin-extreme-events }}" >> $GITHUB_OUTPUT
+        echo plume-plugin-wind-farm="${{ inputs.plume-plugin-wind-farm }}" >> $GITHUB_OUTPUT
         echo pyfdb="${{ inputs.pyfdb }}" >> $GITHUB_OUTPUT
         echo pyodc="${{ inputs.pyodc }}" >> $GITHUB_OUTPUT
         echo skinnywms="${{ inputs.skinnywms }}" >> $GITHUB_OUTPUT
@@ -335,7 +341,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/plume-plugin-wind-farm
     - name: Run setup script
       id: setup
       env:
@@ -644,6 +650,13 @@ jobs:
             master_branch: main
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.plume-plugin-extreme-events }}
+            optional_matrix: null
+          plume-plugin-wind-farm:ecmwf/plume-plugin-wind-farm:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.plume-plugin-wind-farm }}
             optional_matrix: null
           pyfdb:ecmwf/pyfdb:
             path: .github/ci-hpc-config.yml
@@ -2058,6 +2071,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.plume-plugin-extreme-events_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on:
+    - self-hosted
+    - linux
+    - hpc
+    steps:
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+  plume-plugin-wind-farm:
+    name: plume-plugin-wind-farm
+    needs:
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.plume-plugin-wind-farm_matrix && (needs.setup.outputs.plume-plugin-wind-farm)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'plume-plugin-wind-farm') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.plume-plugin-wind-farm_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
