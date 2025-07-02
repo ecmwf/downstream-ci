@@ -500,6 +500,10 @@ plume-plugin-extreme-events:
   type: cmake
   master_branch: main
 
+plume-plugin-wind-farm:
+  type: cmake
+  master_branch: main
+
 pyfdb:
   type: python
   deps:
