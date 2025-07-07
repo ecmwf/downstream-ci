@@ -504,6 +504,10 @@ plume-plugin-wind-farm:
   type: cmake
   master_branch: main
 
+plume-plugin-axe:
+  type: cmake
+  master_branch: main
+
 pyfdb:
   type: python
   deps:
