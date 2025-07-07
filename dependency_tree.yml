@@ -92,6 +92,22 @@ earthkit-utils:
   downstream-ci:
     config_path: ""
 
+earthkit-hydro:
+  type: python
+  master_branch: main
+  toml_opt_dep_sections: all
+  shallow_deps:
+    - earthkit-data
+  conda_deps: "rust"
+  env:
+    CARGO_TARGET_DIR: /var/tmp
+  downstream-ci:
+    config_path: ""
+    test_cmd: |
+      echo $(pwd)
+      python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
+      python -m coverage report
+
 anemoi-datasets:
   type: python
   master_branch: main
@@ -304,6 +320,9 @@ findlibs:
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
+    test_cmd: |
+      FINDLIBS_DISABLE_PACKAGE=no pytest --cov=./ --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 dhskit:
   type: cmake
@@ -438,6 +457,8 @@ pymultio:
   type: python
   repo: ecmwf/multio
   toml_opt_dep_sections: dev
+  env:
+    FINDLIBS_DISABLE_PACKAGE: "yes"
   deps:
     - multio
   downstream-ci:
@@ -472,8 +493,13 @@ pgen:
   type: cmake
   private: true
   deps:
-    - mir
+    - eccodes
+    - eckit
+    - odc
     - metkit
+    - atlas
+    - atlas-orca
+    - mir
   downstream-ci-hpc:
     skip:
       - nvidia-22.11
@@ -488,6 +514,18 @@ plume:
     - eckit
     - atlas
     - fckit
+
+plume-plugin-extreme-events:
+  type: cmake
+  master_branch: main
+
+plume-plugin-wind-farm:
+  type: cmake
+  master_branch: main
+
+plume-plugin-axe:
+  type: cmake
+  master_branch: main
 
 pyfdb:
   type: python

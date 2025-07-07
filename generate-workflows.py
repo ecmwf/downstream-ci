@@ -22,24 +22,34 @@ yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""
 def get_package_deps(
     package: str, dep_tree: dict, wf_name: str, deps: list[str] = None
 ):
+
+    
     if deps is None:
         deps = []
     if package not in dep_tree or dep_tree[package] is None:
         return deps
 
+    package_config = dep_tree[package]
+    
     direct_deps = (
-        dep_tree[package].get(wf_name, {}).get("deps")
-        or dep_tree[package].get("deps")
+        package_config.get(wf_name, {}).get("deps")
+        or package_config.get("deps")
         or []
     )
 
     for dep in direct_deps:
-        if dep in deps:
-            deps.remove(dep)
-        deps.append(dep)
+        if not (dep in deps):
+            deps.append(dep)
+
         if dep in dep_tree:
             get_package_deps(dep, dep_tree, wf_name, deps)
 
+    shallow_deps = package_config.get("shallow_deps", [])
+    
+    for dep in shallow_deps:
+        if not (dep in deps):
+            deps.append(dep)
+    
     return deps
 
 
