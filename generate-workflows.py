@@ -525,6 +525,8 @@ class Workflow:
                     s["with"]["python_toml_opt_dep_sections"] = pkg_conf.get(
                         "toml_opt_dep_sections"
                     )
+                if test_cmd:
+                    s["with"]["test_cmd"] = test_cmd
                 if conda_deps:
                     s["with"]["conda_deps"] = conda_deps
                 steps.append(s)
