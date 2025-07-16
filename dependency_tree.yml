@@ -299,20 +299,17 @@ fdb:
 polytope:
   type: python
   master_branch: main
+  requirements_path: tests/requirements_test.txt
   deps:
     - pygribjump
     - conflator
   downstream-ci:
     config_path: ".github/ci-config.yml"
     test_cmd: | 
-      python -m pip install -r ./tests/requirements_test.txt
       python -m pytest -m 'not fdb' tests --cov=./ --cov-report=xml
       python -m coverage report
   downstream-ci-hpc:
     config_path: ".github/ci-hpc-config.yml"
-    test_cmd: | 
-      python -m pip install -r ./tests/requirements_test.txt
-      python -m pytest -m 'not fdb' tests
 
 findlibs:
   type: python
