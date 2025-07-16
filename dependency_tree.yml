@@ -310,8 +310,6 @@ polytope:
       python -m coverage report
   downstream-ci-hpc:
     config_path: ".github/ci-hpc-config.yml"
-    test_cmd: | 
-      python -m pytest -m 'not fdb' tests
 
 findlibs:
   type: python
