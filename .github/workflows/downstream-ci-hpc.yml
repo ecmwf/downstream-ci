@@ -329,7 +329,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: feature/add_polytope
+        ref: feature/try_to_add_test_cmd_to_hpc_ci
     - name: Run setup script
       id: setup
       env:
@@ -2243,6 +2243,6 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        test_cmd: python -m pytest
         python_requirements: requirements.txt
+        test_cmd: python -m pytest
         conda_deps: '''numpy<2'' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics'
