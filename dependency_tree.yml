@@ -74,7 +74,7 @@ earthkit-regrid:
   master_branch: main
   requirements_path: tests/downstream-ci-requirements.txt
   env:
-    FINDLIBS_DISABLE_PACKAGE: "yes"
+    FINDLIBS_DISABLE_PACKAGE: "no"
   downstream-ci:
     config_path: ""
 
