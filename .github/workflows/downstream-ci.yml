@@ -372,7 +372,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/earthkit-regrid-use-FINDLIBS-DISABLE-PACKAGE=no
     - name: Run setup script
       id: setup
       env:
@@ -1212,6 +1212,9 @@ jobs:
         checkout: true
         python_dependencies: ''
         requirements_path: tests/downstream-ci-requirements.txt
+        test_cmd: |
+          FINDLIBS_DISABLE_PACKAGE=no pytest --cov=./ --cov-report=xml
+          FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-time:
