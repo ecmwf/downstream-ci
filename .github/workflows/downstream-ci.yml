@@ -1204,6 +1204,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-regrid_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+      FINDLIBS_DISABLE_PACKAGE: 'yes'
     runs-on: ${{ matrix.labels }}
     steps:
     - uses: ecmwf/reusable-workflows/ci-python@v2
@@ -1212,9 +1213,6 @@ jobs:
         checkout: true
         python_dependencies: ''
         requirements_path: tests/downstream-ci-requirements.txt
-        test_cmd: |
-          FINDLIBS_DISABLE_PACKAGE=no pytest --cov=./ --cov-report=xml
-          FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-time:
