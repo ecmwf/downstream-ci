@@ -353,7 +353,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/earthkit-regrid-use-FINDLIBS-DISABLE-PACKAGE=no
     - name: Run setup script
       id: setup
       env:
