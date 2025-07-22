@@ -409,7 +409,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
             optional_matrix: null
           earthkit-regrid:ecmwf/earthkit-regrid:
-            path: ''
+            path: .github/ci-hpc-config.yml
             python: true
             master_branch: main
             develop_branch: develop
