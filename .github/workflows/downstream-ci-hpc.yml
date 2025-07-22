@@ -409,7 +409,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
             optional_matrix: null
           earthkit-regrid:ecmwf/earthkit-regrid:
-            path: .github/ci-hpc-config.yml
+            path: ''
             python: true
             master_branch: main
             develop_branch: develop
@@ -1047,7 +1047,6 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-regrid_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
-      FINDLIBS_DISABLE_PACKAGE: 'no'
     runs-on:
     - self-hosted
     - linux
