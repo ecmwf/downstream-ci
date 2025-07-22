@@ -73,10 +73,16 @@ earthkit-regrid:
   type: python
   master_branch: main
   requirements_path: tests/downstream-ci-requirements.txt
-  env:
-    FINDLIBS_DISABLE_PACKAGE: "no"
   downstream-ci:
     config_path: ""
+    pytest_cmd: |
+      FINDLIBS_DISABLE_PACKAGE=no pytest --cov=./ --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
+  downstream-ci-hpc:
+    config_path: ""
+    pytest_cmd: |
+      FINDLIBS_DISABLE_PACKAGE=no pytest --cov=./ --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 earthkit-time:
   type: python
