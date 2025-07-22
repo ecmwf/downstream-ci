@@ -646,7 +646,7 @@ jobs:
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.mir }}
             optional_matrix: null
-          mir-python:ecmwf/mir/python:
+          mir-python:ecmwf/mir/python/mir:
             path: .github/ci-config.yml
             python: true
             master_branch: master
