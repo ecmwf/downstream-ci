@@ -437,6 +437,12 @@ mir:
     - atlas
     - eccodes
 
+mir-python:
+  type: python
+  repo: ecmwf/mir/python
+  deps:
+    - mir
+
 multio:
   type: cmake
   master_branch: master
