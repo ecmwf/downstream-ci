@@ -372,7 +372,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: add-mir-python
     - name: Run setup script
       id: setup
       env:
