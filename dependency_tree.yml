@@ -124,8 +124,8 @@ anemoi-datasets:
     env:
       RUNNER_TYPE: "self-hosted"
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 anemoi-utils:
   type: python
@@ -146,8 +146,8 @@ anemoi-transform:
   downstream-ci:
     config_path: ""
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 anemoi-graphs:
   type: python
@@ -207,8 +207,8 @@ anemoi-inference:
   downstream-ci:
     config_path: ""
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 anemoi-plugins:
   type: python
