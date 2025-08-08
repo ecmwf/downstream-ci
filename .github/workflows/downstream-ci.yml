@@ -372,7 +372,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: remove-netcdf-from-ek-data-tests
     - name: Run setup script
       id: setup
       env:
@@ -1144,9 +1144,9 @@ jobs:
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         toml_opt_dep_sections: all,test,ci
         test_cmd: |
-          python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+          python -m pytest -vv -m 'not notebook and not no_cache_init' -k 'not netcdf' --cov=. --cov-report=xml
           python -m pytest -v -m 'notebook'
-          python -m pytest --forked -vv -m 'no_cache_init'
+          python -m pytest --forked -vv -m 'no_cache_init' -k 'not netcdf'
           python -m coverage report
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
