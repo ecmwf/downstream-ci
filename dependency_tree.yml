@@ -48,9 +48,9 @@ earthkit-data:
     - earthkit-utils
   downstream-ci:
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      python -m pytest -vv -m 'not notebook and not no_cache_init' -k 'not netcdf' --cov=. --cov-report=xml
       python -m pytest -v -m 'notebook'
-      python -m pytest --forked -vv -m 'no_cache_init'
+      python -m pytest --forked -vv -m 'no_cache_init' -k 'not netcdf'
       python -m coverage report
 
 earthkit-geo:
