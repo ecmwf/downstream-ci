@@ -316,7 +316,7 @@ polytope:
 
 findlibs:
   type: python
-  master_branch: master
+  master_branch: main
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
