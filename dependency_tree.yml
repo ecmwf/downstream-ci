@@ -299,6 +299,12 @@ fdb:
   deps:
     - metkit
 
+grib-check:
+  type: python
+  master_branch: master
+  deps:
+    - eccodes-python
+
 polytope:
   type: python
   master_branch: main
