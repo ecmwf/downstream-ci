@@ -99,6 +99,9 @@ name: downstream-ci-hpc
       fdb:
         required: false
         type: string
+      grib-check:
+        required: false
+        type: string
       polytope:
         required: false
         type: string
@@ -241,6 +244,8 @@ jobs:
       fckit_matrix: ${{ steps.setup.outputs.fckit }}
       fdb: ${{ steps.prepare-inputs.outputs.fdb }}
       fdb_matrix: ${{ steps.setup.outputs.fdb }}
+      grib-check: ${{ steps.prepare-inputs.outputs.grib-check }}
+      grib-check_matrix: ${{ steps.setup.outputs.grib-check }}
       polytope: ${{ steps.prepare-inputs.outputs.polytope }}
       polytope_matrix: ${{ steps.setup.outputs.polytope }}
       findlibs: ${{ steps.prepare-inputs.outputs.findlibs }}
@@ -325,6 +330,7 @@ jobs:
         echo eckit="${{ inputs.eckit }}" >> $GITHUB_OUTPUT
         echo fckit="${{ inputs.fckit }}" >> $GITHUB_OUTPUT
         echo fdb="${{ inputs.fdb }}" >> $GITHUB_OUTPUT
+        echo grib-check="${{ inputs.grib-check }}" >> $GITHUB_OUTPUT
         echo polytope="${{ inputs.polytope }}" >> $GITHUB_OUTPUT
         echo findlibs="${{ inputs.findlibs }}" >> $GITHUB_OUTPUT
         echo gribjump="${{ inputs.gribjump }}" >> $GITHUB_OUTPUT
@@ -564,6 +570,13 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.fdb }}
+            optional_matrix: null
+          grib-check:ecmwf/grib-check:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.grib-check }}
             optional_matrix: null
           polytope:ecmwf/polytope:
             path: .github/ci-hpc-config.yml
@@ -1657,6 +1670,38 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.odc }}
         python_dependencies: ''
+  grib-check:
+    name: grib-check
+    needs:
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.grib-check_matrix && (needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.grib-check)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'grib-check') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.grib-check_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on:
+    - self-hosted
+    - linux
+    - hpc
+    steps:
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
   polytope:
     name: polytope
     needs:
