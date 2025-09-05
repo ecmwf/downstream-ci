@@ -380,7 +380,7 @@ class Workflow:
                     needs.append("clang-format")
                     s = {
                         "uses": (
-                            "ecmwf/reusable-workflows/build-package-with-config@v2"
+                            "ecmwf/reusable-workflows/build-package-with-config@debug-fdb-ci"
                         ),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
@@ -412,7 +412,7 @@ class Workflow:
                             "name": "Build dependencies",
                             "id": "build-deps",
                             "uses": (
-                                "ecmwf/reusable-workflows/build-package-with-config@v2"
+                                "ecmwf/reusable-workflows/build-package-with-config@debug-fdb-ci"
                             ),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
