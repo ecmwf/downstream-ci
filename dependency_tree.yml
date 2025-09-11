@@ -302,7 +302,11 @@ fdb:
 polytope:
   type: python
   master_branch: main
-  requirements_path: tests/requirements_test.txt
+  # requirements_path: tests/requirements_test.txt
+  toml_opt_dep_sections: tests
+  conda_deps: "rust"
+  env:
+    CARGO_TARGET_DIR: /var/tmp
   deps:
     - pygribjump
     - conflator
