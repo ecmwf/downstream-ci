@@ -598,10 +598,10 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.polytope }}
             optional_matrix: null
           qubed:ecmwf/qubed:
-            path: .github/ci-config.yml
+            path: ''
             python: true
             master_branch: main
-            develop_branch: develop
+            develop_branch: main
             input: ${{ steps.prepare-inputs.outputs.qubed }}
             optional_matrix: null
           findlibs:ecmwf/findlibs:
