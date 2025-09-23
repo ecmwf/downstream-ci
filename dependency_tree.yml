@@ -318,6 +318,18 @@ polytope:
   downstream-ci-hpc:
     config_path: ".github/ci-hpc-config.yml"
 
+qubed:
+  type: python
+  master_branch: main
+  toml_opt_dep_sections: dev
+  conda_deps: "rust"
+  env:
+    CARGO_TARGET_DIR: /var/tmp
+  downstream-ci:
+    test_cmd: | 
+      python -m pytest tests --cov=./ --cov-report=xml
+      python -m coverage report
+
 findlibs:
   type: python
   master_branch: main
