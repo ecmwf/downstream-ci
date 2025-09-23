@@ -321,11 +321,13 @@ polytope:
 qubed:
   type: python
   master_branch: main
+  develop_branch: main
   toml_opt_dep_sections: dev
   conda_deps: "rust"
   env:
     CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
+    config_path: ""
     test_cmd: | 
       python -m pytest tests --cov=./ --cov-report=xml
       python -m coverage report
