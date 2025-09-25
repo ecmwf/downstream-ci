@@ -888,9 +888,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install black flake8 isort
     - name: Check isort
-      run: isort --check . --profile black
+      run: isort --check --diff . --profile black
     - name: Check black
-      run: black --check .
+      run: black --check --diff .
     - name: Check flake8
       run: flake8 .
   clang-format:
