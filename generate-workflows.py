@@ -213,8 +213,8 @@ class Workflow:
                     "python -m pip install black flake8 isort\n"
                 ),
             },
-            {"name": "Check isort", "run": "isort --check . --profile black"},
-            {"name": "Check black", "run": "black --check ."},
+            {"name": "Check isort", "run": "isort --check --diff . --profile black"},
+            {"name": "Check black", "run": "black --check --diff ."},
             {"name": "Check flake8", "run": "flake8 ."},
         ]
 
