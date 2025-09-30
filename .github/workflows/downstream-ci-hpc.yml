@@ -6,7 +6,7 @@
 #
 #
 name: downstream-ci-hpc
-"on":
+'on':
   workflow_call:
     inputs:
       ci_group:
@@ -293,509 +293,509 @@ jobs:
       use_master: ${{ steps.setup.outputs.use_master }}
       ci_group_pkgs: ${{ steps.setup.outputs.ci_group_pkgs }}
     steps:
-      - name: Prepare inputs
-        id: prepare-inputs
-        run: |-
-          echo atlas="${{ inputs.atlas }}" >> $GITHUB_OUTPUT
-          echo atlas-orca="${{ inputs.atlas-orca }}" >> $GITHUB_OUTPUT
-          echo cfgrib="${{ inputs.cfgrib }}" >> $GITHUB_OUTPUT
-          echo earthkit="${{ inputs.earthkit }}" >> $GITHUB_OUTPUT
-          echo earthkit-data="${{ inputs.earthkit-data }}" >> $GITHUB_OUTPUT
-          echo earthkit-geo="${{ inputs.earthkit-geo }}" >> $GITHUB_OUTPUT
-          echo earthkit-meteo="${{ inputs.earthkit-meteo }}" >> $GITHUB_OUTPUT
-          echo earthkit-regrid="${{ inputs.earthkit-regrid }}" >> $GITHUB_OUTPUT
-          echo earthkit-time="${{ inputs.earthkit-time }}" >> $GITHUB_OUTPUT
-          echo earthkit-utils="${{ inputs.earthkit-utils }}" >> $GITHUB_OUTPUT
-          echo earthkit-hydro="${{ inputs.earthkit-hydro }}" >> $GITHUB_OUTPUT
-          echo anemoi-datasets="${{ inputs.anemoi-datasets }}" >> $GITHUB_OUTPUT
-          echo anemoi-utils="${{ inputs.anemoi-utils }}" >> $GITHUB_OUTPUT
-          echo anemoi-transform="${{ inputs.anemoi-transform }}" >> $GITHUB_OUTPUT
-          echo anemoi-graphs="${{ inputs.anemoi-graphs }}" >> $GITHUB_OUTPUT
-          echo anemoi-models="${{ inputs.anemoi-models }}" >> $GITHUB_OUTPUT
-          echo anemoi-training="${{ inputs.anemoi-training }}" >> $GITHUB_OUTPUT
-          echo anemoi-inference="${{ inputs.anemoi-inference }}" >> $GITHUB_OUTPUT
-          echo anemoi-plugins="${{ inputs.anemoi-plugins }}" >> $GITHUB_OUTPUT
-          echo conflator="${{ inputs.conflator }}" >> $GITHUB_OUTPUT
-          echo earthkit-workflows="${{ inputs.earthkit-workflows }}" >> $GITHUB_OUTPUT
-          echo ecbuild="${{ inputs.ecbuild }}" >> $GITHUB_OUTPUT
-          echo eccodes="${{ inputs.eccodes }}" >> $GITHUB_OUTPUT
-          echo eccodes-python="${{ inputs.eccodes-python }}" >> $GITHUB_OUTPUT
-          echo ecflow="${{ inputs.ecflow }}" >> $GITHUB_OUTPUT
-          echo ecflow-light="${{ inputs.ecflow-light }}" >> $GITHUB_OUTPUT
-          echo eckit="${{ inputs.eckit }}" >> $GITHUB_OUTPUT
-          echo fckit="${{ inputs.fckit }}" >> $GITHUB_OUTPUT
-          echo fdb="${{ inputs.fdb }}" >> $GITHUB_OUTPUT
-          echo polytope="${{ inputs.polytope }}" >> $GITHUB_OUTPUT
-          echo findlibs="${{ inputs.findlibs }}" >> $GITHUB_OUTPUT
-          echo gribjump="${{ inputs.gribjump }}" >> $GITHUB_OUTPUT
-          echo pygribjump="${{ inputs.pygribjump }}" >> $GITHUB_OUTPUT
-          echo infero="${{ inputs.infero }}" >> $GITHUB_OUTPUT
-          echo kronos="${{ inputs.kronos }}" >> $GITHUB_OUTPUT
-          echo metkit="${{ inputs.metkit }}" >> $GITHUB_OUTPUT
-          echo mir="${{ inputs.mir }}" >> $GITHUB_OUTPUT
-          echo multio="${{ inputs.multio }}" >> $GITHUB_OUTPUT
-          echo pymultio="${{ inputs.pymultio }}" >> $GITHUB_OUTPUT
-          echo multiurl="${{ inputs.multiurl }}" >> $GITHUB_OUTPUT
-          echo odc="${{ inputs.odc }}" >> $GITHUB_OUTPUT
-          echo pdbufr="${{ inputs.pdbufr }}" >> $GITHUB_OUTPUT
-          echo plume="${{ inputs.plume }}" >> $GITHUB_OUTPUT
-          echo plume-plugin-extreme-events="${{ inputs.plume-plugin-extreme-events }}" >> $GITHUB_OUTPUT
-          echo plume-plugin-wind-farm="${{ inputs.plume-plugin-wind-farm }}" >> $GITHUB_OUTPUT
-          echo plume-plugin-axe="${{ inputs.plume-plugin-axe }}" >> $GITHUB_OUTPUT
-          echo pyfdb="${{ inputs.pyfdb }}" >> $GITHUB_OUTPUT
-          echo pyodc="${{ inputs.pyodc }}" >> $GITHUB_OUTPUT
-          echo skinnywms="${{ inputs.skinnywms }}" >> $GITHUB_OUTPUT
-          echo thermofeel="${{ inputs.thermofeel }}" >> $GITHUB_OUTPUT
-          echo troika="${{ inputs.troika }}" >> $GITHUB_OUTPUT
-          echo covjsonkit="${{ inputs.covjsonkit }}" >> $GITHUB_OUTPUT
-          echo danu="${{ inputs.danu }}" >> $GITHUB_OUTPUT
-      - name: checkout reusable wfs repo
-        uses: actions/checkout@v4
-        with:
-          repository: ecmwf/downstream-ci
-          ref: main
-      - name: Run setup script
-        id: setup
-        env:
-          TOKEN: ${{ secrets.GH_REPO_READ_TOKEN }}
-          CONFIG: |
-            atlas:ecmwf/atlas:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.atlas }}
-              optional_matrix: null
-            atlas-orca:ecmwf/atlas-orca:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.atlas-orca }}
-              optional_matrix: null
-            cfgrib:ecmwf/cfgrib:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: master
-              input: ${{ steps.prepare-inputs.outputs.cfgrib }}
-              optional_matrix: null
-            earthkit:ecmwf/earthkit:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit }}
-              optional_matrix: null
-            earthkit-data:ecmwf/earthkit-data:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-data }}
-              optional_matrix: null
-            earthkit-geo:ecmwf/earthkit-geo:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-geo }}
-              optional_matrix: null
-            earthkit-meteo:ecmwf/earthkit-meteo:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
-              optional_matrix: null
-            earthkit-regrid:ecmwf/earthkit-regrid:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-regrid }}
-              optional_matrix: null
-            earthkit-time:ecmwf/earthkit-time:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-time }}
-              optional_matrix: null
-            earthkit-utils:ecmwf/earthkit-utils:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-utils }}
-              optional_matrix: null
-            earthkit-hydro:ecmwf/earthkit-hydro:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-hydro }}
-              optional_matrix: null
-            anemoi-datasets:ecmwf/anemoi-datasets:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-datasets }}
-              optional_matrix: null
-            anemoi-utils:ecmwf/anemoi-utils:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-utils }}
-              optional_matrix: null
-            anemoi-transform:ecmwf/anemoi-transform:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-transform }}
-              optional_matrix: null
-            anemoi-graphs:ecmwf/anemoi-core/graphs:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-graphs }}
-              optional_matrix: null
-            anemoi-models:ecmwf/anemoi-core/models:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-models }}
-              optional_matrix: null
-            anemoi-training:ecmwf/anemoi-core/training:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-training }}
-              optional_matrix: null
-            anemoi-inference:ecmwf/anemoi-inference:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-inference }}
-              optional_matrix: null
-            anemoi-plugins:ecmwf/anemoi-plugins:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.anemoi-plugins }}
-              optional_matrix: null
-            conflator:ecmwf/conflator:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.conflator }}
-              optional_matrix: null
-            earthkit-workflows:ecmwf/earthkit-workflows:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.earthkit-workflows }}
-              optional_matrix: null
-            ecbuild:ecmwf/ecbuild:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.ecbuild }}
-              optional_matrix: null
-            eccodes:ecmwf/eccodes:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.eccodes }}
-              optional_matrix: null
-            eccodes-python:ecmwf/eccodes-python:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.eccodes-python }}
-              optional_matrix: null
-            ecflow:ecmwf/ecflow:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.ecflow }}
-              optional_matrix:
-              - clang@macos-13-arm
-              - clang@macos-13-x86
-              - gnu@debian-12
-            ecflow-light:ecmwf/ecflow-light:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.ecflow-light }}
-              optional_matrix: null
-            eckit:ecmwf/eckit:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.eckit }}
-              optional_matrix: null
-            fckit:ecmwf/fckit:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.fckit }}
-              optional_matrix: null
-            fdb:ecmwf/fdb:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.fdb }}
-              optional_matrix: null
-            polytope:ecmwf/polytope:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.polytope }}
-              optional_matrix: null
-            findlibs:ecmwf/findlibs:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.findlibs }}
-              optional_matrix: null
-            gribjump:ecmwf/gribjump:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.gribjump }}
-              optional_matrix: null
-            pygribjump:ecmwf/gribjump:
-              path: .github/ci-hpc-config-pygribjump.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.pygribjump }}
-              optional_matrix: null
-            infero:ecmwf/infero:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.infero }}
-              optional_matrix: null
-            kronos:ecmwf/kronos:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.kronos }}
-              optional_matrix: null
-            metkit:ecmwf/metkit:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.metkit }}
-              optional_matrix: null
-            mir:ecmwf/mir:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.mir }}
-              optional_matrix: null
-            multio:ecmwf/multio:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.multio }}
-              optional_matrix: null
-            pymultio:ecmwf/multio:
-              path: .github/ci-hpc-config-pymultio.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.pymultio }}
-              optional_matrix: null
-            multiurl:ecmwf/multiurl:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: main
-              input: ${{ steps.prepare-inputs.outputs.multiurl }}
-              optional_matrix: null
-            odc:ecmwf/odc:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.odc }}
-              optional_matrix: null
-            pdbufr:ecmwf/pdbufr:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.pdbufr }}
-              optional_matrix: null
-            plume:ecmwf/plume:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.plume }}
-              optional_matrix: null
-            plume-plugin-extreme-events:ecmwf/plume-plugin-extreme-events:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.plume-plugin-extreme-events }}
-              optional_matrix: null
-            plume-plugin-wind-farm:ecmwf/plume-plugin-wind-farm:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.plume-plugin-wind-farm }}
-              optional_matrix: null
-            plume-plugin-axe:ecmwf/plume-plugin-axe:
-              path: .github/ci-hpc-config.yml
-              python: false
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.plume-plugin-axe }}
-              optional_matrix: null
-            pyfdb:ecmwf/pyfdb:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.pyfdb }}
-              optional_matrix: null
-            pyodc:ecmwf/pyodc:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.pyodc }}
-              optional_matrix: null
-            skinnywms:ecmwf/skinnywms:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.skinnywms }}
-              optional_matrix: null
-            thermofeel:ecmwf/thermofeel:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.thermofeel }}
-              optional_matrix: null
-            troika:ecmwf/troika:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: master
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.troika }}
-              optional_matrix: null
-            covjsonkit:ecmwf/covjsonkit:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.covjsonkit }}
-              optional_matrix: null
-            danu:ecmwf/danu:
-              path: .github/ci-hpc-config.yml
-              python: true
-              master_branch: main
-              develop_branch: develop
-              input: ${{ steps.prepare-inputs.outputs.danu }}
-              optional_matrix: null
-          PYTHON_VERSIONS: |+
-            - '3.10'
+    - name: Prepare inputs
+      id: prepare-inputs
+      run: |-
+        echo atlas="${{ inputs.atlas }}" >> $GITHUB_OUTPUT
+        echo atlas-orca="${{ inputs.atlas-orca }}" >> $GITHUB_OUTPUT
+        echo cfgrib="${{ inputs.cfgrib }}" >> $GITHUB_OUTPUT
+        echo earthkit="${{ inputs.earthkit }}" >> $GITHUB_OUTPUT
+        echo earthkit-data="${{ inputs.earthkit-data }}" >> $GITHUB_OUTPUT
+        echo earthkit-geo="${{ inputs.earthkit-geo }}" >> $GITHUB_OUTPUT
+        echo earthkit-meteo="${{ inputs.earthkit-meteo }}" >> $GITHUB_OUTPUT
+        echo earthkit-regrid="${{ inputs.earthkit-regrid }}" >> $GITHUB_OUTPUT
+        echo earthkit-time="${{ inputs.earthkit-time }}" >> $GITHUB_OUTPUT
+        echo earthkit-utils="${{ inputs.earthkit-utils }}" >> $GITHUB_OUTPUT
+        echo earthkit-hydro="${{ inputs.earthkit-hydro }}" >> $GITHUB_OUTPUT
+        echo anemoi-datasets="${{ inputs.anemoi-datasets }}" >> $GITHUB_OUTPUT
+        echo anemoi-utils="${{ inputs.anemoi-utils }}" >> $GITHUB_OUTPUT
+        echo anemoi-transform="${{ inputs.anemoi-transform }}" >> $GITHUB_OUTPUT
+        echo anemoi-graphs="${{ inputs.anemoi-graphs }}" >> $GITHUB_OUTPUT
+        echo anemoi-models="${{ inputs.anemoi-models }}" >> $GITHUB_OUTPUT
+        echo anemoi-training="${{ inputs.anemoi-training }}" >> $GITHUB_OUTPUT
+        echo anemoi-inference="${{ inputs.anemoi-inference }}" >> $GITHUB_OUTPUT
+        echo anemoi-plugins="${{ inputs.anemoi-plugins }}" >> $GITHUB_OUTPUT
+        echo conflator="${{ inputs.conflator }}" >> $GITHUB_OUTPUT
+        echo earthkit-workflows="${{ inputs.earthkit-workflows }}" >> $GITHUB_OUTPUT
+        echo ecbuild="${{ inputs.ecbuild }}" >> $GITHUB_OUTPUT
+        echo eccodes="${{ inputs.eccodes }}" >> $GITHUB_OUTPUT
+        echo eccodes-python="${{ inputs.eccodes-python }}" >> $GITHUB_OUTPUT
+        echo ecflow="${{ inputs.ecflow }}" >> $GITHUB_OUTPUT
+        echo ecflow-light="${{ inputs.ecflow-light }}" >> $GITHUB_OUTPUT
+        echo eckit="${{ inputs.eckit }}" >> $GITHUB_OUTPUT
+        echo fckit="${{ inputs.fckit }}" >> $GITHUB_OUTPUT
+        echo fdb="${{ inputs.fdb }}" >> $GITHUB_OUTPUT
+        echo polytope="${{ inputs.polytope }}" >> $GITHUB_OUTPUT
+        echo findlibs="${{ inputs.findlibs }}" >> $GITHUB_OUTPUT
+        echo gribjump="${{ inputs.gribjump }}" >> $GITHUB_OUTPUT
+        echo pygribjump="${{ inputs.pygribjump }}" >> $GITHUB_OUTPUT
+        echo infero="${{ inputs.infero }}" >> $GITHUB_OUTPUT
+        echo kronos="${{ inputs.kronos }}" >> $GITHUB_OUTPUT
+        echo metkit="${{ inputs.metkit }}" >> $GITHUB_OUTPUT
+        echo mir="${{ inputs.mir }}" >> $GITHUB_OUTPUT
+        echo multio="${{ inputs.multio }}" >> $GITHUB_OUTPUT
+        echo pymultio="${{ inputs.pymultio }}" >> $GITHUB_OUTPUT
+        echo multiurl="${{ inputs.multiurl }}" >> $GITHUB_OUTPUT
+        echo odc="${{ inputs.odc }}" >> $GITHUB_OUTPUT
+        echo pdbufr="${{ inputs.pdbufr }}" >> $GITHUB_OUTPUT
+        echo plume="${{ inputs.plume }}" >> $GITHUB_OUTPUT
+        echo plume-plugin-extreme-events="${{ inputs.plume-plugin-extreme-events }}" >> $GITHUB_OUTPUT
+        echo plume-plugin-wind-farm="${{ inputs.plume-plugin-wind-farm }}" >> $GITHUB_OUTPUT
+        echo plume-plugin-axe="${{ inputs.plume-plugin-axe }}" >> $GITHUB_OUTPUT
+        echo pyfdb="${{ inputs.pyfdb }}" >> $GITHUB_OUTPUT
+        echo pyodc="${{ inputs.pyodc }}" >> $GITHUB_OUTPUT
+        echo skinnywms="${{ inputs.skinnywms }}" >> $GITHUB_OUTPUT
+        echo thermofeel="${{ inputs.thermofeel }}" >> $GITHUB_OUTPUT
+        echo troika="${{ inputs.troika }}" >> $GITHUB_OUTPUT
+        echo covjsonkit="${{ inputs.covjsonkit }}" >> $GITHUB_OUTPUT
+        echo danu="${{ inputs.danu }}" >> $GITHUB_OUTPUT
+    - name: checkout reusable wfs repo
+      uses: actions/checkout@v4
+      with:
+        repository: ecmwf/downstream-ci
+        ref: feature/add-fdb-to-earthkit-data
+    - name: Run setup script
+      id: setup
+      env:
+        TOKEN: ${{ secrets.GH_REPO_READ_TOKEN }}
+        CONFIG: |
+          atlas:ecmwf/atlas:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.atlas }}
+            optional_matrix: null
+          atlas-orca:ecmwf/atlas-orca:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.atlas-orca }}
+            optional_matrix: null
+          cfgrib:ecmwf/cfgrib:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: master
+            input: ${{ steps.prepare-inputs.outputs.cfgrib }}
+            optional_matrix: null
+          earthkit:ecmwf/earthkit:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit }}
+            optional_matrix: null
+          earthkit-data:ecmwf/earthkit-data:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-data }}
+            optional_matrix: null
+          earthkit-geo:ecmwf/earthkit-geo:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-geo }}
+            optional_matrix: null
+          earthkit-meteo:ecmwf/earthkit-meteo:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
+            optional_matrix: null
+          earthkit-regrid:ecmwf/earthkit-regrid:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-regrid }}
+            optional_matrix: null
+          earthkit-time:ecmwf/earthkit-time:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-time }}
+            optional_matrix: null
+          earthkit-utils:ecmwf/earthkit-utils:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-utils }}
+            optional_matrix: null
+          earthkit-hydro:ecmwf/earthkit-hydro:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-hydro }}
+            optional_matrix: null
+          anemoi-datasets:ecmwf/anemoi-datasets:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-datasets }}
+            optional_matrix: null
+          anemoi-utils:ecmwf/anemoi-utils:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-utils }}
+            optional_matrix: null
+          anemoi-transform:ecmwf/anemoi-transform:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-transform }}
+            optional_matrix: null
+          anemoi-graphs:ecmwf/anemoi-core/graphs:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-graphs }}
+            optional_matrix: null
+          anemoi-models:ecmwf/anemoi-core/models:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-models }}
+            optional_matrix: null
+          anemoi-training:ecmwf/anemoi-core/training:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-training }}
+            optional_matrix: null
+          anemoi-inference:ecmwf/anemoi-inference:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-inference }}
+            optional_matrix: null
+          anemoi-plugins:ecmwf/anemoi-plugins:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.anemoi-plugins }}
+            optional_matrix: null
+          conflator:ecmwf/conflator:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.conflator }}
+            optional_matrix: null
+          earthkit-workflows:ecmwf/earthkit-workflows:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-workflows }}
+            optional_matrix: null
+          ecbuild:ecmwf/ecbuild:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.ecbuild }}
+            optional_matrix: null
+          eccodes:ecmwf/eccodes:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.eccodes }}
+            optional_matrix: null
+          eccodes-python:ecmwf/eccodes-python:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.eccodes-python }}
+            optional_matrix: null
+          ecflow:ecmwf/ecflow:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.ecflow }}
+            optional_matrix:
+            - clang@macos-13-arm
+            - clang@macos-13-x86
+            - gnu@debian-12
+          ecflow-light:ecmwf/ecflow-light:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.ecflow-light }}
+            optional_matrix: null
+          eckit:ecmwf/eckit:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.eckit }}
+            optional_matrix: null
+          fckit:ecmwf/fckit:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.fckit }}
+            optional_matrix: null
+          fdb:ecmwf/fdb:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.fdb }}
+            optional_matrix: null
+          polytope:ecmwf/polytope:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.polytope }}
+            optional_matrix: null
+          findlibs:ecmwf/findlibs:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.findlibs }}
+            optional_matrix: null
+          gribjump:ecmwf/gribjump:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.gribjump }}
+            optional_matrix: null
+          pygribjump:ecmwf/gribjump:
+            path: .github/ci-hpc-config-pygribjump.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.pygribjump }}
+            optional_matrix: null
+          infero:ecmwf/infero:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.infero }}
+            optional_matrix: null
+          kronos:ecmwf/kronos:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.kronos }}
+            optional_matrix: null
+          metkit:ecmwf/metkit:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.metkit }}
+            optional_matrix: null
+          mir:ecmwf/mir:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.mir }}
+            optional_matrix: null
+          multio:ecmwf/multio:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.multio }}
+            optional_matrix: null
+          pymultio:ecmwf/multio:
+            path: .github/ci-hpc-config-pymultio.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.pymultio }}
+            optional_matrix: null
+          multiurl:ecmwf/multiurl:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.multiurl }}
+            optional_matrix: null
+          odc:ecmwf/odc:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.odc }}
+            optional_matrix: null
+          pdbufr:ecmwf/pdbufr:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.pdbufr }}
+            optional_matrix: null
+          plume:ecmwf/plume:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.plume }}
+            optional_matrix: null
+          plume-plugin-extreme-events:ecmwf/plume-plugin-extreme-events:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.plume-plugin-extreme-events }}
+            optional_matrix: null
+          plume-plugin-wind-farm:ecmwf/plume-plugin-wind-farm:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.plume-plugin-wind-farm }}
+            optional_matrix: null
+          plume-plugin-axe:ecmwf/plume-plugin-axe:
+            path: .github/ci-hpc-config.yml
+            python: false
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.plume-plugin-axe }}
+            optional_matrix: null
+          pyfdb:ecmwf/pyfdb:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.pyfdb }}
+            optional_matrix: null
+          pyodc:ecmwf/pyodc:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.pyodc }}
+            optional_matrix: null
+          skinnywms:ecmwf/skinnywms:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.skinnywms }}
+            optional_matrix: null
+          thermofeel:ecmwf/thermofeel:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.thermofeel }}
+            optional_matrix: null
+          troika:ecmwf/troika:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.troika }}
+            optional_matrix: null
+          covjsonkit:ecmwf/covjsonkit:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.covjsonkit }}
+            optional_matrix: null
+          danu:ecmwf/danu:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.danu }}
+            optional_matrix: null
+        PYTHON_VERSIONS: |+
+          - '3.10'
 
-          PYTHON_JOBS: |+
-            - gnu-8.5.0
+        PYTHON_JOBS: |+
+          - gnu-8.5.0
 
-          MATRIX: |
-            include:
-            - compiler: gnu-12.2.0
-              compiler_cc: gcc
-              compiler_cxx: g++
-              compiler_fc: gfortran
-              compiler_modules: gcc/12.2.0
-              name: gnu-12.2.0
-              site: atos
-            - compiler: gnu-8.5.0
-              compiler_cc: gcc
-              compiler_cxx: g++
-              compiler_fc: gfortran
-              compiler_modules: gcc/8.5.0
-              name: gnu-8.5.0
-              site: atos
-            - compiler: nvidia-22.11
-              compiler_cc: nvc
-              compiler_cxx: nvc++
-              compiler_fc: nvfortran
-              compiler_modules: prgenv/nvidia,nvidia/22.11
-              name: nvidia-22.11
-              site: atos
-            - compiler: intel-2021.4.0
-              compiler_cc: icc
-              compiler_cxx: icpc
-              compiler_fc: ifort
-              compiler_modules: prgenv/intel,intel/2021.4.0
-              name: intel-2021.4.0
-              site: atos
-            name:
-            - gnu-12.2.0
-            - gnu-8.5.0
-            - nvidia-22.11
-            - intel-2021.4.0
-          OPTIONAL_MATRIX: |
-            include:
-            - compiler: gnu-12.2.0
-              compiler_cc: gcc
-              compiler_cxx: g++
-              compiler_fc: gfortran
-              compiler_modules: LUMI/23.09,cpeGNU/23.09
-              name: lumi-gnu-12.2.0
-              site: lumi
-            name:
-            - lumi
-          WORKFLOW_NAME: downstream-ci-hpc
-          DOWNSTREAM_CI_GROUP: ${{ inputs.ci_group }}
-          SKIP_MATRIX_JOBS: ${{ inputs.skip_matrix_jobs }}
-        run: python setup_downstream_ci.py
+        MATRIX: |
+          include:
+          - compiler: gnu-12.2.0
+            compiler_cc: gcc
+            compiler_cxx: g++
+            compiler_fc: gfortran
+            compiler_modules: gcc/12.2.0
+            name: gnu-12.2.0
+            site: atos
+          - compiler: gnu-8.5.0
+            compiler_cc: gcc
+            compiler_cxx: g++
+            compiler_fc: gfortran
+            compiler_modules: gcc/8.5.0
+            name: gnu-8.5.0
+            site: atos
+          - compiler: nvidia-22.11
+            compiler_cc: nvc
+            compiler_cxx: nvc++
+            compiler_fc: nvfortran
+            compiler_modules: prgenv/nvidia,nvidia/22.11
+            name: nvidia-22.11
+            site: atos
+          - compiler: intel-2021.4.0
+            compiler_cc: icc
+            compiler_cxx: icpc
+            compiler_fc: ifort
+            compiler_modules: prgenv/intel,intel/2021.4.0
+            name: intel-2021.4.0
+            site: atos
+          name:
+          - gnu-12.2.0
+          - gnu-8.5.0
+          - nvidia-22.11
+          - intel-2021.4.0
+        OPTIONAL_MATRIX: |
+          include:
+          - compiler: gnu-12.2.0
+            compiler_cc: gcc
+            compiler_cxx: g++
+            compiler_fc: gfortran
+            compiler_modules: LUMI/23.09,cpeGNU/23.09
+            name: lumi-gnu-12.2.0
+            site: lumi
+          name:
+          - lumi
+        WORKFLOW_NAME: downstream-ci-hpc
+        DOWNSTREAM_CI_GROUP: ${{ inputs.ci_group }}
+        SKIP_MATRIX_JOBS: ${{ inputs.skip_matrix_jobs }}
+      run: python setup_downstream_ci.py
   atlas:
     name: atlas
     needs:
-      - eckit
-      - ecbuild
-      - fckit
-      - setup
+    - eckit
+    - ecbuild
+    - fckit
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.atlas_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fckit || needs.setup.outputs.atlas)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'atlas') }}
     strategy:
       fail-fast: false
@@ -803,30 +803,30 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.fckit }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.fckit }}
+        python_dependencies: ''
   atlas-orca:
     name: atlas-orca
     needs:
-      - atlas
-      - eckit
-      - ecbuild
-      - fckit
-      - setup
+    - atlas
+    - eckit
+    - ecbuild
+    - fckit
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.atlas-orca_matrix && (needs.setup.outputs.atlas || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fckit || needs.setup.outputs.atlas-orca)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'atlas-orca') }}
     strategy:
       fail-fast: false
@@ -834,31 +834,31 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.atlas }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.fckit }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.atlas }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.fckit }}
+        python_dependencies: ''
   cfgrib:
     name: cfgrib
     needs:
-      - eccodes-python
-      - eccodes
-      - ecbuild
-      - findlibs
-      - setup
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.cfgrib_matrix && (needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.cfgrib)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'cfgrib') }}
     strategy:
       fail-fast: false
@@ -866,134 +866,142 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: |-
-            ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-            ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-          python_requirements: ci/requirements-tests.in
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+        python_requirements: ci/requirements-tests.in
   earthkit:
     name: earthkit
     needs:
-      - earthkit-data
-      - cfgrib
-      - eccodes-python
-      - eccodes
-      - ecbuild
-      - findlibs
-      - multiurl
-      - pdbufr
-      - pyodc
-      - odc
-      - eckit
-      - earthkit-utils
-      - earthkit-geo
-      - earthkit-meteo
-      - earthkit-regrid
-      - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
+    - earthkit-data
+    - cfgrib
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - multiurl
+    - pdbufr
+    - pyodc
+    - odc
+    - eckit
+    - pyfdb
+    - fdb
+    - metkit
+    - earthkit-utils
+    - earthkit-geo
+    - earthkit-meteo
+    - earthkit-regrid
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.odc }}
-            ${{ needs.setup.outputs.eckit }}
-          python_dependencies: |-
-            ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
-            ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
-            ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-            ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-            ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
-            ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
-            ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
-            ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-            ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
-            ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
-            ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
-          python_requirements: tests/downstream-ci-requirements.txt
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
+          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+        python_requirements: tests/downstream-ci-requirements.txt
   earthkit-data:
     name: earthkit-data
     needs:
-      - cfgrib
-      - eccodes-python
-      - eccodes
-      - ecbuild
-      - findlibs
-      - multiurl
-      - pdbufr
-      - pyodc
-      - odc
-      - metkit
-      - fdb
-      - pyfdb
-      - eckit
-      - earthkit-utils
-      - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.pyfdb || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
+    - cfgrib
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - multiurl
+    - pdbufr
+    - pyodc
+    - odc
+    - eckit
+    - pyfdb
+    - fdb
+    - metkit
+    - earthkit-utils
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-data_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.odc }}
-            ${{ needs.setup.outputs.eckit }}
-          python_dependencies: |-
-            ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
-            ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-            ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-            ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
-            ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
-            ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
-            ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
-            ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-          python_toml_opt_dep_sections: all,test,ci
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
+          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+        python_toml_opt_dep_sections: all,test,ci
   earthkit-geo:
     name: earthkit-geo
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-geo_matrix && (needs.setup.outputs.earthkit-geo)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-geo') }}
     strategy:
       fail-fast: false
@@ -1001,25 +1009,25 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
-          python_requirements: tests/downstream-ci-requirements.txt
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+        python_requirements: tests/downstream-ci-requirements.txt
   earthkit-meteo:
     name: earthkit-meteo
     needs:
-      - earthkit-utils
-      - setup
+    - earthkit-utils
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-meteo_matrix && (needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-meteo)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-meteo') }}
     strategy:
       fail-fast: false
@@ -1027,24 +1035,24 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-          python_requirements: tests/downstream-ci-requirements.txt
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+        python_requirements: tests/downstream-ci-requirements.txt
   earthkit-regrid:
     name: earthkit-regrid
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-regrid_matrix && (needs.setup.outputs.earthkit-regrid)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-regrid') }}
     strategy:
       fail-fast: false
@@ -1052,24 +1060,24 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
-          python_requirements: tests/downstream-ci-requirements.txt
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+        python_requirements: tests/downstream-ci-requirements.txt
   earthkit-time:
     name: earthkit-time
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-time_matrix && (needs.setup.outputs.earthkit-time)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-time') }}
     strategy:
       fail-fast: false
@@ -1077,23 +1085,23 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   earthkit-utils:
     name: earthkit-utils
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-utils_matrix && (needs.setup.outputs.earthkit-utils)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-utils') }}
     strategy:
       fail-fast: false
@@ -1101,25 +1109,25 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
-          python_requirements: tests/downstream-ci-requirements.txt
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+        python_requirements: tests/downstream-ci-requirements.txt
   earthkit-hydro:
     name: earthkit-hydro
     needs:
-      - earthkit-data
-      - setup
+    - earthkit-data
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-hydro_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-hydro)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-hydro') }}
     strategy:
       fail-fast: false
@@ -1128,27 +1136,27 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
       CARGO_TARGET_DIR: /var/tmp
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
-          python_toml_opt_dep_sections: all
-          conda_deps: rust
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+        python_toml_opt_dep_sections: all
+        conda_deps: rust
   anemoi-datasets:
     name: anemoi-datasets
     needs:
-      - anemoi-utils
-      - anemoi-transform
-      - setup
+    - anemoi-utils
+    - anemoi-transform
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-datasets_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-datasets)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-datasets') }}
     strategy:
       fail-fast: false
@@ -1156,26 +1164,26 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: |-
-            ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
-            ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: |-
+          ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
+          ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+        python_toml_opt_dep_sections: all,tests
   anemoi-utils:
     name: anemoi-utils
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-utils_matrix && (needs.setup.outputs.anemoi-utils)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-utils') }}
     strategy:
       fail-fast: false
@@ -1183,24 +1191,24 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+        python_toml_opt_dep_sections: all,tests
   anemoi-transform:
     name: anemoi-transform
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-transform_matrix && (needs.setup.outputs.anemoi-transform)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-transform') }}
     strategy:
       fail-fast: false
@@ -1208,27 +1216,27 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+        python_toml_opt_dep_sections: all,tests
   anemoi-graphs:
     name: anemoi-graphs
     needs:
-      - anemoi-datasets
-      - anemoi-utils
-      - anemoi-transform
-      - setup
+    - anemoi-datasets
+    - anemoi-utils
+    - anemoi-transform
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-graphs_matrix && (needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-graphs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-graphs') }}
     strategy:
       fail-fast: false
@@ -1236,28 +1244,28 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: |-
-            ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
-            ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
-            ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: |-
+          ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
+          ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
+          ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+        python_toml_opt_dep_sections: all,tests
   anemoi-models:
     name: anemoi-models
     needs:
-      - anemoi-utils
-      - setup
+    - anemoi-utils
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-models_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-models') }}
     strategy:
       fail-fast: false
@@ -1265,29 +1273,29 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
+        python_toml_opt_dep_sections: all,tests
   anemoi-training:
     name: anemoi-training
     needs:
-      - anemoi-utils
-      - anemoi-models
-      - anemoi-datasets
-      - anemoi-transform
-      - anemoi-graphs
-      - setup
+    - anemoi-utils
+    - anemoi-models
+    - anemoi-datasets
+    - anemoi-transform
+    - anemoi-graphs
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-training_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models || needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-graphs || needs.setup.outputs.anemoi-training)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-training') }}
     strategy:
       fail-fast: false
@@ -1295,31 +1303,31 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: |-
-            ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
-            ${{ needs.setup.outputs.anemoi-models || (needs.setup.outputs.use_master == 'True' && 'anemoi-models:ecmwf/anemoi-core/models@main') || 'anemoi-models:ecmwf/anemoi-core/models@main' }}
-            ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
-            ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-            ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: |-
+          ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
+          ${{ needs.setup.outputs.anemoi-models || (needs.setup.outputs.use_master == 'True' && 'anemoi-models:ecmwf/anemoi-core/models@main') || 'anemoi-models:ecmwf/anemoi-core/models@main' }}
+          ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
+          ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
+        python_toml_opt_dep_sections: all,tests
   anemoi-inference:
     name: anemoi-inference
     needs:
-      - anemoi-utils
-      - anemoi-transform
-      - setup
+    - anemoi-utils
+    - anemoi-transform
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-inference_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-inference)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-inference') }}
     strategy:
       fail-fast: false
@@ -1327,27 +1335,27 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: |-
-            ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
-            ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: |-
+          ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
+          ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+        python_toml_opt_dep_sections: all,tests
   anemoi-plugins:
     name: anemoi-plugins
     needs:
-      - anemoi-utils
-      - setup
+    - anemoi-utils
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-plugins_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-plugins)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-plugins') }}
     strategy:
       fail-fast: false
@@ -1355,24 +1363,24 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
-          python_toml_opt_dep_sections: all,tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
+        python_toml_opt_dep_sections: all,tests
   conflator:
     name: conflator
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.conflator_matrix && (needs.setup.outputs.conflator)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'conflator') }}
     strategy:
       fail-fast: false
@@ -1380,72 +1388,78 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   earthkit-workflows:
     name: earthkit-workflows
     needs:
-      - earthkit-data
-      - cfgrib
-      - eccodes-python
-      - eccodes
-      - ecbuild
-      - findlibs
-      - multiurl
-      - pdbufr
-      - pyodc
-      - odc
-      - eckit
-      - earthkit-utils
-      - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-workflows_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-workflows)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-workflows') }}
+    - earthkit-data
+    - cfgrib
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - multiurl
+    - pdbufr
+    - pyodc
+    - odc
+    - eckit
+    - pyfdb
+    - fdb
+    - metkit
+    - earthkit-utils
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-workflows_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-workflows)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-workflows') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-workflows_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.odc }}
-            ${{ needs.setup.outputs.eckit }}
-          python_dependencies: |-
-            ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
-            ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
-            ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-            ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-            ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
-            ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
-            ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
-            ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-          python_toml_opt_dep_sections: tests
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
+          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+        python_toml_opt_dep_sections: tests
   ecbuild:
     name: ecbuild
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.ecbuild_matrix && (needs.setup.outputs.ecbuild)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'ecbuild') }}
     strategy:
       fail-fast: false
@@ -1453,24 +1467,24 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   eccodes:
     name: eccodes
     needs:
-      - ecbuild
-      - setup
+    - ecbuild
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.eccodes_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'eccodes') }}
     strategy:
       fail-fast: false
@@ -1478,26 +1492,26 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ''
   eccodes-python:
     name: eccodes-python
     needs:
-      - eccodes
-      - ecbuild
-      - findlibs
-      - setup
+    - eccodes
+    - ecbuild
+    - findlibs
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.eccodes-python_matrix && (needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.eccodes-python)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'eccodes-python') }}
     strategy:
       fail-fast: false
@@ -1506,26 +1520,26 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
       ECCODES_PYTHON_TRACE_LIB_SEARCH: 1
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
   ecflow:
     name: ecflow
     needs:
-      - ecbuild
-      - setup
+    - ecbuild
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.ecflow_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.ecflow)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'ecflow') }}
     strategy:
       fail-fast: false
@@ -1533,25 +1547,25 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ''
   ecflow-light:
     name: ecflow-light
     needs:
-      - eckit
-      - ecbuild
-      - setup
+    - eckit
+    - ecbuild
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.ecflow-light_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.ecflow-light)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'ecflow-light') }}
     strategy:
       fail-fast: false
@@ -1559,26 +1573,26 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ''
   eckit:
     name: eckit
     needs:
-      - ecbuild
-      - setup
+    - ecbuild
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.eckit_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'eckit') }}
     strategy:
       fail-fast: false
@@ -1586,25 +1600,25 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ''
   fckit:
     name: fckit
     needs:
-      - eckit
-      - ecbuild
-      - setup
+    - eckit
+    - ecbuild
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.fckit_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fckit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'fckit') }}
     strategy:
       fail-fast: false
@@ -1612,30 +1626,30 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ''
   fdb:
     name: fdb
     needs:
-      - metkit
-      - eccodes
-      - ecbuild
-      - eckit
-      - odc
-      - setup
+    - metkit
+    - eccodes
+    - ecbuild
+    - eckit
+    - odc
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.fdb_matrix && (needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.fdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'fdb') }}
     strategy:
       fail-fast: false
@@ -1643,38 +1657,38 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.metkit }}
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.odc }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.odc }}
+        python_dependencies: ''
   polytope:
     name: polytope
     needs:
-      - pygribjump
-      - gribjump
-      - fdb
-      - metkit
-      - eccodes
-      - ecbuild
-      - eckit
-      - odc
-      - findlibs
-      - conflator
-      - setup
+    - pygribjump
+    - gribjump
+    - fdb
+    - metkit
+    - eccodes
+    - ecbuild
+    - eckit
+    - odc
+    - findlibs
+    - conflator
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope_matrix && (needs.setup.outputs.pygribjump || needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.findlibs || needs.setup.outputs.conflator || needs.setup.outputs.polytope)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope') }}
     strategy:
       fail-fast: false
@@ -1683,35 +1697,35 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
       CARGO_TARGET_DIR: /var/tmp
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.gribjump }}
-            ${{ needs.setup.outputs.fdb }}
-            ${{ needs.setup.outputs.metkit }}
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.odc }}
-          python_dependencies: |-
-            ${{ needs.setup.outputs.pygribjump || (needs.setup.outputs.use_master == 'True' && 'pygribjump:ecmwf/gribjump@master') || 'pygribjump:ecmwf/gribjump@develop' }}
-            ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-            ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@main' }}
-          python_toml_opt_dep_sections: tests
-          conda_deps: rust
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.gribjump }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.odc }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.pygribjump || (needs.setup.outputs.use_master == 'True' && 'pygribjump:ecmwf/gribjump@master') || 'pygribjump:ecmwf/gribjump@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@main' }}
+        python_toml_opt_dep_sections: tests
+        conda_deps: rust
   findlibs:
     name: findlibs
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.findlibs_matrix && (needs.setup.outputs.findlibs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'findlibs') }}
     strategy:
       fail-fast: false
@@ -1719,30 +1733,30 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
-          python_requirements: tests/downstream-ci-requirements.txt
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+        python_requirements: tests/downstream-ci-requirements.txt
   gribjump:
     name: gribjump
     needs:
-      - fdb
-      - metkit
-      - eccodes
-      - ecbuild
-      - eckit
-      - odc
-      - setup
+    - fdb
+    - metkit
+    - eccodes
+    - ecbuild
+    - eckit
+    - odc
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.gribjump_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.gribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'gribjump') }}
     strategy:
       fail-fast: false
@@ -1750,37 +1764,37 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.fdb }}
-            ${{ needs.setup.outputs.metkit }}
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.odc }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.odc }}
+        python_dependencies: ''
   pygribjump:
     name: pygribjump
     needs:
-      - gribjump
-      - fdb
-      - metkit
-      - eccodes
-      - ecbuild
-      - eckit
-      - odc
-      - findlibs
-      - setup
+    - gribjump
+    - fdb
+    - metkit
+    - eccodes
+    - ecbuild
+    - eckit
+    - odc
+    - findlibs
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pygribjump_matrix && (needs.setup.outputs.gribjump || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pygribjump') }}
     strategy:
       fail-fast: false
@@ -1788,34 +1802,34 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.gribjump }}
-            ${{ needs.setup.outputs.fdb }}
-            ${{ needs.setup.outputs.metkit }}
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.odc }}
-          python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-          python_toml_opt_dep_sections: dev
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.gribjump }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.odc }}
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+        python_toml_opt_dep_sections: dev
   infero:
     name: infero
     needs:
-      - eckit
-      - ecbuild
-      - fckit
-      - setup
+    - eckit
+    - ecbuild
+    - fckit
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.infero_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fckit || needs.setup.outputs.infero)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'infero') }}
     strategy:
       fail-fast: false
@@ -1823,27 +1837,27 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.fckit }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.fckit }}
+        python_dependencies: ''
   kronos:
     name: kronos
     needs:
-      - ecbuild
-      - setup
+    - ecbuild
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.kronos_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.kronos)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'kronos') }}
     strategy:
       fail-fast: false
@@ -1851,27 +1865,27 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ''
   metkit:
     name: metkit
     needs:
-      - eccodes
-      - ecbuild
-      - eckit
-      - odc
-      - setup
+    - eccodes
+    - ecbuild
+    - eckit
+    - odc
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.metkit_matrix && (needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.metkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'metkit') }}
     strategy:
       fail-fast: false
@@ -1879,32 +1893,32 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.odc }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.odc }}
+        python_dependencies: ''
   mir:
     name: mir
     needs:
-      - eckit
-      - ecbuild
-      - atlas
-      - fckit
-      - eccodes
-      - setup
+    - eckit
+    - ecbuild
+    - atlas
+    - fckit
+    - eccodes
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.mir_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.eccodes || needs.setup.outputs.mir)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'mir') }}
     strategy:
       fail-fast: false
@@ -1912,38 +1926,38 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.atlas }}
-            ${{ needs.setup.outputs.fckit }}
-            ${{ needs.setup.outputs.eccodes }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.atlas }}
+          ${{ needs.setup.outputs.fckit }}
+          ${{ needs.setup.outputs.eccodes }}
+        python_dependencies: ''
   multio:
     name: multio
     needs:
-      - atlas
-      - eckit
-      - ecbuild
-      - fckit
-      - atlas-orca
-      - eccodes
-      - fdb
-      - metkit
-      - odc
-      - mir
-      - setup
+    - atlas
+    - eckit
+    - ecbuild
+    - fckit
+    - atlas-orca
+    - eccodes
+    - fdb
+    - metkit
+    - odc
+    - mir
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.multio_matrix && (needs.setup.outputs.atlas || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fckit || needs.setup.outputs.atlas-orca || needs.setup.outputs.eccodes || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.odc || needs.setup.outputs.mir || needs.setup.outputs.multio)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'multio') }}
     strategy:
       fail-fast: false
@@ -1952,80 +1966,80 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
       CTEST_PARALLEL_LEVEL: 1
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.atlas }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.fckit }}
-            ${{ needs.setup.outputs.atlas-orca }}
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.fdb }}
-            ${{ needs.setup.outputs.metkit }}
-            ${{ needs.setup.outputs.odc }}
-            ${{ needs.setup.outputs.mir }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.atlas }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.fckit }}
+          ${{ needs.setup.outputs.atlas-orca }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.mir }}
+        python_dependencies: ''
   pymultio:
     name: pymultio
     needs:
-      - multio
-      - atlas
-      - eckit
-      - ecbuild
-      - fckit
-      - atlas-orca
-      - eccodes
-      - fdb
-      - metkit
-      - odc
-      - mir
-      - setup
+    - multio
+    - atlas
+    - eckit
+    - ecbuild
+    - fckit
+    - atlas-orca
+    - eccodes
+    - fdb
+    - metkit
+    - odc
+    - mir
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pymultio_matrix && (needs.setup.outputs.multio || needs.setup.outputs.atlas || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.fckit || needs.setup.outputs.atlas-orca || needs.setup.outputs.eccodes || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.odc || needs.setup.outputs.mir || needs.setup.outputs.pymultio)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pymultio') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pymultio_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
-      FINDLIBS_DISABLE_PACKAGE: "yes"
+      FINDLIBS_DISABLE_PACKAGE: 'yes'
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.multio }}
-            ${{ needs.setup.outputs.atlas }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.fckit }}
-            ${{ needs.setup.outputs.atlas-orca }}
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.fdb }}
-            ${{ needs.setup.outputs.metkit }}
-            ${{ needs.setup.outputs.odc }}
-            ${{ needs.setup.outputs.mir }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.multio }}
+          ${{ needs.setup.outputs.atlas }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.fckit }}
+          ${{ needs.setup.outputs.atlas-orca }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.mir }}
+        python_dependencies: ''
   multiurl:
     name: multiurl
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.multiurl_matrix && (needs.setup.outputs.multiurl)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'multiurl') }}
     strategy:
       fail-fast: false
@@ -2033,25 +2047,25 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   odc:
     name: odc
     needs:
-      - eckit
-      - ecbuild
-      - setup
+    - eckit
+    - ecbuild
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.odc_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.odc)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'odc') }}
     strategy:
       fail-fast: false
@@ -2059,29 +2073,29 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ''
   pdbufr:
     name: pdbufr
     needs:
-      - eccodes-python
-      - eccodes
-      - ecbuild
-      - findlibs
-      - setup
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pdbufr_matrix && (needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pdbufr)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pdbufr') }}
     strategy:
       fail-fast: false
@@ -2089,32 +2103,32 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: |-
-            ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-            ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-          python_requirements: tests/downstream-ci-requirements.txt
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+        python_requirements: tests/downstream-ci-requirements.txt
   plume:
     name: plume
     needs:
-      - eckit
-      - ecbuild
-      - atlas
-      - fckit
-      - setup
+    - eckit
+    - ecbuild
+    - atlas
+    - fckit
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.plume_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.plume)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'plume') }}
     strategy:
       fail-fast: false
@@ -2122,27 +2136,27 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.atlas }}
-            ${{ needs.setup.outputs.fckit }}
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.atlas }}
+          ${{ needs.setup.outputs.fckit }}
+        python_dependencies: ''
   plume-plugin-extreme-events:
     name: plume-plugin-extreme-events
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.plume-plugin-extreme-events_matrix && (needs.setup.outputs.plume-plugin-extreme-events)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'plume-plugin-extreme-events') }}
     strategy:
       fail-fast: false
@@ -2150,23 +2164,23 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   plume-plugin-wind-farm:
     name: plume-plugin-wind-farm
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.plume-plugin-wind-farm_matrix && (needs.setup.outputs.plume-plugin-wind-farm)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'plume-plugin-wind-farm') }}
     strategy:
       fail-fast: false
@@ -2174,23 +2188,23 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   plume-plugin-axe:
     name: plume-plugin-axe
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.plume-plugin-axe_matrix && (needs.setup.outputs.plume-plugin-axe)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'plume-plugin-axe') }}
     strategy:
       fail-fast: false
@@ -2198,30 +2212,30 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   pyfdb:
     name: pyfdb
     needs:
-      - fdb
-      - metkit
-      - eccodes
-      - ecbuild
-      - eckit
-      - odc
-      - findlibs
-      - setup
+    - fdb
+    - metkit
+    - eccodes
+    - ecbuild
+    - eckit
+    - odc
+    - findlibs
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyfdb_matrix && (needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.findlibs || needs.setup.outputs.pyfdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyfdb') }}
     strategy:
       fail-fast: false
@@ -2229,33 +2243,33 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.fdb }}
-            ${{ needs.setup.outputs.metkit }}
-            ${{ needs.setup.outputs.eccodes }}
-            ${{ needs.setup.outputs.ecbuild }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.odc }}
-          python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.odc }}
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
   pyodc:
     name: pyodc
     needs:
-      - odc
-      - eckit
-      - ecbuild
-      - findlibs
-      - setup
+    - odc
+    - eckit
+    - ecbuild
+    - findlibs
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyodc_matrix && (needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.pyodc)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyodc') }}
     strategy:
       fail-fast: false
@@ -2263,26 +2277,26 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: |-
-            ${{ needs.setup.outputs.odc }}
-            ${{ needs.setup.outputs.eckit }}
-            ${{ needs.setup.outputs.ecbuild }}
-          python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.ecbuild }}
+        python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
   skinnywms:
     name: skinnywms
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.skinnywms_matrix && (needs.setup.outputs.skinnywms)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'skinnywms') }}
     strategy:
       fail-fast: false
@@ -2290,23 +2304,23 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   thermofeel:
     name: thermofeel
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.thermofeel_matrix && (needs.setup.outputs.thermofeel)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'thermofeel') }}
     strategy:
       fail-fast: false
@@ -2314,23 +2328,23 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   troika:
     name: troika
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.troika_matrix && (needs.setup.outputs.troika)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'troika') }}
     strategy:
       fail-fast: false
@@ -2338,23 +2352,23 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   covjsonkit:
     name: covjsonkit
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.covjsonkit_matrix && (needs.setup.outputs.covjsonkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'covjsonkit') }}
     strategy:
       fail-fast: false
@@ -2362,23 +2376,23 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   danu:
     name: danu
     needs:
-      - setup
+    - setup
     if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.danu_matrix && (needs.setup.outputs.danu)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'danu') }}
     strategy:
       fail-fast: false
@@ -2386,18 +2400,18 @@ jobs:
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on:
-      - self-hosted
-      - linux
-      - hpc
+    - self-hosted
+    - linux
+    - hpc
     steps:
-      - uses: ecmwf/reusable-workflows/ci-hpc@v2
-        with:
-          github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
-          github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-          troika_user: ${{ secrets.HPC_CI_SSH_USER }}
-          repository: ${{ matrix.owner_repo_ref }}
-          build_config: ${{ matrix.config_path }}
-          dependencies: ""
-          python_dependencies: ""
-          python_requirements: requirements.txt
-          conda_deps: "'numpy<2' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics"
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
+        python_requirements: requirements.txt
+        conda_deps: '''numpy<2'' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics'
