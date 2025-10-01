@@ -158,6 +158,10 @@ downstream-ci-hpc: &downstream_ci_hpc
   optional_matrix:
     name:
       - lumi
+      - gnu-14.2.0
+      - nvidia-24.11
+      - intel-2025.0.1
+      - aocc-4.0.0
     include:
       - name: lumi-gnu-12.2.0
         site: lumi
@@ -166,7 +170,35 @@ downstream-ci-hpc: &downstream_ci_hpc
         compiler_cxx: g++
         compiler_fc: gfortran
         compiler_modules: LUMI/23.09,cpeGNU/23.09
-
+      - name: gnu-14.2.0
+        site: atos
+        compiler: gnu-14.2.0
+        compiler_cc: gcc
+        compiler_cxx: g++
+        compiler_fc: gfortran
+        compiler_modules: gcc/14.2.0
+      - name: nvidia-24.11
+        site: atos
+        compiler: nvidia-24.11
+        compiler_cc: nvc
+        compiler_cxx: nvc++
+        compiler_fc: nvfortran
+        compiler_modules: prgenv/nvidia,nvidia/24.11
+      - name: intel-2025.0.1
+        site: atos
+        compiler: intel-2025.0.1
+        compiler_cc: icx
+        compiler_cxx: icpx
+        compiler_fc: ifx
+        compiler_modules: prgenv/intel-llvm,intel/2025.0.1
+      - name: aocc-4.0.0
+        site: atos
+        compiler: aocc-4.0.0
+        compiler_cc: clang
+        compiler_cxx: clang++
+        compiler_fc: flang
+        compiler_modules: prgenv/amd,aocc/4.0.0
+        
 private-downstream-ci:
   <<: *downstream_ci
   repo: ecmwf/private-downstream-ci
