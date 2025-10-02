@@ -353,7 +353,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: fix/remove_aocc_from_ecflow
+        ref: main
     - name: Run setup script
       id: setup
       env:
