@@ -273,7 +273,6 @@ ecflow:
     - gnu-14.2.0
     - nvidia-24.11
     - intel-2025.0.1
-    - aocc-4.0.0
 
 ecflow-light:
   type: cmake
