@@ -73,6 +73,7 @@ earthkit-meteo:
 earthkit-plots:
   type: python
   master_branch: main
+  toml_opt_dep_sections: test
   downstream-ci:
     test_cmd: |
       make unit-tests
