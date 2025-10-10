@@ -1153,6 +1153,7 @@ jobs:
           ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
           ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+        python_toml_opt_dep_sections: test
   earthkit-regrid:
     name: earthkit-regrid
     needs:
