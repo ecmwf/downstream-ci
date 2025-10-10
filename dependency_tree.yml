@@ -78,7 +78,7 @@ earthkit-plots:
     test_cmd: |
       make unit-tests
       make image-tests
-    deps:
+  deps:
     - earthkit-data
     - earthkit-regrid
 
