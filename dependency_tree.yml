@@ -70,6 +70,18 @@ earthkit-meteo:
   deps:
     - earthkit-utils
 
+earthkit-plots:
+  type: python
+  master_branch: main
+  downstream-ci:
+    config_path: ""
+    test_cmd: |
+      make unit-tests
+      make image-tests
+    deps:
+    - earthkit-data
+    - earthkit-regrid
+
 earthkit-regrid:
   type: python
   master_branch: main
