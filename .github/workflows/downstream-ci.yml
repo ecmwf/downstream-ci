@@ -1033,7 +1033,7 @@ jobs:
         build_dependencies: |-
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.ecbuild }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -1090,7 +1090,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -1156,7 +1156,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -1191,7 +1191,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1213,7 +1213,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1265,7 +1265,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -1301,7 +1301,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1325,7 +1325,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1348,7 +1348,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1371,7 +1371,7 @@ jobs:
       CARGO_TARGET_DIR: /var/tmp
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1400,7 +1400,7 @@ jobs:
       RUNNER_TYPE: self-hosted
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1426,7 +1426,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1450,7 +1450,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1477,7 +1477,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1505,7 +1505,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1534,7 +1534,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1565,7 +1565,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1592,7 +1592,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1616,7 +1616,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -1666,7 +1666,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -1755,7 +1755,7 @@ jobs:
         build_dependencies: |-
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.ecbuild }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -1928,7 +1928,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.odc }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -1957,7 +1957,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -2038,7 +2038,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.odc }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -2243,7 +2243,7 @@ jobs:
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.mir }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -2264,7 +2264,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -2324,7 +2324,7 @@ jobs:
         build_dependencies: |-
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.ecbuild }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -2469,7 +2469,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.odc }}
     - run: mkdir -p data/fdb
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -2506,7 +2506,7 @@ jobs:
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
@@ -2527,7 +2527,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -2547,7 +2547,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -2567,7 +2567,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -2590,7 +2590,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
@@ -2610,7 +2610,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/ci-python@feat/upload-extra-artifact
+    - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
