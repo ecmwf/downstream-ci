@@ -74,7 +74,7 @@ earthkit-plots:
   type: python
   master_branch: main
   toml_opt_dep_sections: healpix,test
-  #upload_extra_artifact: mpl-results
+  upload_extra_artifact: mpl-results
   downstream-ci:
     test_cmd: |
       make unit-tests
