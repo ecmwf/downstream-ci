@@ -1285,6 +1285,7 @@ jobs:
         test_cmd: |
           make unit-tests
           make image-tests
+        upload_extra_artifact: mpl-results
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-regrid:
