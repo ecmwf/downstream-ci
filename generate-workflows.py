@@ -456,6 +456,9 @@ class Workflow:
                             )
                         if test_cmd:
                             ci_python_step["with"]["test_cmd"] = test_cmd
+                        upload_extra_artifact = pkg_conf.get("upload_extra_artifact")
+                        if upload_extra_artifact:
+                            ci_python_step["with"]["upload_extra_artifact"] = upload_extra_artifact
                         if conda_deps:
                             ci_python_step["with"]["conda_install"] = conda_deps
                         if not self.private:
