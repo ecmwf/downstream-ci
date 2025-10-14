@@ -112,7 +112,7 @@ earthkit-utils:
 earthkit-hydro:
   type: python
   master_branch: main
-  toml_opt_dep_sections: all
+  toml_opt_dep_sections: all,tests
   shallow_deps:
     - earthkit-data
   conda_deps: "rust"
