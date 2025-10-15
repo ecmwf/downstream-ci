@@ -26,7 +26,7 @@ cfgrib:
 earthkit:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     test_cmd: |
       python -m pytest --forked -vv --cov=. --cov-report=html
