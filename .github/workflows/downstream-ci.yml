@@ -378,7 +378,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/earthkit-pytest-forked
     - name: Run setup script
       id: setup
       env:
@@ -1109,7 +1109,7 @@ jobs:
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
         requirements_path: tests/downstream-ci-requirements.txt
-        test_cmd: '_EKD_DIR=$(pwd) && cd .. && python -m pytest ${_EKD_DIR} -vv --cov=. --cov-report=html && cd -
+        test_cmd: 'python -m pytest --forked -vv --cov=. --cov-report=html
 
           '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
