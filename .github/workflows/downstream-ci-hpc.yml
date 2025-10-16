@@ -359,7 +359,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/multio-parallel-tests
     - name: Run setup script
       id: setup
       env:
@@ -2069,7 +2069,6 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.multio_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
-      CTEST_PARALLEL_LEVEL: 1
     runs-on:
     - self-hosted
     - linux
