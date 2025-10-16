@@ -458,8 +458,6 @@ multio:
   type: cmake
   master_branch: master
   develop_branch: develop
-  env:
-    CTEST_PARALLEL_LEVEL: 1
   deps:
     - atlas
     - atlas-orca
