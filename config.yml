@@ -18,7 +18,7 @@ downstream-ci: &downstream_ci
       - gnu@rocky-8.6
       - clang@rocky-8.6
       - gnu@ubuntu-22.04
-      - gnu@fedora-37
+      # - gnu@fedora-37
     include:
       - name: gnu@debian-11
         labels: [self-hosted, platform-builder-debian-11]
@@ -63,13 +63,13 @@ downstream-ci: &downstream_ci
         compiler_cc: gcc
         compiler_cxx: g++
         compiler_fc: gfortran
-      - name: gnu@fedora-37
-        labels: [self-hosted, platform-builder-fedora-37]
-        os: fedora-37
-        compiler: gnu
-        compiler_cc: gcc
-        compiler_cxx: g++
-        compiler_fc: gfortran
+      # - name: gnu@fedora-37
+      #   labels: [self-hosted, platform-builder-fedora-37]
+      #   os: fedora-37
+      #   compiler: gnu
+      #   compiler_cc: gcc
+      #   compiler_cxx: g++
+      #   compiler_fc: gfortran
   optional_matrix:
     name:
       - gnu@debian-12

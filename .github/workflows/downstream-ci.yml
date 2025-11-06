@@ -813,21 +813,21 @@ jobs:
             - platform-builder-ubuntu-22.04
             name: gnu@ubuntu-22.04
             os: ubuntu-22.04
-          - compiler: gnu
-            compiler_cc: gcc
-            compiler_cxx: g++
-            compiler_fc: gfortran
-            labels:
-            - self-hosted
-            - platform-builder-fedora-37
-            name: gnu@fedora-37
-            os: fedora-37
+          # - compiler: gnu
+          #   compiler_cc: gcc
+          #   compiler_cxx: g++
+          #   compiler_fc: gfortran
+          #   labels:
+          #   - self-hosted
+          #   - platform-builder-fedora-37
+          #   name: gnu@fedora-37
+          #   os: fedora-37
           name:
           - gnu@debian-11
           - gnu@rocky-8.6
           - clang@rocky-8.6
           - gnu@ubuntu-22.04
-          - gnu@fedora-37
+          # - gnu@fedora-37
         OPTIONAL_MATRIX: |
           include:
           - compiler: gnu
