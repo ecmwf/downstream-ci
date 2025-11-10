@@ -5,7 +5,7 @@ atlas:
       - fftw
       - qhull
   deps:
-    - eckit
+    - eckit-cd-test
     - fckit
 
 atlas-orca:
@@ -291,12 +291,7 @@ ecflow-light:
   type: cmake
   master_branch: main
   deps:
-    - eckit
-
-eckit:
-  type: cmake
-  deps:
-    - ecbuild
+    - eckit-cd-test
 
 eckit-cd-test:
   type: cmake
@@ -311,7 +306,7 @@ ecmwf-toolbox:
 fckit:
   type: cmake
   deps:
-    - eckit
+    - eckit-cd-test
 
 fdb:
   type: cmake
@@ -351,7 +346,7 @@ dhskit:
   type: cmake
   private: true
   deps:
-    - eckit
+    - eckit-cd-test
 
 gribjump:
   type: cmake
@@ -378,7 +373,7 @@ infero:
   master_branch: master
   develop_branch: develop
   deps:
-    - eckit
+    - eckit-cd-test
     - fckit
 
 kronos:
@@ -412,7 +407,7 @@ mars-client-cpp:
     - ecbuild
     - libaec
     - eccodes
-    - eckit
+    - eckit-cd-test
     - odc
     - metkit
     - atlas
@@ -450,13 +445,13 @@ metkit:
   type: cmake
   deps:
     - eccodes
-    - eckit
+    - eckit-cd-test
     - odc
 
 mir:
   type: cmake
   deps:
-    - eckit
+    - eckit-cd-test
     - atlas
     - eccodes
 
@@ -468,7 +463,7 @@ multio:
     - atlas
     - atlas-orca
     - eccodes
-    - eckit
+    - eckit-cd-test
     - fckit
     - fdb
     - metkit
@@ -496,7 +491,7 @@ multiurl:
 odc:
   type: cmake
   deps:
-    - eckit
+    - eckit-cd-test
 
 pdbufr:
   type: python
@@ -514,7 +509,7 @@ pgen:
   private: true
   deps:
     - eccodes
-    - eckit
+    - eckit-cd-test
     - odc
     - metkit
     - atlas
@@ -531,7 +526,7 @@ pgen-bundle:
 plume:
   type: cmake
   deps:
-    - eckit
+    - eckit-cd-test
     - atlas
     - fckit
 
@@ -605,7 +600,7 @@ hermes-server:
   develop_branch: develop
   private: true
   deps:
-    - eckit
+    - eckit-cd-test
     - dhskit
     - eccodes
     - metkit
