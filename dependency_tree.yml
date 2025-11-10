@@ -298,6 +298,12 @@ eckit:
   deps:
     - ecbuild
 
+eckit-cd-test:
+  type: cmake
+  deps:
+    - ecbuild
+    - cxx-dependencies
+
 ecmwf-toolbox:
   type: cmake
   private: true
