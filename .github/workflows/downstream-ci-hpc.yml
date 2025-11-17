@@ -359,7 +359,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: earthkit-dep-on-earthkit-utils
     - name: Run setup script
       id: setup
       env:
