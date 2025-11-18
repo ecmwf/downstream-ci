@@ -36,6 +36,7 @@ earthkit:
     - earthkit-meteo
     - earthkit-regrid
     - earthkit-utils
+    - earthkit-hydro
 
 earthkit-data:
   type: python
