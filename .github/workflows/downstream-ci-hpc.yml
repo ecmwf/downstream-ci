@@ -359,7 +359,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feat/add_ekh_as_ek_dep
     - name: Run setup script
       id: setup
       env:
@@ -953,8 +953,9 @@ jobs:
     - earthkit-geo
     - earthkit-meteo
     - earthkit-regrid
+    - earthkit-hydro
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-hydro || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit_matrix) }}
@@ -992,6 +993,7 @@ jobs:
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-hydro || (needs.setup.outputs.use_master == 'True' && 'earthkit-hydro:ecmwf/earthkit-hydro@main') || 'earthkit-hydro:ecmwf/earthkit-hydro@develop' }}
         python_toml_opt_dep_sections: all,test,ci
   earthkit-data:
     name: earthkit-data
