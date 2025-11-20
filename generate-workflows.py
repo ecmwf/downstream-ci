@@ -524,7 +524,7 @@ class Workflow:
                     "with": {
                         "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
                         "github_token": "${{ secrets.GH_REPO_READ_TOKEN }}",
-                        "troika_user": "${{ secrets.HPC_CI_SSH_USER }}",
+                        "troika_user": "${{ secrets.HPC_TEST_USER }}",
                         "repository": "${{ matrix.owner_repo_ref }}",
                         "build_config": "${{ matrix.config_path }}",
                         "dependencies": "\n".join(cmake_deps),
