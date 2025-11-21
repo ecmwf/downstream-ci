@@ -359,7 +359,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: use-test-user
+        ref: main
     - name: Run setup script
       id: setup
       env:
