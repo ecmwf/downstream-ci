@@ -635,7 +635,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.pygribjump }}
             optional_matrix: null
           hyve:ecmwf/hyve:
-            path: .github/ci-config.yml
+            path: ''
             python: true
             master_branch: main
             develop_branch: main
