@@ -369,6 +369,10 @@ pygribjump:
   downstream-ci-hpc:
     config_path: ".github/ci-hpc-config-pygribjump.yml"
 
+hyve:
+  type: python
+  master_branch: main
+
 infero:
   type: cmake
   master_branch: master
