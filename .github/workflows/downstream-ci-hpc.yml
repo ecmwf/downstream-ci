@@ -619,7 +619,7 @@ jobs:
             path: .github/ci-hpc-config.yml
             python: true
             master_branch: main
-            develop_branch: develop
+            develop_branch: main
             input: ${{ steps.prepare-inputs.outputs.hyve }}
             optional_matrix: null
           infero:ecmwf/infero:
