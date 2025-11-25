@@ -114,6 +114,9 @@ name: downstream-ci-hpc
       pygribjump:
         required: false
         type: string
+      hyve:
+        required: false
+        type: string
       infero:
         required: false
         type: string
@@ -254,6 +257,8 @@ jobs:
       gribjump_matrix: ${{ steps.setup.outputs.gribjump }}
       pygribjump: ${{ steps.prepare-inputs.outputs.pygribjump }}
       pygribjump_matrix: ${{ steps.setup.outputs.pygribjump }}
+      hyve: ${{ steps.prepare-inputs.outputs.hyve }}
+      hyve_matrix: ${{ steps.setup.outputs.hyve }}
       infero: ${{ steps.prepare-inputs.outputs.infero }}
       infero_matrix: ${{ steps.setup.outputs.infero }}
       kronos: ${{ steps.prepare-inputs.outputs.kronos }}
@@ -335,6 +340,7 @@ jobs:
         echo findlibs="${{ inputs.findlibs }}" >> $GITHUB_OUTPUT
         echo gribjump="${{ inputs.gribjump }}" >> $GITHUB_OUTPUT
         echo pygribjump="${{ inputs.pygribjump }}" >> $GITHUB_OUTPUT
+        echo hyve="${{ inputs.hyve }}" >> $GITHUB_OUTPUT
         echo infero="${{ inputs.infero }}" >> $GITHUB_OUTPUT
         echo kronos="${{ inputs.kronos }}" >> $GITHUB_OUTPUT
         echo metkit="${{ inputs.metkit }}" >> $GITHUB_OUTPUT
@@ -359,7 +365,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feat/hyve
     - name: Run setup script
       id: setup
       env:
@@ -608,6 +614,13 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.pygribjump }}
+            optional_matrix: null
+          hyve:ecmwf/hyve:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.hyve }}
             optional_matrix: null
           infero:ecmwf/infero:
             path: .github/ci-hpc-config.yml
@@ -1930,6 +1943,30 @@ jobs:
           ${{ needs.setup.outputs.odc }}
         python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
         python_toml_opt_dep_sections: dev
+  hyve:
+    name: hyve
+    needs:
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.hyve_matrix && (needs.setup.outputs.hyve)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'hyve') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.hyve_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on:
+    - self-hosted
+    - linux
+    - hpc
+    steps:
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ''
+        python_dependencies: ''
   infero:
     name: infero
     needs:
