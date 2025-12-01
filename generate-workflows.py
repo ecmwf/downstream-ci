@@ -374,6 +374,9 @@ class Workflow:
             build_package_python = tree_get_package_var(
                 "build-package-python", dep_tree, package, self.name
             )
+            github_token = tree_get_package_var(
+                "github_token", dep_tree, package, self.name
+            )
             steps = []
             if self.wf_type == "build-package":
                 if pkg_conf.get("type", "cmake") == "cmake":
@@ -399,8 +402,9 @@ class Workflow:
                             "${{ contains(needs.setup.outputs.trigger_pkgs, "
                             "github.job) && inputs.codecov_upload }}"
                         )
-                    else:
-                        s["with"]["github_token"] = "${{ secrets.GH_REPO_READ_TOKEN }}"
+                    if self.private or github_token:
+                        token_name = github_token or "GH_REPO_READ_TOKEN"
+                        s["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
                     if build_package_python:
                         s["with"]["python_version"] = build_package_python
                     steps.append(s)
@@ -424,10 +428,9 @@ class Workflow:
                                 "build_dependencies": "\n".join(cmake_deps),
                             },
                         }
-                        if self.private:
-                            s["with"]["github_token"] = (
-                                "${{ secrets.GH_REPO_READ_TOKEN }}"
-                            )
+                        if self.private or github_token:
+                            token_name = github_token or "GH_REPO_READ_TOKEN"
+                            s["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
                         if build_package_python:
                             s["with"]["python_version"] = build_package_python
                         steps.append(s)
@@ -471,9 +474,10 @@ class Workflow:
                             ci_python_step["with"]["codecov_token"] = (
                                 "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
                             )
-                        else:
+                        if self.private or github_token:
+                            token_name = github_token or "GH_REPO_READ_TOKEN"
                             ci_python_step["with"]["github_token"] = (
-                                "${{ secrets.GH_REPO_READ_TOKEN }}"
+                                f"${{{{ secrets.{token_name} }}}}"
                             )
                         steps.append(ci_python_step)
                     else:
@@ -508,9 +512,10 @@ class Workflow:
                             ci_python_step["with"]["codecov_token"] = (
                                 "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
                             )
-                        else:
+                        if self.private or github_token:
+                            token_name = github_token or "GH_REPO_READ_TOKEN"
                             ci_python_step["with"]["github_token"] = (
-                                "${{ secrets.GH_REPO_READ_TOKEN }}"
+                                f"${{{{ secrets.{token_name} }}}}"
                             )
                         steps.append(ci_python_step)
             if self.wf_type == "build-package-hpc":
@@ -519,11 +524,12 @@ class Workflow:
                     "linux",
                     "hpc",
                 ]
+                token_name = github_token or "GH_REPO_READ_TOKEN"
                 s = {
                     "uses": "ecmwf/reusable-workflows/ci-hpc@v2",
                     "with": {
                         "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
-                        "github_token": "${{ secrets.GH_REPO_READ_TOKEN }}",
+                        "github_token": f"${{{{ secrets.{token_name} }}}}",
                         "troika_user": "${{ secrets.HPC_CI_SSH_USER }}",
                         "repository": "${{ matrix.owner_repo_ref }}",
                         "build_config": "${{ matrix.config_path }}",
