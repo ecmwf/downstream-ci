@@ -412,7 +412,7 @@ class Workflow:
                             "name": "Build dependencies",
                             "id": "build-deps",
                             "uses": (
-                                "ecmwf/reusable-workflows/build-package-with-config@v2"
+                                "ecmwf/reusable-workflows/build-package-with-config@build-package-submodules"
                             ),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
