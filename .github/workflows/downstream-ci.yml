@@ -1832,6 +1832,7 @@ jobs:
         build_dependencies: ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   fckit:
     name: fckit
     needs:
