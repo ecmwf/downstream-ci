@@ -134,6 +134,8 @@ anemoi-datasets:
   toml_opt_dep_sections: all,tests
   shallow_deps:
     - earthkit-data
+    - earthkit-geo
+    - earthkit-meteo
   deps:
     - anemoi-utils
     - anemoi-transform
@@ -163,6 +165,8 @@ anemoi-transform:
   toml_opt_dep_sections: all,tests
   shallow_deps:
     - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
   downstream-ci:
     config_path: ""
     test_cmd: |
