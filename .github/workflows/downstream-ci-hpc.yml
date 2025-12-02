@@ -1264,8 +1264,11 @@ jobs:
     - anemoi-utils
     - anemoi-transform
     - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-datasets_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.anemoi-datasets)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-datasets') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-datasets_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-datasets)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-datasets') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-datasets_matrix) }}
@@ -1288,6 +1291,9 @@ jobs:
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-utils:
     name: anemoi-utils
@@ -1318,8 +1324,10 @@ jobs:
     name: anemoi-transform
     needs:
     - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-transform_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.anemoi-transform)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-transform') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-transform_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.anemoi-transform)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-transform') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-transform_matrix) }}
@@ -1338,7 +1346,10 @@ jobs:
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
-        python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-graphs:
     name: anemoi-graphs
@@ -1347,8 +1358,11 @@ jobs:
     - anemoi-utils
     - anemoi-transform
     - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-graphs_matrix && (needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.anemoi-graphs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-graphs') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-graphs_matrix && (needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-graphs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-graphs') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-graphs_matrix) }}
@@ -1372,6 +1386,9 @@ jobs:
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-models:
     name: anemoi-models
@@ -1407,9 +1424,12 @@ jobs:
     - anemoi-datasets
     - anemoi-transform
     - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - anemoi-graphs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-training_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models || needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.anemoi-graphs || needs.setup.outputs.anemoi-training)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-training') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-training_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models || needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-graphs || needs.setup.outputs.anemoi-training)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-training') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-training_matrix) }}
@@ -1434,6 +1454,9 @@ jobs:
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-inference:
@@ -1442,9 +1465,11 @@ jobs:
     - anemoi-utils
     - anemoi-transform
     - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
     - earthkit-plots
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-inference_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-plots || needs.setup.outputs.anemoi-inference)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-inference') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-inference_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-plots || needs.setup.outputs.anemoi-inference)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-inference') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-inference_matrix) }}
@@ -1467,6 +1492,8 @@ jobs:
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-plots || (needs.setup.outputs.use_master == 'True' && 'earthkit-plots:ecmwf/earthkit-plots@main') || 'earthkit-plots:ecmwf/earthkit-plots@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-plugins:
