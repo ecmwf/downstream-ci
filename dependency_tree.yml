@@ -26,15 +26,17 @@ cfgrib:
 earthkit:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     test_cmd: |
-      _EKD_DIR=$(pwd) && cd .. && python -m pytest ${_EKD_DIR} -vv --cov=. --cov-report=html && cd -
+      python -m pytest --forked -vv --cov=. --cov-report=html
   deps:
     - earthkit-data
     - earthkit-geo
     - earthkit-meteo
     - earthkit-regrid
+    - earthkit-utils
+    - earthkit-hydro
 
 earthkit-data:
   type: python
@@ -45,12 +47,13 @@ earthkit-data:
     - multiurl
     - pdbufr
     - pyodc
+    - pyfdb
     - earthkit-utils
   downstream-ci:
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      python -m pytest -vv -m 'not notebook and not no_cache_init' -k 'not netcdf' --cov=. --cov-report=xml
       python -m pytest -v -m 'notebook'
-      python -m pytest --forked -vv -m 'no_cache_init'
+      python -m pytest --forked -vv -m 'no_cache_init' -k 'not netcdf'
       python -m coverage report
 
 earthkit-geo:
@@ -69,12 +72,28 @@ earthkit-meteo:
   deps:
     - earthkit-utils
 
+earthkit-plots:
+  type: python
+  master_branch: main
+  toml_opt_dep_sections: healpix,test
+  upload_extra_artifact: mpl-results
+  downstream-ci:
+    test_cmd: |
+      make unit-tests
+      make image-tests
+  deps:
+    - earthkit-data
+    - earthkit-regrid
+
 earthkit-regrid:
   type: python
   master_branch: main
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
+    test_cmd: |
+      FINDLIBS_DISABLE_PACKAGE=no pytest --cov=./ --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 earthkit-time:
   type: python
@@ -95,7 +114,7 @@ earthkit-utils:
 earthkit-hydro:
   type: python
   master_branch: main
-  toml_opt_dep_sections: all
+  toml_opt_dep_sections: all,tests
   shallow_deps:
     - earthkit-data
   conda_deps: "rust"
@@ -103,7 +122,7 @@ earthkit-hydro:
     CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
     config_path: ""
-    test_cmd: | 
+    test_cmd: |
       echo $(pwd)
       python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
       python -m coverage report
@@ -113,6 +132,10 @@ anemoi-datasets:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  shallow_deps:
+    - earthkit-data
+    - earthkit-geo
+    - earthkit-meteo
   deps:
     - anemoi-utils
     - anemoi-transform
@@ -121,8 +144,8 @@ anemoi-datasets:
     env:
       RUNNER_TYPE: "self-hosted"
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 anemoi-utils:
   type: python
@@ -140,11 +163,15 @@ anemoi-transform:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  shallow_deps:
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
   downstream-ci:
     config_path: ""
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 anemoi-graphs:
   type: python
@@ -198,14 +225,17 @@ anemoi-inference:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  shallow_deps:
+    - earthkit-data
+    - earthkit-plots
   deps:
     - anemoi-utils
     - anemoi-transform
   downstream-ci:
     config_path: ""
     test_cmd: |
-      python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
 
 anemoi-plugins:
   type: python
@@ -223,6 +253,7 @@ anemoi-plugins:
 conflator:
   type: python
   master_branch: main
+  develop_branch: main
   downstream-ci:
     config_path: ""
 
@@ -265,10 +296,9 @@ ecflow:
     - clang@macos-13-arm
     - clang@macos-13-x86
     - gnu@debian-12
-  downstream-ci-hpc:
-    skip:
-      - nvidia-22.11
-      - intel-2021.4.0
+    - gnu-14.2.0
+    - nvidia-24.11
+    - intel-2025.0.1
 
 ecflow-light:
   type: cmake
@@ -295,9 +325,28 @@ fdb:
   deps:
     - metkit
 
+polytope:
+  type: python
+  master_branch: main
+  # requirements_path: tests/requirements_test.txt
+  toml_opt_dep_sections: tests
+  conda_deps: "rust"
+  env:
+    CARGO_TARGET_DIR: /var/tmp
+  deps:
+    - pygribjump
+    - conflator
+  downstream-ci:
+    config_path: ".github/ci-config.yml"
+    test_cmd: |
+      python -m pytest -m 'not fdb' tests --cov=./ --cov-report=xml
+      python -m coverage report
+  downstream-ci-hpc:
+    config_path: ".github/ci-hpc-config.yml"
+
 findlibs:
   type: python
-  master_branch: master
+  master_branch: main
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
@@ -422,8 +471,6 @@ multio:
   type: cmake
   master_branch: master
   develop_branch: develop
-  env:
-    CTEST_PARALLEL_LEVEL: 1
   deps:
     - atlas
     - atlas-orca
@@ -437,7 +484,6 @@ multio:
 pymultio:
   type: python
   repo: ecmwf/multio
-  toml_opt_dep_sections: dev
   env:
     FINDLIBS_DISABLE_PACKAGE: "yes"
   deps:
@@ -474,8 +520,13 @@ pgen:
   type: cmake
   private: true
   deps:
-    - mir
+    - eccodes
+    - eckit
+    - odc
     - metkit
+    - atlas
+    - atlas-orca
+    - mir
   downstream-ci-hpc:
     skip:
       - nvidia-22.11
@@ -492,6 +543,14 @@ plume:
     - fckit
 
 plume-plugin-extreme-events:
+  type: cmake
+  master_branch: main
+
+plume-plugin-wind-farm:
+  type: cmake
+  master_branch: main
+
+plume-plugin-axe:
   type: cmake
   master_branch: main
 
