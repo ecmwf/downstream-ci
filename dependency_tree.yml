@@ -133,6 +133,7 @@ anemoi-datasets:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   shallow_deps:
+    - earthkit-utils
     - earthkit-data
     - earthkit-geo
     - earthkit-meteo
@@ -164,6 +165,7 @@ anemoi-transform:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   shallow_deps:
+    - earthkit-utils
     - earthkit-data
     - earthkit-regrid
     - earthkit-meteo
@@ -226,6 +228,7 @@ anemoi-inference:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   shallow_deps:
+    - earthkit-utils
     - earthkit-data
     - earthkit-plots
   deps:
