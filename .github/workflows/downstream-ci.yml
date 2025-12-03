@@ -37,6 +37,9 @@ name: downstream-ci
       earthkit-meteo:
         required: false
         type: string
+      earthkit-plots:
+        required: false
+        type: string
       earthkit-regrid:
         required: false
         type: string
@@ -216,6 +219,8 @@ jobs:
       earthkit-geo_matrix: ${{ steps.setup.outputs.earthkit-geo }}
       earthkit-meteo: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
       earthkit-meteo_matrix: ${{ steps.setup.outputs.earthkit-meteo }}
+      earthkit-plots: ${{ steps.prepare-inputs.outputs.earthkit-plots }}
+      earthkit-plots_matrix: ${{ steps.setup.outputs.earthkit-plots }}
       earthkit-regrid: ${{ steps.prepare-inputs.outputs.earthkit-regrid }}
       earthkit-regrid_matrix: ${{ steps.setup.outputs.earthkit-regrid }}
       earthkit-time: ${{ steps.prepare-inputs.outputs.earthkit-time }}
@@ -327,6 +332,7 @@ jobs:
         echo earthkit-data="${{ inputs.earthkit-data }}" >> $GITHUB_OUTPUT
         echo earthkit-geo="${{ inputs.earthkit-geo }}" >> $GITHUB_OUTPUT
         echo earthkit-meteo="${{ inputs.earthkit-meteo }}" >> $GITHUB_OUTPUT
+        echo earthkit-plots="${{ inputs.earthkit-plots }}" >> $GITHUB_OUTPUT
         echo earthkit-regrid="${{ inputs.earthkit-regrid }}" >> $GITHUB_OUTPUT
         echo earthkit-time="${{ inputs.earthkit-time }}" >> $GITHUB_OUTPUT
         echo earthkit-utils="${{ inputs.earthkit-utils }}" >> $GITHUB_OUTPUT
@@ -432,6 +438,13 @@ jobs:
             master_branch: main
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
+            optional_matrix: null
+          earthkit-plots:ecmwf/earthkit-plots:
+            path: .github/ci-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-plots }}
             optional_matrix: null
           earthkit-regrid:ecmwf/earthkit-regrid:
             path: ''
@@ -562,6 +575,9 @@ jobs:
             - clang@macos-13-arm
             - clang@macos-13-x86
             - gnu@debian-12
+            - gnu-14.2.0
+            - nvidia-24.11
+            - intel-2025.0.1
           ecflow-light:ecmwf/ecflow-light:
             path: .github/ci-config.yml
             python: false
@@ -901,9 +917,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install black flake8 isort
     - name: Check isort
-      run: isort --check . --profile black
+      run: isort --check --diff . --profile black
     - name: Check black
-      run: black --check .
+      run: black --check --diff .
     - name: Check flake8
       run: flake8 .
   clang-format:
@@ -1055,13 +1071,17 @@ jobs:
     - pyodc
     - odc
     - eckit
+    - pyfdb
+    - fdb
+    - metkit
     - earthkit-utils
     - earthkit-geo
     - earthkit-meteo
     - earthkit-regrid
+    - earthkit-hydro
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-hydro || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit_matrix) }}
@@ -1082,6 +1102,8 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
@@ -1095,12 +1117,14 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
-        requirements_path: tests/downstream-ci-requirements.txt
-        test_cmd: '_EKD_DIR=$(pwd) && cd .. && python -m pytest ${_EKD_DIR} -vv --cov=. --cov-report=html && cd -
+          ${{ needs.setup.outputs.earthkit-hydro || (needs.setup.outputs.use_master == 'True' && 'earthkit-hydro:ecmwf/earthkit-hydro@main') || 'earthkit-hydro:ecmwf/earthkit-hydro@develop' }}
+        toml_opt_dep_sections: all,test,ci
+        test_cmd: 'python -m pytest --forked -vv --cov=. --cov-report=html
 
           '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
@@ -1118,10 +1142,13 @@ jobs:
     - pyodc
     - odc
     - eckit
+    - pyfdb
+    - fdb
+    - metkit
     - earthkit-utils
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-data_matrix) }}
@@ -1142,6 +1169,8 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
@@ -1154,6 +1183,7 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         toml_opt_dep_sections: all,test,ci
         test_cmd: |
@@ -1204,6 +1234,73 @@ jobs:
         checkout: true
         python_dependencies: ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         requirements_path: tests/downstream-ci-requirements.txt
+        codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
+        codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
+  earthkit-plots:
+    name: earthkit-plots
+    needs:
+    - earthkit-data
+    - cfgrib
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - multiurl
+    - pdbufr
+    - pyodc
+    - odc
+    - eckit
+    - pyfdb
+    - fdb
+    - metkit
+    - earthkit-utils
+    - earthkit-regrid
+    - setup
+    - python-qa
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-plots_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-plots)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-plots') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.earthkit-plots_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on: ${{ matrix.labels }}
+    steps:
+    - name: Build dependencies
+      id: build-deps
+      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      with:
+        repository: ${{ matrix.owner_repo_ref }}
+        codecov_upload: false
+        build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
+        build_config: ${{ matrix.config_path }}
+        build_dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+    - uses: ecmwf/reusable-workflows/ci-python@v2
+      with:
+        repository: ${{ matrix.owner_repo_ref }}
+        lib_path: ${{ steps.build-deps.outputs.lib_path }}
+        bin_paths: ${{ steps.build-deps.outputs.bin_paths }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
+          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+        toml_opt_dep_sections: healpix,test
+        test_cmd: |
+          make unit-tests
+          make image-tests
+        upload_extra_artifact: mpl-results
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-regrid:
@@ -1294,7 +1391,7 @@ jobs:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
         python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
-        toml_opt_dep_sections: all
+        toml_opt_dep_sections: all,tests
         test_cmd: |
           echo $(pwd)
           python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
@@ -1307,9 +1404,13 @@ jobs:
     needs:
     - anemoi-utils
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-datasets_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-datasets)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-datasets') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-datasets_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-datasets)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-datasets') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-datasets_matrix) }}
@@ -1325,6 +1426,10 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         toml_opt_dep_sections: all,tests
         test_cmd: |
           FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
@@ -1358,9 +1463,12 @@ jobs:
   anemoi-transform:
     name: anemoi-transform
     needs:
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-transform_matrix && (needs.setup.outputs.anemoi-transform)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-transform') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-transform_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.anemoi-transform)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-transform') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-transform_matrix) }}
@@ -1372,7 +1480,10 @@ jobs:
       with:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
-        python_dependencies: ''
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
         toml_opt_dep_sections: all,tests
         test_cmd: |
           FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
@@ -1385,9 +1496,13 @@ jobs:
     - anemoi-datasets
     - anemoi-utils
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-graphs_matrix && (needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-graphs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-graphs') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-graphs_matrix && (needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-graphs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-graphs') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-graphs_matrix) }}
@@ -1403,6 +1518,10 @@ jobs:
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         toml_opt_dep_sections: all,tests
         test_cmd: |
           python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
@@ -1441,10 +1560,14 @@ jobs:
     - anemoi-models
     - anemoi-datasets
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - anemoi-graphs
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-training_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models || needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-graphs || needs.setup.outputs.anemoi-training)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-training') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-training_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models || needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-graphs || needs.setup.outputs.anemoi-training)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-training') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-training_matrix) }}
@@ -1461,6 +1584,10 @@ jobs:
           ${{ needs.setup.outputs.anemoi-models || (needs.setup.outputs.use_master == 'True' && 'anemoi-models:ecmwf/anemoi-core/models@main') || 'anemoi-models:ecmwf/anemoi-core/models@main' }}
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
         toml_opt_dep_sections: all,tests
         test_cmd: |
@@ -1473,9 +1600,13 @@ jobs:
     needs:
     - anemoi-utils
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-plots
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-inference_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-inference)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-inference') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-inference_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-plots || needs.setup.outputs.anemoi-inference)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-inference') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-inference_matrix) }}
@@ -1490,6 +1621,10 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-plots || (needs.setup.outputs.use_master == 'True' && 'earthkit-plots:ecmwf/earthkit-plots@main') || 'earthkit-plots:ecmwf/earthkit-plots@develop' }}
         toml_opt_dep_sections: all,tests
         test_cmd: |
           FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
@@ -1545,20 +1680,9 @@ jobs:
     name: earthkit-workflows
     needs:
     - earthkit-data
-    - cfgrib
-    - eccodes-python
-    - eccodes
-    - ecbuild
-    - findlibs
-    - multiurl
-    - pdbufr
-    - pyodc
-    - odc
-    - eckit
-    - earthkit-utils
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-workflows_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-workflows)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-workflows') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-workflows_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-workflows)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-workflows') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-workflows_matrix) }}
@@ -1566,33 +1690,11 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - name: Build dependencies
-      id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
-      with:
-        repository: ${{ matrix.owner_repo_ref }}
-        codecov_upload: false
-        build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
-        build_config: ${{ matrix.config_path }}
-        build_dependencies: |-
-          ${{ needs.setup.outputs.eccodes }}
-          ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.odc }}
-          ${{ needs.setup.outputs.eckit }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
-        lib_path: ${{ steps.build-deps.outputs.lib_path }}
-        bin_paths: ${{ steps.build-deps.outputs.bin_paths }}
-        python_dependencies: |-
-          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
-          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
-          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
-          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
-          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
-          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+        checkout: true
+        python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
         toml_opt_dep_sections: tests
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
@@ -2115,7 +2217,6 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.multio_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
-      CTEST_PARALLEL_LEVEL: 1
     runs-on: ${{ matrix.labels }}
     steps:
     - uses: ecmwf/reusable-workflows/build-package-with-config@v2

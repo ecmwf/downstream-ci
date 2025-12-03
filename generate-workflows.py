@@ -213,8 +213,8 @@ class Workflow:
                     "python -m pip install black flake8 isort\n"
                 ),
             },
-            {"name": "Check isort", "run": "isort --check . --profile black"},
-            {"name": "Check black", "run": "black --check ."},
+            {"name": "Check isort", "run": "isort --check --diff . --profile black"},
+            {"name": "Check black", "run": "black --check --diff ."},
             {"name": "Check flake8", "run": "flake8 ."},
         ]
 
@@ -456,6 +456,9 @@ class Workflow:
                             )
                         if test_cmd:
                             ci_python_step["with"]["test_cmd"] = test_cmd
+                        upload_extra_artifact = pkg_conf.get("upload_extra_artifact")
+                        if upload_extra_artifact:
+                            ci_python_step["with"]["upload_extra_artifact"] = upload_extra_artifact
                         if conda_deps:
                             ci_python_step["with"]["conda_install"] = conda_deps
                         if not self.private:
@@ -521,7 +524,7 @@ class Workflow:
                     "with": {
                         "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
                         "github_token": "${{ secrets.GH_REPO_READ_TOKEN }}",
-                        "troika_user": "${{ secrets.HPC_CI_SSH_USER }}",
+                        "troika_user": "${{ secrets.HPC_TEST_USER }}",
                         "repository": "${{ matrix.owner_repo_ref }}",
                         "build_config": "${{ matrix.config_path }}",
                         "dependencies": "\n".join(cmake_deps),

@@ -33,6 +33,9 @@ name: downstream-ci-hpc
       earthkit-meteo:
         required: false
         type: string
+      earthkit-plots:
+        required: false
+        type: string
       earthkit-regrid:
         required: false
         type: string
@@ -200,6 +203,8 @@ jobs:
       earthkit-geo_matrix: ${{ steps.setup.outputs.earthkit-geo }}
       earthkit-meteo: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
       earthkit-meteo_matrix: ${{ steps.setup.outputs.earthkit-meteo }}
+      earthkit-plots: ${{ steps.prepare-inputs.outputs.earthkit-plots }}
+      earthkit-plots_matrix: ${{ steps.setup.outputs.earthkit-plots }}
       earthkit-regrid: ${{ steps.prepare-inputs.outputs.earthkit-regrid }}
       earthkit-regrid_matrix: ${{ steps.setup.outputs.earthkit-regrid }}
       earthkit-time: ${{ steps.prepare-inputs.outputs.earthkit-time }}
@@ -308,6 +313,7 @@ jobs:
         echo earthkit-data="${{ inputs.earthkit-data }}" >> $GITHUB_OUTPUT
         echo earthkit-geo="${{ inputs.earthkit-geo }}" >> $GITHUB_OUTPUT
         echo earthkit-meteo="${{ inputs.earthkit-meteo }}" >> $GITHUB_OUTPUT
+        echo earthkit-plots="${{ inputs.earthkit-plots }}" >> $GITHUB_OUTPUT
         echo earthkit-regrid="${{ inputs.earthkit-regrid }}" >> $GITHUB_OUTPUT
         echo earthkit-time="${{ inputs.earthkit-time }}" >> $GITHUB_OUTPUT
         echo earthkit-utils="${{ inputs.earthkit-utils }}" >> $GITHUB_OUTPUT
@@ -413,6 +419,13 @@ jobs:
             master_branch: main
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.earthkit-meteo }}
+            optional_matrix: null
+          earthkit-plots:ecmwf/earthkit-plots:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-plots }}
             optional_matrix: null
           earthkit-regrid:ecmwf/earthkit-regrid:
             path: .github/ci-hpc-config.yml
@@ -543,6 +556,9 @@ jobs:
             - clang@macos-13-arm
             - clang@macos-13-x86
             - gnu@debian-12
+            - gnu-14.2.0
+            - nvidia-24.11
+            - intel-2025.0.1
           ecflow-light:ecmwf/ecflow-light:
             path: .github/ci-hpc-config.yml
             python: false
@@ -796,8 +812,40 @@ jobs:
             compiler_modules: LUMI/23.09,cpeGNU/23.09
             name: lumi-gnu-12.2.0
             site: lumi
+          - compiler: gnu-14.2.0
+            compiler_cc: gcc
+            compiler_cxx: g++
+            compiler_fc: gfortran
+            compiler_modules: gcc/14.2.0
+            name: gnu-14.2.0
+            site: atos
+          - compiler: nvidia-24.11
+            compiler_cc: nvc
+            compiler_cxx: nvc++
+            compiler_fc: nvfortran
+            compiler_modules: prgenv/nvidia,nvidia/24.11
+            name: nvidia-24.11
+            site: atos
+          - compiler: intel-2025.0.1
+            compiler_cc: icx
+            compiler_cxx: icpx
+            compiler_fc: ifx
+            compiler_modules: prgenv/intel-llvm,intel/2025.0.1
+            name: intel-2025.0.1
+            site: atos
+          - compiler: aocc-4.0.0
+            compiler_cc: clang
+            compiler_cxx: clang++
+            compiler_fc: flang
+            compiler_modules: prgenv/amd,aocc/4.0.0
+            name: aocc-4.0.0
+            site: atos
           name:
           - lumi
+          - gnu-14.2.0
+          - nvidia-24.11
+          - intel-2025.0.1
+          - aocc-4.0.0
         WORKFLOW_NAME: downstream-ci-hpc
         DOWNSTREAM_CI_GROUP: ${{ inputs.ci_group }}
         SKIP_MATRIX_JOBS: ${{ inputs.skip_matrix_jobs }}
@@ -824,7 +872,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -855,7 +903,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -887,7 +935,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -911,12 +959,16 @@ jobs:
     - pyodc
     - odc
     - eckit
+    - pyfdb
+    - fdb
+    - metkit
     - earthkit-utils
     - earthkit-geo
     - earthkit-meteo
     - earthkit-regrid
+    - earthkit-hydro
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-hydro || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit_matrix) }}
@@ -931,7 +983,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -939,6 +991,8 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
         python_dependencies: |-
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
           ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
@@ -947,11 +1001,13 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
-        python_requirements: tests/downstream-ci-requirements.txt
+          ${{ needs.setup.outputs.earthkit-hydro || (needs.setup.outputs.use_master == 'True' && 'earthkit-hydro:ecmwf/earthkit-hydro@main') || 'earthkit-hydro:ecmwf/earthkit-hydro@develop' }}
+        python_toml_opt_dep_sections: all,test,ci
   earthkit-data:
     name: earthkit-data
     needs:
@@ -965,9 +1021,12 @@ jobs:
     - pyodc
     - odc
     - eckit
+    - pyfdb
+    - fdb
+    - metkit
     - earthkit-utils
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-data_matrix && (needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-data)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-data') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-data_matrix) }}
@@ -982,7 +1041,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -990,6 +1049,8 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
         python_dependencies: |-
           ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
@@ -997,6 +1058,7 @@ jobs:
           ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         python_toml_opt_dep_sections: all,test,ci
   earthkit-geo:
@@ -1018,7 +1080,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1044,12 +1106,69 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         python_requirements: tests/downstream-ci-requirements.txt
+  earthkit-plots:
+    name: earthkit-plots
+    needs:
+    - earthkit-data
+    - cfgrib
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - multiurl
+    - pdbufr
+    - pyodc
+    - odc
+    - eckit
+    - pyfdb
+    - fdb
+    - metkit
+    - earthkit-utils
+    - earthkit-regrid
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-plots_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-plots)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-plots') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.earthkit-plots_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on:
+    - self-hosted
+    - linux
+    - hpc
+    steps:
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
+          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+        python_toml_opt_dep_sections: healpix,test
   earthkit-regrid:
     name: earthkit-regrid
     needs:
@@ -1069,7 +1188,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1094,7 +1213,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1118,7 +1237,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1145,20 +1264,24 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
-        python_toml_opt_dep_sections: all
+        python_toml_opt_dep_sections: all,tests
         conda_deps: rust
   anemoi-datasets:
     name: anemoi-datasets
     needs:
     - anemoi-utils
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-datasets_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-datasets)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-datasets') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-datasets_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-datasets)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-datasets') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-datasets_matrix) }}
@@ -1173,13 +1296,17 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: |-
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-utils:
     name: anemoi-utils
@@ -1200,7 +1327,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1209,8 +1336,11 @@ jobs:
   anemoi-transform:
     name: anemoi-transform
     needs:
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-transform_matrix && (needs.setup.outputs.anemoi-transform)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-transform') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-transform_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.anemoi-transform)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-transform') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-transform_matrix) }}
@@ -1225,11 +1355,14 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
-        python_dependencies: ''
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-graphs:
     name: anemoi-graphs
@@ -1237,8 +1370,12 @@ jobs:
     - anemoi-datasets
     - anemoi-utils
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-graphs_matrix && (needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-graphs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-graphs') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-graphs_matrix && (needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-graphs)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-graphs') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-graphs_matrix) }}
@@ -1253,7 +1390,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1261,6 +1398,10 @@ jobs:
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-models:
     name: anemoi-models
@@ -1282,7 +1423,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1295,9 +1436,13 @@ jobs:
     - anemoi-models
     - anemoi-datasets
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-geo
     - anemoi-graphs
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-training_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models || needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-graphs || needs.setup.outputs.anemoi-training)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-training') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-training_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-models || needs.setup.outputs.anemoi-datasets || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-geo || needs.setup.outputs.anemoi-graphs || needs.setup.outputs.anemoi-training)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-training') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-training_matrix) }}
@@ -1312,7 +1457,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1321,6 +1466,10 @@ jobs:
           ${{ needs.setup.outputs.anemoi-models || (needs.setup.outputs.use_master == 'True' && 'anemoi-models:ecmwf/anemoi-core/models@main') || 'anemoi-models:ecmwf/anemoi-core/models@main' }}
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-inference:
@@ -1328,8 +1477,12 @@ jobs:
     needs:
     - anemoi-utils
     - anemoi-transform
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
+    - earthkit-plots
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-inference_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.anemoi-inference)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-inference') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.anemoi-inference_matrix && (needs.setup.outputs.anemoi-utils || needs.setup.outputs.anemoi-transform || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-regrid || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-plots || needs.setup.outputs.anemoi-inference)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'anemoi-inference') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.anemoi-inference_matrix) }}
@@ -1344,13 +1497,17 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: |-
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
+          ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
+          ${{ needs.setup.outputs.earthkit-plots || (needs.setup.outputs.use_master == 'True' && 'earthkit-plots:ecmwf/earthkit-plots@main') || 'earthkit-plots:ecmwf/earthkit-plots@develop' }}
         python_toml_opt_dep_sections: all,tests
   anemoi-plugins:
     name: anemoi-plugins
@@ -1372,7 +1529,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1397,7 +1554,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1406,19 +1563,8 @@ jobs:
     name: earthkit-workflows
     needs:
     - earthkit-data
-    - cfgrib
-    - eccodes-python
-    - eccodes
-    - ecbuild
-    - findlibs
-    - multiurl
-    - pdbufr
-    - pyodc
-    - odc
-    - eckit
-    - earthkit-utils
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-workflows_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-workflows)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-workflows') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-workflows_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-workflows)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-workflows') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-workflows_matrix) }}
@@ -1433,23 +1579,11 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
-        dependencies: |-
-          ${{ needs.setup.outputs.eccodes }}
-          ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.odc }}
-          ${{ needs.setup.outputs.eckit }}
-        python_dependencies: |-
-          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
-          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
-          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
-          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
-          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
-          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
-          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+        dependencies: ''
+        python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
         python_toml_opt_dep_sections: tests
   ecbuild:
     name: ecbuild
@@ -1470,7 +1604,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1495,7 +1629,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
@@ -1523,7 +1657,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1550,7 +1684,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
@@ -1576,7 +1710,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1603,7 +1737,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
@@ -1629,7 +1763,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1660,7 +1794,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1700,7 +1834,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1763,7 +1897,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -1794,7 +1928,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1832,7 +1966,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1867,7 +2001,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1895,7 +2029,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
@@ -1923,7 +2057,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1956,7 +2090,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -1986,7 +2120,6 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.multio_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
-      CTEST_PARALLEL_LEVEL: 1
     runs-on:
     - self-hosted
     - linux
@@ -1996,7 +2129,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -2042,7 +2175,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -2077,7 +2210,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2103,7 +2236,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -2133,7 +2266,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -2166,7 +2299,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -2194,7 +2327,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2218,7 +2351,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2242,7 +2375,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2273,7 +2406,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -2307,7 +2440,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: |-
@@ -2334,7 +2467,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2358,7 +2491,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2382,7 +2515,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2406,7 +2539,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
@@ -2430,7 +2563,7 @@ jobs:
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
-        troika_user: ${{ secrets.HPC_CI_SSH_USER }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''

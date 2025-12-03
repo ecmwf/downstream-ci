@@ -26,15 +26,17 @@ cfgrib:
 earthkit:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     test_cmd: |
-      _EKD_DIR=$(pwd) && cd .. && python -m pytest ${_EKD_DIR} -vv --cov=. --cov-report=html && cd -
+      python -m pytest --forked -vv --cov=. --cov-report=html
   deps:
     - earthkit-data
     - earthkit-geo
     - earthkit-meteo
     - earthkit-regrid
+    - earthkit-utils
+    - earthkit-hydro
 
 earthkit-data:
   type: python
@@ -45,6 +47,7 @@ earthkit-data:
     - multiurl
     - pdbufr
     - pyodc
+    - pyfdb
     - earthkit-utils
   downstream-ci:
     test_cmd: |
@@ -68,6 +71,19 @@ earthkit-meteo:
     config_path: ""
   deps:
     - earthkit-utils
+
+earthkit-plots:
+  type: python
+  master_branch: main
+  toml_opt_dep_sections: healpix,test
+  upload_extra_artifact: mpl-results
+  downstream-ci:
+    test_cmd: |
+      make unit-tests
+      make image-tests
+  deps:
+    - earthkit-data
+    - earthkit-regrid
 
 earthkit-regrid:
   type: python
@@ -98,7 +114,7 @@ earthkit-utils:
 earthkit-hydro:
   type: python
   master_branch: main
-  toml_opt_dep_sections: all
+  toml_opt_dep_sections: all,tests
   shallow_deps:
     - earthkit-data
   conda_deps: "rust"
@@ -116,6 +132,10 @@ anemoi-datasets:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  shallow_deps:
+    - earthkit-data
+    - earthkit-geo
+    - earthkit-meteo
   deps:
     - anemoi-utils
     - anemoi-transform
@@ -143,6 +163,10 @@ anemoi-transform:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  shallow_deps:
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -201,6 +225,9 @@ anemoi-inference:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  shallow_deps:
+    - earthkit-data
+    - earthkit-plots
   deps:
     - anemoi-utils
     - anemoi-transform
@@ -234,7 +261,7 @@ earthkit-workflows:
   type: python
   master_branch: main
   toml_opt_dep_sections: tests
-  deps:
+  shallow_deps:
     - earthkit-data
 
 ecbuild:
@@ -269,10 +296,9 @@ ecflow:
     - clang@macos-13-arm
     - clang@macos-13-x86
     - gnu@debian-12
-  downstream-ci-hpc:
-    skip:
-      - nvidia-22.11
-      - intel-2021.4.0
+    - gnu-14.2.0
+    - nvidia-24.11
+    - intel-2025.0.1
 
 ecflow-light:
   type: cmake
@@ -312,7 +338,7 @@ polytope:
     - conflator
   downstream-ci:
     config_path: ".github/ci-config.yml"
-    test_cmd: | 
+    test_cmd: |
       python -m pytest -m 'not fdb' tests --cov=./ --cov-report=xml
       python -m coverage report
   downstream-ci-hpc:
@@ -459,8 +485,6 @@ multio:
   type: cmake
   master_branch: master
   develop_branch: develop
-  env:
-    CTEST_PARALLEL_LEVEL: 1
   deps:
     - atlas
     - atlas-orca
