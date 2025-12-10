@@ -218,6 +218,13 @@ for owner_repo, val in ci_config.items():
         matrices[pkg_name]["include"] = [
             d for d in matrices[pkg_name]["include"] if d["name"] not in pkg_skip
         ]
+
+        # is this whole workflow to be skipped by the package?
+        if workflow_name in pkg_skip:
+            print("skipped workflow", workflow_name, "for package", pkg_name)
+            matrices[pkg_name]["name"] = []
+            matrices[pkg_name]["include"] = []
+
     repo_subdir = f"{repo}/{subdir}" if subdir else repo
     print("repo_subdir=", repo_subdir)
     for index, item in enumerate(matrices[pkg_name]["include"]):

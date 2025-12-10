@@ -133,6 +133,8 @@ anemoi-datasets:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  skip:
+    - downstream-ci-hpc
   shallow_deps:
     - earthkit-utils
     - earthkit-data
@@ -165,6 +167,8 @@ anemoi-transform:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  skip:
+    - downstream-ci-hpc
   shallow_deps:
     - earthkit-utils
     - earthkit-data
@@ -228,6 +232,8 @@ anemoi-inference:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  skip:
+    - downstream-ci-hpc
   shallow_deps:
     - earthkit-utils
     - earthkit-data
