@@ -198,6 +198,12 @@ for owner_repo, val in ci_config.items():
     if not config["setup_matrix"]:
         continue
 
+    # is this whole workflow to be skipped by the package?
+    pkg_skip = tree_get_package_var("skip", dep_tree, pkg_name, workflow_name) or []
+    if workflow_name in pkg_skip:
+        print("skipped workflow", workflow_name, "for package", pkg_name)
+        continue
+
     matrices[pkg_name] = copy.deepcopy(matrix)
 
     for opt in optional_matrix.get("name", []):
@@ -210,7 +216,6 @@ for owner_repo, val in ci_config.items():
     if config["matrix"]:
         matrices[pkg_name]["config"] = config["matrix"]
 
-    pkg_skip = tree_get_package_var("skip", dep_tree, pkg_name, workflow_name) or []
     if pkg_skip:
         matrices[pkg_name]["name"] = [
             name for name in matrices[pkg_name]["name"] if name not in pkg_skip
@@ -218,12 +223,6 @@ for owner_repo, val in ci_config.items():
         matrices[pkg_name]["include"] = [
             d for d in matrices[pkg_name]["include"] if d["name"] not in pkg_skip
         ]
-
-        # is this whole workflow to be skipped by the package?
-        if workflow_name in pkg_skip:
-            print("skipped workflow", workflow_name, "for package", pkg_name)
-            matrices[pkg_name]["name"] = []
-            matrices[pkg_name]["include"] = []
 
     repo_subdir = f"{repo}/{subdir}" if subdir else repo
     print("repo_subdir=", repo_subdir)
