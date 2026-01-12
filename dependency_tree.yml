@@ -110,7 +110,6 @@ earthkit-transforms:
   master_branch: main
   develop_branch: main
   downstream-ci:
-    config_path: ""
     test_cmd: |
       make unit-tests
       make docs-build
