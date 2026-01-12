@@ -115,6 +115,7 @@ earthkit-transforms:
       make docs-build
   deps:
     - earthkit-data
+    -earthkit-utils
 
 earthkit-utils:
   type: python
