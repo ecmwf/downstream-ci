@@ -467,7 +467,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.earthkit-time }}
             optional_matrix: null
           earthkit-transforms:ecmwf/earthkit-transforms:
-            path: ''
+            path: .github/ci-config.yml
             python: true
             master_branch: main
             develop_branch: main
