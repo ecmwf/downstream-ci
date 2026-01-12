@@ -104,6 +104,18 @@ earthkit-time:
       python -m pytest --cov=./ --cov-report=xml
       python -m coverage report
 
+
+earthkit-transforms:
+  type: python
+  master_branch: main
+  develop_branch: main
+  downstream-ci:
+    test_cmd: |
+      make unit-tests
+      make docs-build
+  deps:
+    - earthkit-data
+
 earthkit-utils:
   type: python
   master_branch: main
