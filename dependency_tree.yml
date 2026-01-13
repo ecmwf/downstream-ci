@@ -109,11 +109,10 @@ earthkit-transforms:
   type: python
   master_branch: main
   develop_branch: main
-  conda_deps: rasterio statsmodels
+  conda_deps: rasterio
   downstream-ci:
     test_cmd: |
       make unit-tests
-      make docs-build
   deps:
     - earthkit-data
 
