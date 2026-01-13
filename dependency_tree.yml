@@ -113,7 +113,7 @@ earthkit-transforms:
   downstream-ci:
     test_cmd: |
       make unit-tests
-  deps:
+  shallow_deps:
     - earthkit-data
 
 earthkit-utils:
