@@ -1421,10 +1421,10 @@ jobs:
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
           ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-        test_cmd: |
-          make unit-tests
-          make docs-build
-        conda_install: rasterio statsmodels
+        test_cmd: 'make unit-tests
+
+          '
+        conda_install: rasterio
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-utils:
