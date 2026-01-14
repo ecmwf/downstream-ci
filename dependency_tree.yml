@@ -115,6 +115,8 @@ earthkit-transforms:
       make unit-tests
   shallow_deps:
     - earthkit-data
+    - earthkit-utils
+
 
 earthkit-utils:
   type: python
