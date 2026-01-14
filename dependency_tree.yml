@@ -111,6 +111,7 @@ earthkit-transforms:
   develop_branch: main
   conda_deps: rasterio
   downstream-ci:
+    config_path: ""
     test_cmd: |
       make unit-tests
   shallow_deps:
