@@ -1235,8 +1235,9 @@ jobs:
     name: earthkit-transforms
     needs:
     - earthkit-data
+    - earthkit-utils
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-transforms_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-transforms)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-transforms') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-transforms_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-transforms)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-transforms') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-transforms_matrix) }}
@@ -1255,7 +1256,9 @@ jobs:
         repository: ${{ matrix.owner_repo_ref }}
         build_config: ${{ matrix.config_path }}
         dependencies: ''
-        python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         conda_deps: rasterio
   earthkit-utils:
     name: earthkit-utils
