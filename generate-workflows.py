@@ -518,7 +518,7 @@ class Workflow:
                 runs_on = [
                     "self-hosted",
                     "linux",
-                    "hpc",
+                    "hpc-dev",
                 ]
                 token_name = github_token or "GH_REPO_READ_TOKEN"
                 s = {
