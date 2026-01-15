@@ -365,7 +365,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: cmake-py
     - name: Run setup script
       id: setup
       env:
@@ -868,7 +868,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -899,7 +899,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -931,7 +931,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -979,7 +979,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1037,7 +1037,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1076,7 +1076,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1102,7 +1102,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1143,7 +1143,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1184,7 +1184,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1209,7 +1209,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1233,7 +1233,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1261,7 +1261,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1296,7 +1296,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1328,7 +1328,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1357,7 +1357,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1394,7 +1394,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1428,7 +1428,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1463,7 +1463,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1505,7 +1505,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1538,7 +1538,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1563,7 +1563,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1589,7 +1589,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1616,7 +1616,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1641,7 +1641,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1669,7 +1669,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1696,7 +1696,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1722,7 +1722,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1749,7 +1749,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1775,7 +1775,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1806,7 +1806,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1846,7 +1846,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1883,7 +1883,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1909,7 +1909,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1940,7 +1940,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -1978,7 +1978,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2013,7 +2013,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2041,7 +2041,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2069,7 +2069,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2102,7 +2102,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2141,7 +2141,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2187,7 +2187,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2222,7 +2222,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2248,7 +2248,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2278,7 +2278,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2311,7 +2311,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2339,7 +2339,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2363,7 +2363,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2387,7 +2387,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2418,7 +2418,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2452,7 +2452,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2479,7 +2479,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2503,7 +2503,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2527,7 +2527,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2551,7 +2551,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
@@ -2575,7 +2575,7 @@ jobs:
     - linux
     - hpc
     steps:
-    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+    - uses: ecmwf/reusable-workflows/ci-hpc@cmake-py
       with:
         github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
