@@ -46,6 +46,9 @@ name: downstream-ci
       earthkit-time:
         required: false
         type: string
+      earthkit-transforms:
+        required: false
+        type: string
       earthkit-utils:
         required: false
         type: string
@@ -225,6 +228,8 @@ jobs:
       earthkit-regrid_matrix: ${{ steps.setup.outputs.earthkit-regrid }}
       earthkit-time: ${{ steps.prepare-inputs.outputs.earthkit-time }}
       earthkit-time_matrix: ${{ steps.setup.outputs.earthkit-time }}
+      earthkit-transforms: ${{ steps.prepare-inputs.outputs.earthkit-transforms }}
+      earthkit-transforms_matrix: ${{ steps.setup.outputs.earthkit-transforms }}
       earthkit-utils: ${{ steps.prepare-inputs.outputs.earthkit-utils }}
       earthkit-utils_matrix: ${{ steps.setup.outputs.earthkit-utils }}
       earthkit-hydro: ${{ steps.prepare-inputs.outputs.earthkit-hydro }}
@@ -335,6 +340,7 @@ jobs:
         echo earthkit-plots="${{ inputs.earthkit-plots }}" >> $GITHUB_OUTPUT
         echo earthkit-regrid="${{ inputs.earthkit-regrid }}" >> $GITHUB_OUTPUT
         echo earthkit-time="${{ inputs.earthkit-time }}" >> $GITHUB_OUTPUT
+        echo earthkit-transforms="${{ inputs.earthkit-transforms }}" >> $GITHUB_OUTPUT
         echo earthkit-utils="${{ inputs.earthkit-utils }}" >> $GITHUB_OUTPUT
         echo earthkit-hydro="${{ inputs.earthkit-hydro }}" >> $GITHUB_OUTPUT
         echo anemoi-datasets="${{ inputs.anemoi-datasets }}" >> $GITHUB_OUTPUT
@@ -384,7 +390,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: add-repo-earthkit-transforms
     - name: Run setup script
       id: setup
       env:
@@ -459,6 +465,13 @@ jobs:
             master_branch: main
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.earthkit-time }}
+            optional_matrix: null
+          earthkit-transforms:ecmwf/earthkit-transforms:
+            path: ''
+            python: true
+            master_branch: main
+            develop_branch: main
+            input: ${{ steps.prepare-inputs.outputs.earthkit-transforms }}
             optional_matrix: null
           earthkit-utils:ecmwf/earthkit-utils:
             path: ''
@@ -1348,6 +1361,34 @@ jobs:
         test_cmd: |
           python -m pytest --cov=./ --cov-report=xml
           python -m coverage report
+        codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
+        codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
+  earthkit-transforms:
+    name: earthkit-transforms
+    needs:
+    - earthkit-data
+    - earthkit-utils
+    - setup
+    - python-qa
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-transforms_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-transforms)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-transforms') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.earthkit-transforms_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on: ${{ matrix.labels }}
+    steps:
+    - uses: ecmwf/reusable-workflows/ci-python@v2
+      with:
+        repository: ${{ matrix.owner_repo_ref }}
+        checkout: true
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
+        toml_opt_dep_sections: all
+        test_cmd: 'FINDLIBS_DISABLE_PACKAGE=no make unit-tests
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-utils:
