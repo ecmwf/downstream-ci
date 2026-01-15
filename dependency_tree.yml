@@ -109,7 +109,8 @@ earthkit-transforms:
   type: python
   master_branch: main
   develop_branch: main
-  conda_deps: rasterio eccodes
+  toml_opt_dep_sections: all
+  conda_deps: rasterio
   downstream-ci:
     config_path: ""
     test_cmd: |
