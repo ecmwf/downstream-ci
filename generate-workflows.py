@@ -383,7 +383,7 @@ class Workflow:
                     needs.append("clang-format")
                     s = {
                         "uses": (
-                            "ecmwf/reusable-workflows/build-package-with-config@v2"
+                            "ecmwf/reusable-workflows/build-package-with-config@cmake-py"
                         ),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
@@ -416,7 +416,7 @@ class Workflow:
                             "name": "Build dependencies",
                             "id": "build-deps",
                             "uses": (
-                                "ecmwf/reusable-workflows/build-package-with-config@v2"
+                                "ecmwf/reusable-workflows/build-package-with-config@cmake-py"
                             ),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
@@ -437,7 +437,7 @@ class Workflow:
                         for path in mkdir:
                             steps.append({"run": f"mkdir -p {path}"})
                         ci_python_step = {
-                            "uses": "ecmwf/reusable-workflows/ci-python@v2",
+                            "uses": "ecmwf/reusable-workflows/ci-python@cmake-py",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "lib_path": (
@@ -481,7 +481,7 @@ class Workflow:
                     else:
                         # pure python package
                         ci_python_step = {
-                            "uses": "ecmwf/reusable-workflows/ci-python@v2",
+                            "uses": "ecmwf/reusable-workflows/ci-python@cmake-py",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "checkout": True,
@@ -522,7 +522,7 @@ class Workflow:
                 ]
                 token_name = github_token or "GH_REPO_READ_TOKEN"
                 s = {
-                    "uses": "ecmwf/reusable-workflows/ci-hpc@v2",
+                    "uses": "ecmwf/reusable-workflows/ci-hpc@cmake-py",
                     "with": {
                         "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
                         "github_token": f"${{{{ secrets.{token_name} }}}}",
