@@ -1389,7 +1389,6 @@ jobs:
         test_cmd: 'FINDLIBS_DISABLE_PACKAGE=no make unit-tests
 
           '
-        conda_install: rasterio
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-utils:
