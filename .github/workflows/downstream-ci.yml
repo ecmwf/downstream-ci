@@ -795,7 +795,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.danu }}
             optional_matrix: null
         PYTHON_VERSIONS: |+
-          - '3.10'
+          - '3.11'
 
         PYTHON_JOBS: |+
           []
