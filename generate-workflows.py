@@ -142,7 +142,7 @@ class Workflow:
             "required": False,
             "default": yaml.dump(
                 wf_config["python_versions"], indent=2, default_flow_style=False
-            ),
+            )+ "\n",
         }
 
     # this setting ensures that multiple pushes to the same branch of a repo
@@ -667,8 +667,7 @@ class Workflow:
                     default_flow_style=False,
                     sort_keys=False,
                 ),
-                "PYTHON_VERSIONS": "${{ inputs.python_versions }}"
-                + "\n",
+                "PYTHON_VERSIONS": "${{ inputs.python_versions }}",
                 "PYTHON_JOBS": yaml.dump(
                     wf_config.get("python_jobs", []),
                     indent=2,
