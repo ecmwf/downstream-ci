@@ -136,6 +136,14 @@ class Workflow:
         for package, val in dep_tree.items():
             if is_input(package, dep_tree, self.name, self.private):
                 self.inputs[package] = {"required": False, "type": "string"}
+        self.inputs["python_versions"] = {
+            "description": "Python versions to build the test matrix with.",
+            "type": "string",
+            "required": False,
+            "default": yaml.dump(
+                wf_config["python_versions"], indent=2, default_flow_style=False
+            ),
+        }
 
     # this setting ensures that multiple pushes to the same branch of a repo
     # will result in all but the latest ci workflows being cancelled
@@ -659,9 +667,7 @@ class Workflow:
                     default_flow_style=False,
                     sort_keys=False,
                 ),
-                "PYTHON_VERSIONS": yaml.dump(
-                    wf_config["python_versions"], indent=2, default_flow_style=False
-                )
+                "PYTHON_VERSIONS": "${{ inputs.python_versions }}"
                 + "\n",
                 "PYTHON_JOBS": yaml.dump(
                     wf_config.get("python_jobs", []),
