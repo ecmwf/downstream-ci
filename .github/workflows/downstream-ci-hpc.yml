@@ -184,9 +184,9 @@ name: downstream-ci-hpc
         description: Python versions to build the test matrix with.
         type: string
         required: false
-        default: '- ''3.10''
+        default: |+
+          - '3.10'
 
-          '
       skip_matrix_jobs:
         description: List of matrix jobs to be skipped.
         required: false
@@ -782,9 +782,7 @@ jobs:
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.danu }}
             optional_matrix: null
-        PYTHON_VERSIONS: '${{ inputs.python_versions }}
-
-          '
+        PYTHON_VERSIONS: ${{ inputs.python_versions }}
         PYTHON_JOBS: |+
           - gnu-8.5.0
 
