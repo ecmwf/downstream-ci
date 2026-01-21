@@ -175,7 +175,7 @@ anemoi-utils:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 anemoi-transform:
   type: python
@@ -193,7 +193,7 @@ anemoi-transform:
     config_path: ""
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
 
 anemoi-graphs:
   type: python
@@ -222,7 +222,7 @@ anemoi-models:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 anemoi-training:
   type: python
@@ -240,7 +240,7 @@ anemoi-training:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 anemoi-inference:
   type: python
@@ -260,7 +260,7 @@ anemoi-inference:
     config_path: ""
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
 
 anemoi-plugins:
   type: python
@@ -273,7 +273,7 @@ anemoi-plugins:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 conflator:
   type: python
