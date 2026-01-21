@@ -1484,7 +1484,7 @@ jobs:
         toml_opt_dep_sections: all,tests
         test_cmd: |
           FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
+          FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-utils:
@@ -1580,7 +1580,7 @@ jobs:
         toml_opt_dep_sections: all,tests
         test_cmd: |
           python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          python -m coverage report
+          python -m coverage report --omit "*.pyx"
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-models:
