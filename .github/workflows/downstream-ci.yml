@@ -403,7 +403,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: test-coverage
     - name: Run setup script
       id: setup
       env:
@@ -1495,9 +1495,9 @@ jobs:
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
+        test_cmd: 'FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-utils:
@@ -1519,9 +1519,9 @@ jobs:
         checkout: true
         python_dependencies: ''
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          python -m coverage report --omit "*.pyx"
+        test_cmd: 'python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-transform:
@@ -1551,9 +1551,9 @@ jobs:
           ${{ needs.setup.outputs.earthkit-regrid || (needs.setup.outputs.use_master == 'True' && 'earthkit-regrid:ecmwf/earthkit-regrid@main') || 'earthkit-regrid:ecmwf/earthkit-regrid@develop' }}
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
+        test_cmd: 'FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-graphs:
@@ -1591,9 +1591,9 @@ jobs:
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          python -m coverage report --omit "*.pyx"
+        test_cmd: 'python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-models:
@@ -1616,9 +1616,9 @@ jobs:
         checkout: true
         python_dependencies: ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          python -m coverage report --omit "*.pyx"
+        test_cmd: 'python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-training:
@@ -1660,9 +1660,9 @@ jobs:
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          python -m coverage report --omit "*.pyx"
+        test_cmd: 'python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-inference:
@@ -1698,9 +1698,9 @@ jobs:
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-plots || (needs.setup.outputs.use_master == 'True' && 'earthkit-plots:ecmwf/earthkit-plots@main') || 'earthkit-plots:ecmwf/earthkit-plots@develop' }}
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
+        test_cmd: 'FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   anemoi-plugins:
@@ -1723,9 +1723,9 @@ jobs:
         checkout: true
         python_dependencies: ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
         toml_opt_dep_sections: all,tests
-        test_cmd: |
-          python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-          python -m coverage report --omit "*.pyx"
+        test_cmd: 'python -m pytest -vv -m ''not notebook and not no_cache_init''
+
+          '
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   conflator:
