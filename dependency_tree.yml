@@ -104,6 +104,21 @@ earthkit-time:
       python -m pytest --cov=./ --cov-report=xml
       python -m coverage report
 
+
+earthkit-transforms:
+  type: python
+  master_branch: main
+  develop_branch: main
+  toml_opt_dep_sections: all
+  downstream-ci:
+    config_path: ""
+    test_cmd: |
+      FINDLIBS_DISABLE_PACKAGE=no make unit-tests
+  shallow_deps:
+    - earthkit-data
+    - earthkit-utils
+
+
 earthkit-utils:
   type: python
   master_branch: main
@@ -117,6 +132,7 @@ earthkit-hydro:
   toml_opt_dep_sections: all,tests
   shallow_deps:
     - earthkit-data
+    - earthkit-utils
   conda_deps: "rust"
   env:
     CARGO_TARGET_DIR: /var/tmp
@@ -132,6 +148,13 @@ anemoi-datasets:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  skip:
+    - downstream-ci-hpc
+  shallow_deps:
+    - earthkit-utils
+    - earthkit-data
+    - earthkit-geo
+    - earthkit-meteo
   deps:
     - anemoi-utils
     - anemoi-transform
@@ -141,7 +164,7 @@ anemoi-datasets:
       RUNNER_TYPE: "self-hosted"
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
 
 anemoi-utils:
   type: python
@@ -152,18 +175,25 @@ anemoi-utils:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 anemoi-transform:
   type: python
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  skip:
+    - downstream-ci-hpc
+  shallow_deps:
+    - earthkit-utils
+    - earthkit-data
+    - earthkit-regrid
+    - earthkit-meteo
   downstream-ci:
     config_path: ""
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
 
 anemoi-graphs:
   type: python
@@ -178,7 +208,7 @@ anemoi-graphs:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 anemoi-models:
   type: python
@@ -192,7 +222,7 @@ anemoi-models:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 anemoi-training:
   type: python
@@ -210,13 +240,19 @@ anemoi-training:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 anemoi-inference:
   type: python
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  skip:
+    - downstream-ci-hpc
+  shallow_deps:
+    - earthkit-utils
+    - earthkit-data
+    - earthkit-plots
   deps:
     - anemoi-utils
     - anemoi-transform
@@ -224,7 +260,7 @@ anemoi-inference:
     config_path: ""
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report
+      FINDLIBS_DISABLE_PACKAGE=no python -m coverage report --omit "*.pyx"
 
 anemoi-plugins:
   type: python
@@ -237,7 +273,7 @@ anemoi-plugins:
     config_path: ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' --cov=. --cov-report=xml
-      python -m coverage report
+      python -m coverage report --omit "*.pyx"
 
 conflator:
   type: python
@@ -250,8 +286,9 @@ earthkit-workflows:
   type: python
   master_branch: main
   toml_opt_dep_sections: tests
-  deps:
+  shallow_deps:
     - earthkit-data
+    - earthkit-utils
 
 ecbuild:
   type: cmake
@@ -332,6 +369,20 @@ polytope:
       python -m coverage report
   downstream-ci-hpc:
     config_path: ".github/ci-hpc-config.yml"
+
+qubed:
+  type: python
+  master_branch: main
+  develop_branch: main
+  toml_opt_dep_sections: dev
+  conda_deps: "rust"
+  env:
+    CARGO_TARGET_DIR: /var/tmp
+  downstream-ci:
+    config_path: ""
+    test_cmd: | 
+      python -m pytest tests --cov=./ --cov-report=xml
+      python -m coverage report
 
 findlibs:
   type: python
