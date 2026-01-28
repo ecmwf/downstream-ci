@@ -157,7 +157,7 @@ downstream-ci-hpc: &downstream_ci_hpc
         compiler_modules: prgenv/intel,intel/2021.4.0
   optional_matrix:
     name:
-      - lumi
+      - lumi-gnu-12.2.0
       - gnu-14.2.0
       - nvidia-24.11
       - intel-2025.0.1

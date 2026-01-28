@@ -328,6 +328,9 @@ eckit-cd-test:
   type: cmake
   deps:
     - ecbuild
+  downstream-ci-hpc:
+    optional_matrix:
+      - lumi-gnu-12.2.0
 
 ecmwf-toolbox:
   type: cmake
