@@ -550,6 +550,11 @@ class Workflow:
                     )
                 if conda_deps:
                     s["with"]["conda_deps"] = conda_deps
+                fail_on_ssh_error = tree_get_package_var(
+                    "fail_on_ssh_error", dep_tree, package, self.name
+                )
+                if fail_on_ssh_error is not None:
+                    s["with"]["fail_on_ssh_error"] = str(fail_on_ssh_error).lower()
                 steps.append(s)
             self.add_job(Job(package, needs, condition,
                          strategy, env, runs_on, steps))
