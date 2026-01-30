@@ -164,7 +164,7 @@ downstream-ci-hpc: &downstream_ci_hpc
       - aocc-4.0.0
     include:
       - name: lumi-gnu-12.2.0
-        site: lumi
+        site: lumi-error
         compiler: gnu-12.2.0
         compiler_cc: gcc
         compiler_cxx: g++
