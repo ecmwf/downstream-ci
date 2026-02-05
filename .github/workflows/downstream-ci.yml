@@ -466,7 +466,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.earthkit-plots }}
             optional_matrix: null
           earthkit-regrid:ecmwf/earthkit-regrid:
-            path: ''
+            path: .github/ci-config.yml
             python: true
             master_branch: main
             develop_branch: develop
