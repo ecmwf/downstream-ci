@@ -188,7 +188,7 @@ name: downstream-ci-hpc
         type: string
         required: false
         default: |+
-          - '3.10'
+          - '3.11'
 
       skip_matrix_jobs:
         description: List of matrix jobs to be skipped.
