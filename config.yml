@@ -9,7 +9,7 @@ downstream-ci: &downstream_ci
   python_qa: true
   clang_format: true
   python_versions:
-    - "3.10"
+    - "3.11"
   matrix:
     name:
       - gnu@debian-11
@@ -119,7 +119,7 @@ downstream-ci-hpc: &downstream_ci_hpc
   python_jobs:
     - gnu-8.5.0
   python_versions:
-    - "3.10"
+    - "3.11"
   matrix:
     name:
       - gnu-12.2.0
