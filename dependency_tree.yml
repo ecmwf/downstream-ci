@@ -93,7 +93,7 @@ earthkit-regrid:
     test_cmd: |
       pytest --cov=./ --cov-report=xml
       python -m coverage report
-  deps:
+  shallow_deps:
     - mir
 
 
