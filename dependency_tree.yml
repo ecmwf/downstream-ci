@@ -508,6 +508,12 @@ mir:
     - atlas
     - eccodes
 
+mir-python:
+  type: python
+  repo: ecmwf/mir/python/mir
+  shallow_deps:
+    - mir
+
 multio:
   type: cmake
   master_branch: master
