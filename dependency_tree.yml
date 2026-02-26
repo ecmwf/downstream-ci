@@ -291,7 +291,7 @@ eccodes:
   type: cmake
   downstream-ci-hpc:
     modules:
-      - aec
+      - aec/1.1.4
     deps:
       - ecbuild
   downstream-ci:
