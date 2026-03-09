@@ -35,7 +35,7 @@ def get_package_deps(
     )
 
     for dep in direct_deps:
-        if not (dep in deps):
+        if dep not in deps:
             deps.append(dep)
 
         if dep in dep_tree:
@@ -44,7 +44,7 @@ def get_package_deps(
     shallow_deps = package_config.get("shallow_deps", [])
 
     for dep in shallow_deps:
-        if not (dep in deps):
+        if dep not in deps:
             deps.append(dep)
 
     return deps
