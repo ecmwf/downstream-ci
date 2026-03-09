@@ -23,3 +23,4 @@ mypy .
 - Avoid using `Any` type. Better let it undeclared, than use `Any` just to silence type errors.
     It's borderline acceptable to use it for value in a dictionary, e.g. `Dict[str, Any]`, but even then it's better to be more specific if possible.
 - Use 120 line length limit.
+- Use specific error codes when ignoring linter errors, e.g. `# type: ignore[method-assign]` instead of just `# type: ignore`
