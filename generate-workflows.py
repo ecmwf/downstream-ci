@@ -65,7 +65,7 @@ def tree_get_package_var(
 
 def get_type_deps(
     package: str, dep_tree: dict, wf_name, type: Literal["cmake", "python"]
-):
+) -> list[str]:
     package_deps = get_package_deps(package, dep_tree, wf_name)
     type_deps = []
     for dep in package_deps:
