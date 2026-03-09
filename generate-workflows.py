@@ -2,7 +2,7 @@
 
 import argparse
 from pathlib import PurePath
-from typing import Any, Literal
+from typing import Any, Literal, Mapping, Sequence, TypeVar, Type
 import yaml
 
 from dataclasses import dataclass, field
@@ -17,6 +17,16 @@ def str_presenter(dumper, data):
 
 yaml.add_representer(str, str_presenter)
 yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
+
+PackageVariable = str | bool | Sequence[str] | Sequence[bool] | Mapping[str, str]
+
+T = TypeVar("T")
+
+
+def ensure_type(T_: Type[T], x: Any) -> T:
+    if not isinstance(x, T_):
+        raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
+    return x
 
 
 def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str] | None = None) -> list[str]:
@@ -46,14 +56,28 @@ def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str]
     return deps
 
 
-def tree_get_package_var(var_name: str, dep_tree: dict, package: str, wf_name: str, default: Any = None):
-    """Get package variable from dep tree. Prefers vars set for given workflow name."""
+def tree_get_package_var(
+    var_name: str,
+    dep_tree: dict,
+    package: str,
+    wf_name: str,
+    default: PackageVariable | None = None,
+) -> PackageVariable:
+    """Get package variable from dep tree, preferring workflow-specific values.
+
+    Lookup order: workflow-specific value, package value, then default.
+
+    Fails if variable is not found and no default is provided.
+    """
     wf_spec = dep_tree[package].get(wf_name, {})
     general = dep_tree[package]
     if wf_spec.get(var_name) is not None:
         return wf_spec[var_name]
     if general.get(var_name) is not None:
         return general[var_name]
+    assert default is not None, (
+        f"Missing package variable '{var_name}' for package '{package}' in workflow '{wf_name}'."
+    )
     return default
 
 
@@ -282,12 +306,15 @@ class Workflow:
                     # input || (use_master == 'True' && master_branch) || develop_branch
                     master_branch = tree_get_package_var("master_branch", dep_tree, dep, self.name, "master")
                     develop_branch = tree_get_package_var("develop_branch", dep_tree, dep, self.name, "develop")
-                    dep_repo = tree_get_package_var(
-                        "repo",
-                        dep_tree,
-                        dep,
-                        self.name,
-                        dep,
+                    dep_repo = ensure_type(
+                        str,
+                        tree_get_package_var(
+                            "repo",
+                            dep_tree,
+                            dep,
+                            self.name,
+                            dep,
+                        ),
                     )
                     if not dep_repo.startswith("ecmwf/"):
                         dep_repo = f"ecmwf/{dep_repo}"
@@ -330,11 +357,11 @@ class Workflow:
                 "matrix": "${{ " + f"fromJson(needs.setup.outputs.{package}_matrix)" + " }}",
             }
             runs_on: str | list[str] = "${{ matrix.labels }}"
-            package_env = tree_get_package_var("env", dep_tree, package, self.name)
+            package_env = ensure_type(dict[str, str], tree_get_package_var("env", dep_tree, package, self.name))
             env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"}
             env.update(package_env) if package_env else None
             test_cmd = tree_get_package_var("test_cmd", dep_tree, package, self.name)
-            mkdir = tree_get_package_var("mkdir", dep_tree, package, self.name) or []
+            mkdir = ensure_type(list[str], tree_get_package_var("mkdir", dep_tree, package, self.name) or [])
             conda_deps = tree_get_package_var("conda_deps", dep_tree, package, self.name)
             build_package_python = tree_get_package_var("build-package-python", dep_tree, package, self.name)
             github_token = tree_get_package_var("github_token", dep_tree, package, self.name)
