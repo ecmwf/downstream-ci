@@ -27,7 +27,7 @@ jobs:
 
       - name: Verify
         run: |
-          mypy downstream-ci/generate-workflows.py
+          mypy generate-workflows.py
 
       - name: Build
         run: >
