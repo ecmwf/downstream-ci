@@ -561,19 +561,9 @@ class Workflow:
             "id": "setup",
             "env": {
                 "TOKEN": "${{ secrets.GH_REPO_READ_TOKEN }}",
-                "CONFIG": yaml.dump(
-                    setup_config,
-                    indent=2,
-                    default_flow_style=False,
-                    sort_keys=False,
-                ),
+                "CONFIG": yaml.dump(setup_config, indent=2, default_flow_style=False, sort_keys=False),
                 "PYTHON_VERSIONS": "${{ inputs.python_versions }}",
-                "PYTHON_JOBS": yaml.dump(
-                    wf_config.get("python_jobs", []),
-                    indent=2,
-                    default_flow_style=False,
-                )
-                + "\n",
+                "PYTHON_JOBS": yaml.dump(wf_config.get("python_jobs", []), indent=2, default_flow_style=False) + "\n",
                 "MATRIX": yaml.dump(wf_config["matrix"], indent=2),
                 "OPTIONAL_MATRIX": yaml.dump(wf_config["optional_matrix"], indent=2, default_flow_style=False),
                 "WORKFLOW_NAME": wf_name,
