@@ -2,7 +2,7 @@
 
 import argparse
 from pathlib import PurePath
-from typing import Literal
+from typing import Any, Literal
 import yaml
 
 from dataclasses import dataclass, field
@@ -20,7 +20,7 @@ yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""
 
 
 def get_package_deps(
-    package: str, dep_tree: dict, wf_name: str, deps: list[str] = None
+    package: str, dep_tree: dict, wf_name: str, deps: list[str] | None = None
 ):
 
     if deps is None:
@@ -51,7 +51,7 @@ def get_package_deps(
 
 
 def tree_get_package_var(
-    var_name: str, dep_tree: dict, package: str, wf_name: str, default=None
+    var_name: str, dep_tree: dict, package: str, wf_name: str, default: Any = None
 ):
     """Get package variable from dep tree. Prefers vars set for given workflow name."""
     wf_spec = dep_tree[package].get(wf_name, {})
@@ -85,16 +85,16 @@ def is_input(package, dep_tree, wf_name, wf_private) -> bool:
 @dataclass
 class Job:
     name: str
-    needs: str | list[str] = None
-    condition: str = None
-    strategy: dict = None
-    env: dict = None
+    needs: str | list[str] | None = None
+    condition: str | None = None
+    strategy: dict[str, Any] | None = None
+    env: dict[str, Any] | None = None
     runs_on: str | list[str] = "ubuntu-latest"
-    steps: list[dict] = field(default_factory=list)
-    outputs: dict = None
+    steps: list[dict[str, Any]] = field(default_factory=list)
+    outputs: dict[str, Any] | None = None
 
-    def __getstate__(self) -> object:
-        d = {"name": self.name}
+    def __getstate__(self) -> dict[str, Any]:
+        d: dict[str, Any] = {"name": self.name}
         if self.needs:
             d["needs"] = self.needs
         if self.condition:
@@ -152,8 +152,8 @@ class Workflow:
 
         return c
 
-    def __getstate__(self) -> object:
-        d = {
+    def __getstate__(self) -> dict[str, Any]:
+        d: dict[str, Any] = {
             "name": self.name,
             "on": {"workflow_call": {"inputs": self.inputs}},
             "concurrency": self.concurrency(),
@@ -169,7 +169,7 @@ class Workflow:
 
         return d
 
-    def get_prepare_inputs_script(self, pkgs) -> str:
+    def get_prepare_inputs_script(self, pkgs) -> list[str]:
         lines = []
         if self.private:
             for pkg in pkgs:
@@ -363,7 +363,7 @@ class Workflow:
                 + f"fromJson(needs.setup.outputs.{package}_matrix)"
                 + " }}",
             }
-            runs_on = "${{ matrix.labels }}"
+            runs_on: str | list[str] = "${{ matrix.labels }}"
             package_env = tree_get_package_var("env", dep_tree, package, self.name)
             env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"}
             env.update(package_env) if package_env else None
@@ -378,11 +378,11 @@ class Workflow:
             github_token = tree_get_package_var(
                 "github_token", dep_tree, package, self.name
             )
-            steps = []
+            steps: list[dict[str, Any]] = []
             if self.wf_type == "build-package":
                 if pkg_conf.get("type", "cmake") == "cmake":
                     needs.append("clang-format")
-                    s = {
+                    s: dict[str, Any] = {
                         "uses": (
                             "ecmwf/reusable-workflows/build-package-with-config@v2"
                         ),
@@ -439,7 +439,7 @@ class Workflow:
                         steps.append(s)
                         for path in mkdir:
                             steps.append({"run": f"mkdir -p {path}"})
-                        ci_python_step = {
+                        ci_python_step: dict[str, Any] = {
                             "uses": "ecmwf/reusable-workflows/ci-python@v2",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
@@ -586,7 +586,7 @@ class Workflow:
                 }
             }
         )
-        steps = []
+        steps: list[dict[str, Any]] = []
         if self.private:
             steps.append(
                 {
@@ -653,7 +653,7 @@ class Workflow:
             case _:
                 wf_name = self.name
 
-        s = {
+        s: dict[str, Any] = {
             "name": "Run setup script",
             "id": "setup",
             "env": {
