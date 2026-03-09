@@ -62,7 +62,7 @@ def tree_get_package_var(
     package: str,
     wf_name: str,
     default: PackageVariable | None = None,
-) -> PackageVariable:
+) -> PackageVariable | None:
     """Get package variable from dep tree, preferring workflow-specific values.
 
     Lookup order: workflow-specific value, package value, then default.
@@ -75,9 +75,6 @@ def tree_get_package_var(
         return wf_spec[var_name]
     if general.get(var_name) is not None:
         return general[var_name]
-    assert default is not None, (
-        f"Missing package variable '{var_name}' for package '{package}' in workflow '{wf_name}'."
-    )
     return default
 
 
