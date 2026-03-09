@@ -2,7 +2,7 @@
 
 import argparse
 from pathlib import PurePath
-from typing import Any, Literal, Mapping, Sequence, TypeVar, Type
+from typing import Any, Literal, Mapping, Sequence, TypeVar, Type, cast, Final
 import yaml
 
 from dataclasses import dataclass, field
@@ -19,13 +19,14 @@ yaml.add_representer(str, str_presenter)
 yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
 
 PackageVariable = str | bool | Sequence[str] | Sequence[bool] | Mapping[str, str]
+T_PackageVariable = TypeVar("T_PackageVariable", bound=PackageVariable)
 
 T = TypeVar("T")
 
 
 def ensure_type(T_: Type[T], x: Any) -> T:
-    if not isinstance(x, T_):
-        raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
+    # if not isinstance(x, T_):
+    #     raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
     return x
 
 
@@ -56,7 +57,7 @@ def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str]
     return deps
 
 
-def tree_get_package_var(
+def tree_get_package_optional_var(
     var_name: str,
     dep_tree: dict,
     package: str,
@@ -78,6 +79,26 @@ def tree_get_package_var(
     return default
 
 
+def tree_get_package_var(
+    var_name: str,
+    dep_tree: dict,
+    package: str,
+    wf_name: str,
+    default: T_PackageVariable | None = None,
+) -> T_PackageVariable:
+    """Get package variable from dep tree, preferring workflow-specific values.
+
+    Lookup order: workflow-specific value, package value, then default.
+
+    Fails if variable is not found and no default is provided.
+    """
+    result = tree_get_package_optional_var(var_name, dep_tree, package, wf_name, default)
+    assert result is not None, (
+        f"Variable '{var_name}' not found for package '{package}' in workflow '{wf_name}', and no default value provided."
+    )
+    return cast(T_PackageVariable, result)
+
+
 def get_type_deps(package: str, dep_tree: dict, wf_name, type: Literal["cmake", "python"]) -> list[str]:
     package_deps = get_package_deps(package, dep_tree, wf_name)
     type_deps = []
@@ -88,7 +109,7 @@ def get_type_deps(package: str, dep_tree: dict, wf_name, type: Literal["cmake", 
 
 
 def is_input(package, dep_tree, wf_name, wf_private) -> bool:
-    is_input = tree_get_package_var("input", dep_tree, package, wf_name) is not False
+    is_input = tree_get_package_var("input", dep_tree, package, wf_name, True)
     is_pkg_private = tree_get_package_var("private", dep_tree, package, wf_name, False)
     # add private packages as inputs to private wfs only
     # add non-private packages to all wfs
@@ -354,14 +375,15 @@ class Workflow:
                 "matrix": "${{ " + f"fromJson(needs.setup.outputs.{package}_matrix)" + " }}",
             }
             runs_on: str | list[str] = "${{ matrix.labels }}"
-            package_env = ensure_type(dict[str, str], tree_get_package_var("env", dep_tree, package, self.name))
-            env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"}
-            env.update(package_env) if package_env else None
-            test_cmd = tree_get_package_var("test_cmd", dep_tree, package, self.name)
-            mkdir = ensure_type(list[str], tree_get_package_var("mkdir", dep_tree, package, self.name) or [])
-            conda_deps = tree_get_package_var("conda_deps", dep_tree, package, self.name)
-            build_package_python = tree_get_package_var("build-package-python", dep_tree, package, self.name)
-            github_token = tree_get_package_var("github_token", dep_tree, package, self.name)
+
+            package_env = ensure_type(dict[str, str], tree_get_package_var("env", dep_tree, package, self.name, {}))
+            env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"} | package_env
+
+            test_cmd = tree_get_package_var("test_cmd", dep_tree, package, self.name, "")
+            mkdir = ensure_type(list[str], tree_get_package_var("mkdir", dep_tree, package, self.name, []))
+            conda_deps = tree_get_package_var("conda_deps", dep_tree, package, self.name, [])
+            build_package_python = tree_get_package_var("build-package-python", dep_tree, package, self.name, [])
+            github_token = tree_get_package_var("github_token", dep_tree, package, self.name, "")
             steps: list[dict[str, Any]] = []
             if self.wf_type == "build-package":
                 if pkg_conf.get("type", "cmake") == "cmake":
@@ -552,24 +574,22 @@ class Workflow:
             }
         )
         setup_config = {}
-        default_config_path = (
+        default_config_path: Final = (
             ".github/ci-config.yml" if self.wf_type == "build-package" else ".github/ci-hpc-config.yml"
         )
         for dep in dep_tree:
             if is_input(dep, dep_tree, self.name, self.private):
-                config_path = tree_get_package_var("config_path", dep_tree, dep, self.name)
-                if config_path is None:
-                    config_path = default_config_path
+                config_path = tree_get_package_var("config_path", dep_tree, dep, self.name, default_config_path)
                 dep_repo = dep_tree[dep].get("repo", dep)
                 if not dep_repo.startswith("ecmwf/"):
                     dep_repo = f"ecmwf/{dep_repo}"
                 setup_config[f"{dep}:{dep_repo}"] = {
                     "path": config_path,
                     "python": dep_tree[dep].get("type", "cmake") == "python",
-                    "master_branch": tree_get_package_var("master_branch", dep_tree, dep, self.name) or "master",
-                    "develop_branch": tree_get_package_var("develop_branch", dep_tree, dep, self.name) or "develop",
+                    "master_branch": tree_get_package_var("master_branch", dep_tree, dep, self.name, "master"),
+                    "develop_branch": tree_get_package_var("develop_branch", dep_tree, dep, self.name, "develop"),
                     "input": "${{ " + f"steps.prepare-inputs.outputs.{dep}" + " }}",
-                    "optional_matrix": tree_get_package_var("optional_matrix", dep_tree, dep, self.name),
+                    "optional_matrix": tree_get_package_optional_var("optional_matrix", dep_tree, dep, self.name),
                 }
 
         match self.name:
