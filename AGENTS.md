@@ -20,3 +20,6 @@ mypy .
 - Follow PEP 8 style guide for Python code
 - Declare arguments generally as non-mutable, e.g. `Sequence` instead of `list`, `Mapping` instead of `dict`, etc.
 - Don't use implicit optional arguments, e.g. `def foo(x: Optional[int] = None)` is not ideal, prefer `def foo(x: int | None = None)`
+- Avoid using `Any` type. Better let it undeclared, than use `Any` just to silence type errors.
+    It's borderline acceptable to use it for value in a dictionary, e.g. `Dict[str, Any]`, but even then it's better to be more specific if possible.
+- Use 120 line length limit.
