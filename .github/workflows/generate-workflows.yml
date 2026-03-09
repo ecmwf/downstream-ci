@@ -25,6 +25,10 @@ jobs:
 
       - run: pip install pyyaml
 
+      - name: Verify
+        run: |
+          mypy downstream-ci/generate-workflows.py
+
       - name: Build
         run: >
           python generate-workflows.py
@@ -81,7 +85,6 @@ jobs:
           python-version: "3.x"
 
       - run: pip install pyyaml
-
 
       - name: Verify
         run: |
