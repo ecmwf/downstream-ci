@@ -23,18 +23,15 @@ def get_package_deps(
     package: str, dep_tree: dict, wf_name: str, deps: list[str] = None
 ):
 
-    
     if deps is None:
         deps = []
     if package not in dep_tree or dep_tree[package] is None:
         return deps
 
     package_config = dep_tree[package]
-    
+
     direct_deps = (
-        package_config.get(wf_name, {}).get("deps")
-        or package_config.get("deps")
-        or []
+        package_config.get(wf_name, {}).get("deps") or package_config.get("deps") or []
     )
 
     for dep in direct_deps:
@@ -45,11 +42,11 @@ def get_package_deps(
             get_package_deps(dep, dep_tree, wf_name, deps)
 
     shallow_deps = package_config.get("shallow_deps", [])
-    
+
     for dep in shallow_deps:
         if not (dep in deps):
             deps.append(dep)
-    
+
     return deps
 
 
@@ -78,10 +75,8 @@ def get_type_deps(
 
 
 def is_input(package, dep_tree, wf_name, wf_private) -> bool:
-    is_input = tree_get_package_var(
-        "input", dep_tree, package, wf_name) is not False
-    is_pkg_private = tree_get_package_var(
-        "private", dep_tree, package, wf_name, False)
+    is_input = tree_get_package_var("input", dep_tree, package, wf_name) is not False
+    is_pkg_private = tree_get_package_var("private", dep_tree, package, wf_name, False)
     # add private packages as inputs to private wfs only
     # add non-private packages to all wfs
     return is_input and (is_pkg_private is False or is_pkg_private == wf_private)
@@ -142,7 +137,8 @@ class Workflow:
             "required": False,
             "default": yaml.dump(
                 wf_config["python_versions"], indent=2, default_flow_style=False
-            )+ "\n",
+            )
+            + "\n",
         }
 
     # this setting ensures that multiple pushes to the same branch of a repo
@@ -368,14 +364,11 @@ class Workflow:
                 + " }}",
             }
             runs_on = "${{ matrix.labels }}"
-            package_env = tree_get_package_var(
-                "env", dep_tree, package, self.name)
+            package_env = tree_get_package_var("env", dep_tree, package, self.name)
             env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"}
             env.update(package_env) if package_env else None
-            test_cmd = tree_get_package_var(
-                "test_cmd", dep_tree, package, self.name)
-            mkdir = tree_get_package_var(
-                "mkdir", dep_tree, package, self.name) or []
+            test_cmd = tree_get_package_var("test_cmd", dep_tree, package, self.name)
+            mkdir = tree_get_package_var("mkdir", dep_tree, package, self.name) or []
             conda_deps = tree_get_package_var(
                 "conda_deps", dep_tree, package, self.name
             )
@@ -438,7 +431,9 @@ class Workflow:
                         }
                         if self.private or github_token:
                             token_name = github_token or "GH_REPO_READ_TOKEN"
-                            s["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
+                            s["with"]["github_token"] = (
+                                f"${{{{ secrets.{token_name} }}}}"
+                            )
                         if build_package_python:
                             s["with"]["python_version"] = build_package_python
                         steps.append(s)
@@ -469,7 +464,9 @@ class Workflow:
                             ci_python_step["with"]["test_cmd"] = test_cmd
                         upload_extra_artifact = pkg_conf.get("upload_extra_artifact")
                         if upload_extra_artifact:
-                            ci_python_step["with"]["upload_extra_artifact"] = upload_extra_artifact
+                            ci_python_step["with"]["upload_extra_artifact"] = (
+                                upload_extra_artifact
+                            )
                         if conda_deps:
                             ci_python_step["with"]["conda_install"] = conda_deps
                         if not self.private:
@@ -484,7 +481,9 @@ class Workflow:
                             )
                         if self.private or github_token:
                             token_name = github_token or "GH_REPO_READ_TOKEN"
-                            ci_python_step["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
+                            ci_python_step["with"]["github_token"] = (
+                                f"${{{{ secrets.{token_name} }}}}"
+                            )
                         steps.append(ci_python_step)
                     else:
                         # pure python package
@@ -520,7 +519,9 @@ class Workflow:
                             )
                         if self.private or github_token:
                             token_name = github_token or "GH_REPO_READ_TOKEN"
-                            ci_python_step["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
+                            ci_python_step["with"]["github_token"] = (
+                                f"${{{{ secrets.{token_name} }}}}"
+                            )
                         steps.append(ci_python_step)
             if self.wf_type == "build-package-hpc":
                 runs_on = [
@@ -542,8 +543,7 @@ class Workflow:
                     },
                 }
                 if pkg_conf.get("requirements_path"):
-                    s["with"]["python_requirements"] = pkg_conf.get(
-                        "requirements_path")
+                    s["with"]["python_requirements"] = pkg_conf.get("requirements_path")
                 if pkg_conf.get("toml_opt_dep_sections"):
                     s["with"]["python_toml_opt_dep_sections"] = pkg_conf.get(
                         "toml_opt_dep_sections"
@@ -551,8 +551,7 @@ class Workflow:
                 if conda_deps:
                     s["with"]["conda_deps"] = conda_deps
                 steps.append(s)
-            self.add_job(Job(package, needs, condition,
-                         strategy, env, runs_on, steps))
+            self.add_job(Job(package, needs, condition, strategy, env, runs_on, steps))
 
     def generate_setup_job(
         self, dep_tree: dict, wf_config: dict, downstream_ci_ref: str
@@ -562,10 +561,8 @@ class Workflow:
             dep for dep in dep_tree if is_input(dep, dep_tree, self.name, self.private)
         ]
         for dep in deps:
-            outputs[dep] = "${{ " + \
-                f"steps.prepare-inputs.outputs.{dep}" + " }}"
-            outputs[f"{dep}_matrix"] = "${{ " + \
-                f"steps.setup.outputs.{dep}" + " }}"
+            outputs[dep] = "${{ " + f"steps.prepare-inputs.outputs.{dep}" + " }}"
+            outputs[f"{dep}_matrix"] = "${{ " + f"steps.setup.outputs.{dep}" + " }}"
 
         if self.wf_type == "build-package":
             outputs["dep_tree"] = "${{ steps.setup.outputs.build_package_dep_tree }}"
@@ -698,8 +695,7 @@ class Workflow:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--config", help="Path to configuration file", required=True)
+    parser.add_argument("--config", help="Path to configuration file", required=True)
     parser.add_argument(
         "--dep-tree", help="Path to dependency tree file.", required=True
     )
