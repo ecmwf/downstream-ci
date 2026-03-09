@@ -21,7 +21,7 @@ yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""
 
 def get_package_deps(
     package: str, dep_tree: dict, wf_name: str, deps: list[str] | None = None
-):
+) -> list[str]:
 
     if deps is None:
         deps = []
@@ -119,12 +119,12 @@ class Workflow:
     jobs: dict[str, Job] = field(default_factory=dict)
     private: bool = False
 
-    def add_job(self, job: Job):
+    def add_job(self, job: Job) -> None:
         self.jobs[job.name] = job
 
     # generate inputs - runner type specific inputs + list of packages
     #   read config for specific inputs and dep tree for packages
-    def generate_inputs(self, dep_tree: dict, wf_config: dict):
+    def generate_inputs(self, dep_tree: dict, wf_config: dict) -> None:
         wf_spec_inputs: dict = wf_config.get("inputs", {})
         self.inputs.update(wf_spec_inputs)
         self.inputs["ci_group"] = {"required": False, "type": "string"}
@@ -143,14 +143,12 @@ class Workflow:
 
     # this setting ensures that multiple pushes to the same branch of a repo
     # will result in all but the latest ci workflows being cancelled
-    def concurrency(self) -> object:
-        c = {
+    def concurrency(self) -> dict[Literal["group", "cancel-in-progress"], str | bool]:
+        return {
             "group": "${{ github.workflow }}-${{ (github.event_name == 'repository_dispatch' && format('{0}-{1}', github.event.client_payload.repository, github.event.client_payload.ref_name)) || github.ref }}-"
             + self.name,
             "cancel-in-progress": True,
         }
-
-        return c
 
     def __getstate__(self) -> dict[str, Any]:
         d: dict[str, Any] = {
@@ -189,14 +187,14 @@ class Workflow:
                 )
         return lines
 
-    def add_python_qa_job(self):
+    def add_python_qa_job(self) -> None:
         self.inputs["python_qa"] = {
             "description": "Whether to run code QA tasks.",
             "type": "boolean",
             "required": False,
         }
 
-        steps = [
+        steps: list[dict[str, Any]] = [
             {
                 "name": "Checkout Repository",
                 "uses": "actions/checkout@v4",
@@ -230,7 +228,7 @@ class Workflow:
         )
         self.add_job(job)
 
-    def add_clang_format_job(self):
+    def add_clang_format_job(self) -> None:
         self.inputs["clang_format"] = {
             "description": "Whether to run clang-format QA.",
             "type": "boolean",
@@ -287,7 +285,7 @@ class Workflow:
             )
         )
 
-    def generate_package_jobs(self, dep_tree: dict):
+    def generate_package_jobs(self, dep_tree: dict) -> None:
         for package, pkg_conf in dep_tree.items():
             if not is_input(package, dep_tree, self.name, self.private):
                 continue
@@ -555,7 +553,7 @@ class Workflow:
 
     def generate_setup_job(
         self, dep_tree: dict, wf_config: dict, downstream_ci_ref: str
-    ):
+    ) -> None:
         outputs = {}
         deps = [
             dep for dep in dep_tree if is_input(dep, dep_tree, self.name, self.private)
@@ -693,7 +691,7 @@ class Workflow:
         self.add_job(Job("setup", steps=steps, outputs=outputs))
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", help="Path to configuration file", required=True)
     parser.add_argument(
