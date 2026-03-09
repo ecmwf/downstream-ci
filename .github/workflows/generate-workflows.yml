@@ -25,8 +25,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyyaml mypy
-          mypy --install-types --non-interactive
+          pip install pyyaml mypy types-PyYAML
 
       - name: Verify
         run: |
