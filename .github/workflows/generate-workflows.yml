@@ -82,6 +82,11 @@ jobs:
 
       - run: pip install pyyaml
 
+
+      - name: Verify
+        run: |
+          mypy downstream-ci/generate-workflows.py
+
       - name: Build
         run: |
           python downstream-ci/generate-workflows.py --config downstream-ci/config.yml --dep-tree downstream-ci/dependency_tree.yml --output private-downstream-ci/.github/workflows private-downstream-ci private-downstream-ci-hpc
