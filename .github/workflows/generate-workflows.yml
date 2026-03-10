@@ -25,7 +25,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyyaml mypy types-PyYAML black
+          pip install pyyaml mypy types-PyYAML types-requests black
 
       - name: Verify
         run: |
