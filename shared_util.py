@@ -36,9 +36,7 @@ def tree_get_package_optional_var(
     try:
         return dep_tree[package][wf_name][var_name]
     except KeyError:
-        return dep_tree[package][var_name]
-    else:
-        return default
+        return dep_tree[package].get(var_name, default)
 
 
 def tree_get_package_var(
