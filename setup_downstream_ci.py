@@ -41,7 +41,9 @@ import copy
 import json
 import os
 import sys
+from typing import TypeVar
 
+from shared_util import ensure_not_none, tree_get_package_var, ensure_type
 import requests
 import yaml
 
@@ -50,7 +52,7 @@ ci_config: dict = yaml.safe_load(os.getenv("CONFIG", ""))
 python_versions = yaml.safe_load(os.getenv("PYTHON_VERSIONS", ""))
 python_jobs = yaml.safe_load(os.getenv("PYTHON_JOBS", ""))
 matrix = yaml.safe_load(os.getenv("MATRIX", ""))
-optional_matrix = yaml.safe_load(os.getenv("OPTIONAL_MATRIX", "")) or {}
+optional_matrix: dict = yaml.safe_load(os.getenv("OPTIONAL_MATRIX", "")) or {}
 skip_jobs = os.getenv("SKIP_MATRIX_JOBS", "").splitlines()
 token = os.getenv("TOKEN", "")
 trigger_ref_name = os.getenv("DISPATCH_REF_NAME") or os.getenv("GITHUB_REF_NAME", "")
@@ -60,6 +62,8 @@ ci_group = os.getenv("DOWNSTREAM_CI_GROUP", "")
 github_repository = os.getenv("DISPATCH_REPOSITORY", "") or os.getenv("GITHUB_REPOSITORY", "")
 _, trigger_repo = github_repository.split("/")
 print(f"Triggered from: {trigger_repo}")
+
+T = TypeVar("T")
 
 
 DEFAULT_MASTER_BRANCH_NAME = "master"
@@ -71,17 +75,6 @@ with open("dependency_tree.yml", "r") as f:
 
 trigger_pkgs = [k for k, v in dep_tree.items() if v.get("repo", k) in [github_repository, trigger_repo]]
 print(f"Trigger packages: {trigger_pkgs}")
-
-
-def tree_get_package_var(var_name: str, dep_tree: dict, package: str, wf_name: str):
-    """Get package variable from dep tree. Prefers vars set for given workflow name."""
-    wf_spec = dep_tree[package].get(wf_name, {})
-    general = dep_tree[package]
-    if wf_spec.get(var_name) is not None:
-        return wf_spec[var_name]
-    if general.get(var_name) is not None:
-        return general[var_name]
-    return None
 
 
 # Get build-pacakge(-hpc) config for each repo
@@ -184,7 +177,7 @@ for owner_repo, val in ci_config.items():
         continue
 
     # is this whole workflow to be skipped by the package?
-    pkg_skip = tree_get_package_var("skip", dep_tree, pkg_name, workflow_name) or []
+    pkg_skip: list[str] = tree_get_package_var("skip", dep_tree, pkg_name, workflow_name, [])
     if workflow_name in pkg_skip:
         print("skipped workflow", workflow_name, "for package", pkg_name)
         continue
@@ -194,7 +187,7 @@ for owner_repo, val in ci_config.items():
     for opt in optional_matrix.get("name", []):
         if val.get("optional_matrix", []) and opt in val.get("optional_matrix", []):
             matrices[pkg_name]["name"].append(opt)
-            matrices[pkg_name]["include"].extend([d for d in optional_matrix.get("include") if d["name"] == opt])
+            matrices[pkg_name]["include"].extend([d for d in optional_matrix["include"] if d["name"] == opt])
 
     if config["matrix"]:
         matrices[pkg_name]["config"] = config["matrix"]
@@ -218,25 +211,25 @@ for owner_repo, val in ci_config.items():
             py_codecov_platform = matrices[pkg_name]["name"][0] if len(matrices[pkg_name]["name"]) else ""
 
 
-build_package_dep_tree = {}
-build_package_hpc_dep_tree = {}
+build_package_dep_tree: dict[str, dict[str, list[str]]] = {}
+build_package_hpc_dep_tree: dict[str, dict[str, list[str]]] = {}
 
 
 for package, conf in dep_tree.items():
     build_package_dep_tree[package] = {}
-    if bp_deps := tree_get_package_var("deps", dep_tree, package, "downstream-ci"):
+    if bp_deps := ensure_type(list[str], tree_get_package_var("deps", dep_tree, package, "downstream-ci", [])):
         build_package_dep_tree[package]["deps"] = bp_deps
 
     build_package_hpc_dep_tree[package] = {}
-    if hpc_deps := tree_get_package_var("deps", dep_tree, package, "downstream-ci-hpc"):
+    if hpc_deps := ensure_type(list[str], tree_get_package_var("deps", dep_tree, package, "downstream-ci-hpc", [])):
         build_package_hpc_dep_tree[package]["deps"] = hpc_deps
 
-    if hpc_modules := tree_get_package_var("modules", dep_tree, package, "downstream-ci-hpc"):
+    if hpc_modules := ensure_type(list[str],tree_get_package_var("modules", dep_tree, package, "downstream-ci-hpc", [])):
         build_package_hpc_dep_tree[package]["modules"] = hpc_modules
 
 
 print("Build matrices:")
-yaml.Dumper.ignore_aliases = lambda *args: True
+yaml.Dumper.ignore_aliases = lambda *args: True  # type: ignore[method-assign]
 print(yaml.dump(matrices, sort_keys=False))
 
 print(
@@ -252,7 +245,7 @@ print(f"Python codecov platform: {py_codecov_platform}")
 ci_group_pkgs = get_ci_group_pkgs(ci_group, dep_tree)
 print(f"CI group packages: {ci_group_pkgs}")
 
-with open(os.getenv("GITHUB_OUTPUT"), "a") as f:
+with open(ensure_not_none(os.getenv("GITHUB_OUTPUT")), "a") as f:
     print("trigger_repo", trigger_repo, sep="=", file=f)
     print("trigger_pkgs", trigger_pkgs, sep="=", file=f)
     print("py_codecov_platform", py_codecov_platform, sep="=", file=f)

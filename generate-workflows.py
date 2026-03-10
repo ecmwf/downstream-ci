@@ -2,10 +2,13 @@
 
 import argparse
 from pathlib import PurePath
-from typing import Any, Literal, Mapping, Sequence, TypeVar, Type, cast, Final, get_origin
+from typing import Any, Literal, TypeVar, Type, cast, Final, get_origin
+from collections.abc import Sequence, Mapping
 import yaml
 
 from dataclasses import dataclass, field
+
+from shared_util import ensure_type, tree_get_package_var, tree_get_package_optional_var
 
 
 # modify how pyyaml dumps multiline strings - we want `|`
@@ -17,18 +20,6 @@ def str_presenter(dumper, data):
 
 yaml.add_representer(str, str_presenter)
 yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
-
-PackageVariable = str | bool | Sequence[str] | Sequence[bool] | Mapping[str, str]
-T_PackageVariable = TypeVar("T_PackageVariable", bound=PackageVariable)
-
-T = TypeVar("T")
-
-
-def ensure_type(T_: Type[T], x: Any) -> T:
-    type_to_test = get_origin(T_) or T_
-    if not isinstance(x, type_to_test):
-        raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
-    return x
 
 
 def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str] | None = None) -> list[str]:
@@ -56,48 +47,6 @@ def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str]
             deps.append(dep)
 
     return deps
-
-
-def tree_get_package_optional_var(
-    var_name: str,
-    dep_tree: dict,
-    package: str,
-    wf_name: str,
-    default: PackageVariable | None = None,
-) -> PackageVariable | None:
-    """Get package variable from dep tree, preferring workflow-specific values.
-
-    Lookup order: workflow-specific value, package value, then default.
-
-    Fails if variable is not found and no default is provided.
-    """
-    wf_spec = dep_tree[package].get(wf_name, {})
-    general = dep_tree[package]
-    if wf_spec.get(var_name) is not None:
-        return wf_spec[var_name]
-    if general.get(var_name) is not None:
-        return general[var_name]
-    return default
-
-
-def tree_get_package_var(
-    var_name: str,
-    dep_tree: dict,
-    package: str,
-    wf_name: str,
-    default: T_PackageVariable | None = None,
-) -> T_PackageVariable:
-    """Get package variable from dep tree, preferring workflow-specific values.
-
-    Lookup order: workflow-specific value, package value, then default.
-
-    Fails if variable is not found and no default is provided.
-    """
-    result = tree_get_package_optional_var(var_name, dep_tree, package, wf_name, default)
-    assert result is not None, (
-        f"Variable '{var_name}' not found for package '{package}' in workflow '{wf_name}', and no default value provided."
-    )
-    return cast(T_PackageVariable, result)
 
 
 def get_type_deps(package: str, dep_tree: dict, wf_name, type: Literal["cmake", "python"]) -> list[str]:
