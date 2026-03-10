@@ -25,11 +25,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyyaml mypy types-PyYAML
+          pip install pyyaml mypy types-PyYAML black
 
       - name: Verify
         run: |
-          mypy generate-workflows.py
+          black --check --diff .
+          mypy .
 
       - name: Build
         run: >
