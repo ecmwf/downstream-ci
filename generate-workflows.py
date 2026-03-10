@@ -2,7 +2,7 @@
 
 import argparse
 from pathlib import PurePath
-from typing import Any, Literal, Mapping, Sequence, TypeVar, Type, cast, Final
+from typing import Any, Literal, Mapping, Sequence, TypeVar, Type, cast, Final, get_origin
 import yaml
 
 from dataclasses import dataclass, field
@@ -25,8 +25,9 @@ T = TypeVar("T")
 
 
 def ensure_type(T_: Type[T], x: Any) -> T:
-    # if not isinstance(x, T_):
-    #     raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
+    type_to_test = get_origin(T_) or T_
+    if not isinstance(x, type_to_test):
+        raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
     return x
 
 
@@ -381,7 +382,7 @@ class Workflow:
 
             test_cmd = tree_get_package_var("test_cmd", dep_tree, package, self.name, "")
             mkdir = ensure_type(list[str], tree_get_package_var("mkdir", dep_tree, package, self.name, []))
-            conda_deps = ensure_type(list[str], tree_get_package_var("conda_deps", dep_tree, package, self.name, []))
+            conda_deps = ensure_type(str, tree_get_package_var("conda_deps", dep_tree, package, self.name, ""))
             build_package_python = ensure_type(list[str], tree_get_package_var("build-package-python", dep_tree, package, self.name, []))
             github_token = tree_get_package_var("github_token", dep_tree, package, self.name, "")
             steps: list[dict[str, Any]] = []
