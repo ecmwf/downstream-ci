@@ -7,7 +7,7 @@ import yaml
 
 from dataclasses import dataclass, field
 
-from shared_util import ensure_type, tree_get_package_var, tree_get_package_optional_var
+from shared_util import ensure_type, get_required_package_var, get_optional_package_var
 
 
 # modify how pyyaml dumps multiline strings - we want `|`
@@ -64,8 +64,8 @@ def get_type_deps(
 
 
 def is_input(package, dep_tree, wf_name, wf_private) -> bool:
-    is_input = tree_get_package_var("input", dep_tree, package, wf_name, True)
-    is_pkg_private = tree_get_package_var("private", dep_tree, package, wf_name, False)
+    is_input = get_required_package_var("input", dep_tree, package, wf_name, True)
+    is_pkg_private = get_required_package_var("private", dep_tree, package, wf_name, False)
     # add private packages as inputs to private wfs only
     # add non-private packages to all wfs
     return is_input and (not is_pkg_private or is_pkg_private == wf_private)
@@ -277,7 +277,7 @@ class Workflow:
         for package, pkg_conf in dep_tree.items():
             if not is_input(package, dep_tree, self.name, self.private):
                 continue
-            if self.private != tree_get_package_var(
+            if self.private != get_required_package_var(
                 "private", dep_tree, package, self.name, False
             ):
                 continue
@@ -293,15 +293,15 @@ class Workflow:
                     # Python deps need a default input value for ci-python
                     # because there's no ci-config for it. ==>
                     # input || (use_master == 'True' && master_branch) || develop_branch
-                    master_branch = tree_get_package_var(
+                    master_branch = get_required_package_var(
                         "master_branch", dep_tree, dep, self.name, "master"
                     )
-                    develop_branch = tree_get_package_var(
+                    develop_branch = get_required_package_var(
                         "develop_branch", dep_tree, dep, self.name, "develop"
                     )
                     dep_repo = ensure_type(
                         str,
-                        tree_get_package_var(
+                        get_required_package_var(
                             "repo",
                             dep_tree,
                             dep,
@@ -326,7 +326,7 @@ class Workflow:
                 for dep in package_deps
                 if is_input(dep, dep_tree, self.name, self.private)
                 and self.private
-                == tree_get_package_var("private", dep_tree, dep, self.name, False)
+                == get_required_package_var("private", dep_tree, dep, self.name, False)
             ]
             condition_inputs = " || ".join(
                 [
@@ -356,28 +356,28 @@ class Workflow:
 
             package_env = ensure_type(
                 dict[str, str],
-                tree_get_package_var("env", dep_tree, package, self.name, {}),
+                get_required_package_var("env", dep_tree, package, self.name, {}),
             )
             env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"} | package_env
 
-            test_cmd = tree_get_package_var(
+            test_cmd = get_required_package_var(
                 "test_cmd", dep_tree, package, self.name, ""
             )
             mkdir = ensure_type(
                 list[str],
-                tree_get_package_var("mkdir", dep_tree, package, self.name, []),
+                get_required_package_var("mkdir", dep_tree, package, self.name, []),
             )
             conda_deps = ensure_type(
                 str,
-                tree_get_package_var("conda_deps", dep_tree, package, self.name, ""),
+                get_required_package_var("conda_deps", dep_tree, package, self.name, ""),
             )
             build_package_python = ensure_type(
                 list[str],
-                tree_get_package_var(
+                get_required_package_var(
                     "build-package-python", dep_tree, package, self.name, []
                 ),
             )
-            github_token = tree_get_package_var(
+            github_token = get_required_package_var(
                 "github_token", dep_tree, package, self.name, ""
             )
             steps: list[dict[str, Any]] = []
@@ -621,7 +621,7 @@ class Workflow:
         )
         for dep in dep_tree:
             if is_input(dep, dep_tree, self.name, self.private):
-                config_path = tree_get_package_var(
+                config_path = get_required_package_var(
                     "config_path", dep_tree, dep, self.name, default_config_path
                 )
                 dep_repo = dep_tree[dep].get("repo", dep)
@@ -630,14 +630,14 @@ class Workflow:
                 setup_config[f"{dep}:{dep_repo}"] = {
                     "path": config_path,
                     "python": dep_tree[dep].get("type", "cmake") == "python",
-                    "master_branch": tree_get_package_var(
+                    "master_branch": get_required_package_var(
                         "master_branch", dep_tree, dep, self.name, "master"
                     ),
-                    "develop_branch": tree_get_package_var(
+                    "develop_branch": get_required_package_var(
                         "develop_branch", dep_tree, dep, self.name, "develop"
                     ),
                     "input": "${{ " + f"steps.prepare-inputs.outputs.{dep}" + " }}",
-                    "optional_matrix": tree_get_package_optional_var(
+                    "optional_matrix": get_optional_package_var(
                         "optional_matrix", dep_tree, dep, self.name
                     ),
                 }

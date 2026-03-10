@@ -43,7 +43,7 @@ import os
 import sys
 from typing import TypeVar
 
-from shared_util import ensure_not_none, tree_get_package_var, ensure_type
+from shared_util import ensure_not_none, get_required_package_var, ensure_type
 import requests
 import yaml
 
@@ -192,7 +192,7 @@ for owner_repo, val in ci_config.items():
         continue
 
     # is this whole workflow to be skipped by the package?
-    pkg_skip: list[str] = tree_get_package_var(
+    pkg_skip: list[str] = get_required_package_var(
         "skip", dep_tree, pkg_name, workflow_name, []
     )
     if workflow_name in pkg_skip:
@@ -249,20 +249,20 @@ build_package_hpc_dep_tree: dict[str, dict[str, list[str]]] = {}
 for package, conf in dep_tree.items():
     build_package_dep_tree[package] = {}
     if bp_deps := ensure_type(
-        list[str], tree_get_package_var("deps", dep_tree, package, "downstream-ci", [])
+        list[str], get_required_package_var("deps", dep_tree, package, "downstream-ci", [])
     ):
         build_package_dep_tree[package]["deps"] = bp_deps
 
     build_package_hpc_dep_tree[package] = {}
     if hpc_deps := ensure_type(
         list[str],
-        tree_get_package_var("deps", dep_tree, package, "downstream-ci-hpc", []),
+        get_required_package_var("deps", dep_tree, package, "downstream-ci-hpc", []),
     ):
         build_package_hpc_dep_tree[package]["deps"] = hpc_deps
 
     if hpc_modules := ensure_type(
         list[str],
-        tree_get_package_var("modules", dep_tree, package, "downstream-ci-hpc", []),
+        get_required_package_var("modules", dep_tree, package, "downstream-ci-hpc", []),
     ):
         build_package_hpc_dep_tree[package]["modules"] = hpc_modules
 

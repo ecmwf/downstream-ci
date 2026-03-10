@@ -20,7 +20,7 @@ def ensure_not_none(var: T | None) -> T:
     return var
 
 
-def tree_get_package_optional_var(
+def get_optional_package_var(
     var_name: str,
     dep_tree: dict,
     package: str,
@@ -39,7 +39,7 @@ def tree_get_package_optional_var(
         return dep_tree[package].get(var_name, default)
 
 
-def tree_get_package_var(
+def get_required_package_var(
     var_name: str,
     dep_tree: dict,
     package: str,
@@ -52,7 +52,7 @@ def tree_get_package_var(
 
     Fails if variable is not found and no default is provided.
     """
-    result = tree_get_package_optional_var(
+    result = get_optional_package_var(
         var_name, dep_tree, package, wf_name, default
     )
     assert (
