@@ -31,7 +31,7 @@ def tree_get_package_optional_var(
 
     Lookup order: workflow-specific value, package value, then default.
 
-    Fails if variable is not found and no default is provided.
+    Can return none if variable is not found and no default is provided.
     """
     try:
         return dep_tree[package][wf_name][var_name]
