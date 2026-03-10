@@ -52,9 +52,7 @@ def get_required_package_var(
 
     Fails if variable is not found and no default is provided.
     """
-    result = get_optional_package_var(
-        var_name, dep_tree, package, wf_name, default
-    )
+    result = get_optional_package_var(var_name, dep_tree, package, wf_name, default)
     assert (
         result is not None
     ), f"Variable '{var_name}' not found for package '{package}' in workflow '{wf_name}', and no default value provided."

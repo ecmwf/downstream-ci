@@ -65,7 +65,9 @@ def get_type_deps(
 
 def is_input(package, dep_tree, wf_name, wf_private) -> bool:
     is_input = get_required_package_var("input", dep_tree, package, wf_name, True)
-    is_pkg_private = get_required_package_var("private", dep_tree, package, wf_name, False)
+    is_pkg_private = get_required_package_var(
+        "private", dep_tree, package, wf_name, False
+    )
     # add private packages as inputs to private wfs only
     # add non-private packages to all wfs
     return is_input and (not is_pkg_private or is_pkg_private == wf_private)
@@ -369,7 +371,9 @@ class Workflow:
             )
             conda_deps = ensure_type(
                 str,
-                get_required_package_var("conda_deps", dep_tree, package, self.name, ""),
+                get_required_package_var(
+                    "conda_deps", dep_tree, package, self.name, ""
+                ),
             )
             build_package_python = ensure_type(
                 list[str],

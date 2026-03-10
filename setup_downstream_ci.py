@@ -249,7 +249,8 @@ build_package_hpc_dep_tree: dict[str, dict[str, list[str]]] = {}
 for package, conf in dep_tree.items():
     build_package_dep_tree[package] = {}
     if bp_deps := ensure_type(
-        list[str], get_required_package_var("deps", dep_tree, package, "downstream-ci", [])
+        list[str],
+        get_required_package_var("deps", dep_tree, package, "downstream-ci", []),
     ):
         build_package_dep_tree[package]["deps"] = bp_deps
 
