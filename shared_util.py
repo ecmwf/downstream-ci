@@ -1,0 +1,62 @@
+from typing import Any, TypeVar, Type, cast, get_origin
+from collections.abc import Sequence, Mapping
+
+
+PackageVariable = str | bool | Sequence[str] | Sequence[bool] | Mapping[str, str]
+T_PackageVariable = TypeVar("T_PackageVariable", bound=PackageVariable)
+
+T = TypeVar("T")
+
+
+def ensure_type(T_: Type[T], x: Any) -> T:
+    type_to_test = get_origin(T_) or T_
+    if not isinstance(x, type_to_test):
+        raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
+    return x
+
+
+def ensure_not_none(var: T | None) -> T:
+    if var is None:
+        raise ValueError("Expected variable to be not None")
+    return var
+
+
+def tree_get_package_optional_var(
+    var_name: str,
+    dep_tree: dict,
+    package: str,
+    wf_name: str,
+    default: PackageVariable | None = None,
+) -> PackageVariable | None:
+    """Get package variable from dep tree, preferring workflow-specific values.
+
+    Lookup order: workflow-specific value, package value, then default.
+
+    Fails if variable is not found and no default is provided.
+    """
+    try:
+        return dep_tree[package][wf_name][var_name]
+    except KeyError:
+        return dep_tree[package][var_name]
+    else:
+        return default
+
+
+def tree_get_package_var(
+    var_name: str,
+    dep_tree: dict,
+    package: str,
+    wf_name: str,
+    default: T_PackageVariable | None = None,
+) -> T_PackageVariable:
+    """Get package variable from dep tree, preferring workflow-specific values.
+
+    Lookup order: workflow-specific value, package value, then default.
+
+    Fails if variable is not found and no default is provided.
+    """
+    result = tree_get_package_optional_var(var_name, dep_tree, package, wf_name, default)
+    assert result is not None, (
+        f"Variable '{var_name}' not found for package '{package}' in workflow '{wf_name}', and no default value provided."
+    )
+    return cast(T_PackageVariable, result)
