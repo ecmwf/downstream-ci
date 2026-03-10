@@ -113,7 +113,7 @@ def is_input(package, dep_tree, wf_name, wf_private) -> bool:
     is_pkg_private = tree_get_package_var("private", dep_tree, package, wf_name, False)
     # add private packages as inputs to private wfs only
     # add non-private packages to all wfs
-    return is_input and (is_pkg_private is False or is_pkg_private == wf_private)
+    return is_input and (not is_pkg_private or is_pkg_private == wf_private)
 
 
 @dataclass
