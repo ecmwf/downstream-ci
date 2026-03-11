@@ -10,7 +10,7 @@ T = TypeVar("T")
 def ensure_type(T_: Type[T], x: Any) -> T:
     type_to_test = get_origin(T_) or T_
     if not isinstance(x, type_to_test):
-        raise TypeError(f"Expected type {T_.__name__}, got {type(x).__name__}")
+        raise TypeError(f"Expected type {T_}, got {type(x)}")
     return x
 
 
