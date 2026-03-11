@@ -4,16 +4,17 @@ So far these are just two standalone scripts `setup_downstream_ci.py` and `gener
 
 ## Test
 
-- There are no tests yet 
-- Verify via 
+- There are no tests yet
+- Verify via
 ```
-ruff check 
+ruff check .
+black --check --diff .
 mypy .
 ```
 
 ## Code style
 
-- Use `ruff format`
+- Use `black` for formatting
 - Annotate with types and use `mypy` to check
 - prefer pure functions and avoid side effects
 - Use docstrings to explain the purpose of functions and classes
