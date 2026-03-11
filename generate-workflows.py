@@ -181,9 +181,10 @@ class Workflow:
             },
             {
                 "name": "Install Python Dependencies",
-                "run": ("python -m pip install --upgrade pip\npython -m pip install black flake8 isort\n"),
+                "run": ("python -m pip install --upgrade pip\npython -m pip install black flake8 isort ruff\n"),
             },
             {"name": "Check isort", "run": "isort --check --diff . --profile black"},
+            {"name": "Check ruff", "run": "ruff check ."},
             {"name": "Check black", "run": "black --check --diff ."},
             {"name": "Check flake8", "run": "flake8 ."},
         ]

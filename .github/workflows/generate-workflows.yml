@@ -25,10 +25,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyyaml mypy types-PyYAML types-requests black
+          pip install pyyaml mypy types-PyYAML types-requests black ruff
 
       - name: Verify
         run: |
+          ruff check .
           black --check --diff .
           mypy .
 
@@ -87,10 +88,12 @@ jobs:
         with:
           python-version: "3.x"
 
-      - run: pip install pyyaml
+      - run: pip install pyyaml mypy black ruff
 
       - name: Verify
         run: |
+          ruff check downstream-ci
+          black --check --diff downstream-ci
           mypy downstream-ci/generate-workflows.py
 
       - name: Build
