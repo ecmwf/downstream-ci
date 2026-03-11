@@ -1,6 +1,0 @@
-# according to https://confluence.ecmwf.int/display/ODC/Python+Code+Style
-
-# ruff is just a faster version of black
-
-# Allow lines to be as long as 120.
-line-length = 120 

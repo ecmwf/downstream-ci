@@ -51,9 +51,10 @@ def get_required_package_var(
     Lookup order: workflow-specific value, package value, then default.
 
     Fails if variable is not found and no default is provided.
+
+    Deduces the type from the default value if provided, otherwise returns a union of all possible types.
     """
-    result = get_optional_package_var(var_name, dep_tree, package, wf_name, default)
-    assert (
-        result is not None
-    ), f"Variable '{var_name}' not found for package '{package}' in workflow '{wf_name}', and no default value provided."
-    return cast(T_PackageVariable, result)
+    return cast(
+        T_PackageVariable,
+        ensure_not_none(get_optional_package_var(var_name, dep_tree, package, wf_name, default)),
+    )
