@@ -41,7 +41,6 @@ import copy
 import json
 import os
 import sys
-from typing import TypeVar
 
 from shared_util import ensure_not_none, get_required_package_var, ensure_type
 import requests
@@ -62,9 +61,6 @@ ci_group = os.getenv("DOWNSTREAM_CI_GROUP", "")
 github_repository = os.getenv("DISPATCH_REPOSITORY", "") or os.getenv("GITHUB_REPOSITORY", "")
 _, trigger_repo = github_repository.split("/")
 print(f"Triggered from: {trigger_repo}")
-
-T = TypeVar("T")
-
 
 DEFAULT_MASTER_BRANCH_NAME = "master"
 DEFAULT_DEVELOP_BRANCH_NAME = "develop"
