@@ -255,11 +255,7 @@ class Workflow:
             )
         )
 
-    def generate_package_jobs(
-        self, dep_tree: dict
-    ) -> (
-        None
-    ):  # noqa: C901 - this function is indeed too complex, but can't do something about it right now without a major refactor.
+    def generate_package_jobs(self, dep_tree: dict) -> None:  # noqa: C901 - this function is too complex, but legacy
         for package, pkg_conf in dep_tree.items():
             if not is_input(package, dep_tree, self.name, self.private):
                 continue
