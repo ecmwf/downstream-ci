@@ -509,6 +509,7 @@ mir:
     - eckit
     - atlas
     - eccodes
+    - ecbuild
 
 multio:
   type: cmake
