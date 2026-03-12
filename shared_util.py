@@ -1,5 +1,5 @@
-from typing import Any, TypeVar, Type, cast, get_origin
-from collections.abc import Sequence, Mapping
+from collections.abc import Mapping, Sequence
+from typing import Any, Type, TypeVar, cast, get_origin
 
 PackageVariable = str | bool | Sequence[str] | Sequence[bool] | Mapping[str, str]
 T_PackageVariable = TypeVar("T_PackageVariable", bound=PackageVariable)
@@ -7,7 +7,7 @@ T_PackageVariable = TypeVar("T_PackageVariable", bound=PackageVariable)
 T = TypeVar("T")
 
 
-def ensure_type(T_: Type[T], x: Any) -> T:
+def ensure_type(T_: Type[T], x: Any) -> T:  # noqa: N803 - uppercase type arg is more readable.
     type_to_test = get_origin(T_) or T_
     if not isinstance(x, type_to_test):
         raise TypeError(f"Expected type {T_}, got {type(x)}")

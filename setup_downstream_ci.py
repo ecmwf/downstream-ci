@@ -41,10 +41,12 @@ import copy
 import json
 import os
 import sys
+from typing import Final
 
-from shared_util import ensure_not_none, get_required_package_var, ensure_type
 import requests
 import yaml
+
+from shared_util import ensure_not_none, ensure_type, get_required_package_var
 
 # Load inputs
 ci_config: dict = yaml.safe_load(os.getenv("CONFIG", ""))
@@ -58,7 +60,7 @@ trigger_ref_name = os.getenv("DISPATCH_REF_NAME") or os.getenv("GITHUB_REF_NAME"
 workflow_name = os.getenv("WORKFLOW_NAME", "")
 ci_group = os.getenv("DOWNSTREAM_CI_GROUP", "")
 
-github_repository = os.getenv("DISPATCH_REPOSITORY", "") or os.getenv("GITHUB_REPOSITORY", "")
+github_repository: Final = ensure_not_none(os.getenv("DISPATCH_REPOSITORY") or os.getenv("GITHUB_REPOSITORY"))
 _, trigger_repo = github_repository.split("/")
 print(f"Triggered from: {trigger_repo}")
 
@@ -114,7 +116,7 @@ def get_ci_group_pkgs(ci_group: str, dep_tree: dict) -> list[str]:
     # "all_cmake" -> all cmake packages
 
     if ci_group == "all":
-        return [k for k in dep_tree.keys()]
+        return list(dep_tree.keys())
     if ci_group == "all_python":
         return [k for k, v in dep_tree.items() if v.get("type", "") == "python"]
     if ci_group == "all_cmake":
@@ -234,7 +236,7 @@ for package, conf in dep_tree.items():
 
 
 print("Build matrices:")
-yaml.Dumper.ignore_aliases = lambda *args: True  # type: ignore[method-assign]
+yaml.Dumper.ignore_aliases = lambda *_: True  # type: ignore[method-assign]
 print(yaml.dump(matrices, sort_keys=False))
 
 print(

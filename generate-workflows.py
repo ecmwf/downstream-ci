@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 import argparse
+from dataclasses import dataclass, field
 from pathlib import PurePath
-from typing import Any, Literal, Final
+from typing import Any, Final, Literal
+
 import yaml
 
-from dataclasses import dataclass, field
-
-from shared_util import ensure_type, get_required_package_var, get_optional_package_var
+from shared_util import ensure_type, get_optional_package_var, get_required_package_var
 
 
 # modify how pyyaml dumps multiline strings - we want `|`
@@ -18,7 +18,7 @@ def str_presenter(dumper, data):
 
 
 yaml.add_representer(str, str_presenter)
-yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign]
+yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign] # noqa: ARG005
 
 
 def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str] | None = None) -> list[str]:
@@ -125,7 +125,8 @@ class Workflow:
     # will result in all but the latest ci workflows being cancelled
     def concurrency(self) -> dict[Literal["group", "cancel-in-progress"], str | bool]:
         return {
-            "group": "${{ github.workflow }}-${{ (github.event_name == 'repository_dispatch' && format('{0}-{1}', github.event.client_payload.repository, github.event.client_payload.ref_name)) || github.ref }}-"
+            "group": "${{ github.workflow }}-${{ (github.event_name == 'repository_dispatch' && format('{0}-{1}', "
+            + "github.event.client_payload.repository, github.event.client_payload.ref_name)) || github.ref }}-"
             + self.name,
             "cancel-in-progress": True,
         }
@@ -254,7 +255,11 @@ class Workflow:
             )
         )
 
-    def generate_package_jobs(self, dep_tree: dict) -> None:
+    def generate_package_jobs(
+        self, dep_tree: dict
+    ) -> (
+        None
+    ):  # noqa: C901 - this function is indeed too complex, but can't do something about it right now without a major refactor.
         for package, pkg_conf in dep_tree.items():
             if not is_input(package, dep_tree, self.name, self.private):
                 continue
