@@ -95,6 +95,8 @@ earthkit-regrid:
       python -m coverage report
   shallow_deps:
     - mir
+  deps:
+    - ecbuild
 
 
 earthkit-time:
@@ -374,7 +376,7 @@ qubed:
     CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
     config_path: ""
-    test_cmd: | 
+    test_cmd: |
       python -m pytest tests --cov=./ --cov-report=xml
       python -m coverage report
 
