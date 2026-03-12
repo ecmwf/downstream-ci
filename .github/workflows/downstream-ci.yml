@@ -1343,10 +1343,11 @@ jobs:
   earthkit-regrid:
     name: earthkit-regrid
     needs:
+    - ecbuild
     - mir
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-regrid_matrix && (needs.setup.outputs.mir || needs.setup.outputs.earthkit-regrid)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-regrid') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-regrid_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.mir || needs.setup.outputs.earthkit-regrid)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-regrid') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-regrid_matrix) }}
@@ -1362,7 +1363,9 @@ jobs:
         codecov_upload: false
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
         build_config: ${{ matrix.config_path }}
-        build_dependencies: ${{ needs.setup.outputs.mir }}
+        build_dependencies: |-
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.mir }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
