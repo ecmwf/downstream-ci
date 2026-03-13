@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 
 import argparse
+from dataclasses import dataclass, field
 from pathlib import PurePath
-from typing import Literal
+from typing import Any, Final, Literal
+
 import yaml
 
-from dataclasses import dataclass, field
+from shared_util import ensure_type, get_optional_package_var, get_required_package_var
 
 
 # modify how pyyaml dumps multiline strings - we want `|`
@@ -16,59 +18,37 @@ def str_presenter(dumper, data):
 
 
 yaml.add_representer(str, str_presenter)
-yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""
+yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign] # noqa: ARG005
 
 
-def get_package_deps(
-    package: str, dep_tree: dict, wf_name: str, deps: list[str] = None
-):
+def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str] | None = None) -> list[str]:
 
-    
     if deps is None:
         deps = []
     if package not in dep_tree or dep_tree[package] is None:
         return deps
 
     package_config = dep_tree[package]
-    
-    direct_deps = (
-        package_config.get(wf_name, {}).get("deps")
-        or package_config.get("deps")
-        or []
-    )
+
+    direct_deps = package_config.get(wf_name, {}).get("deps") or package_config.get("deps") or []
 
     for dep in direct_deps:
-        if not (dep in deps):
+        if dep not in deps:
             deps.append(dep)
 
         if dep in dep_tree:
             get_package_deps(dep, dep_tree, wf_name, deps)
 
     shallow_deps = package_config.get("shallow_deps", [])
-    
+
     for dep in shallow_deps:
-        if not (dep in deps):
+        if dep not in deps:
             deps.append(dep)
-    
+
     return deps
 
 
-def tree_get_package_var(
-    var_name: str, dep_tree: dict, package: str, wf_name: str, default=None
-):
-    """Get package variable from dep tree. Prefers vars set for given workflow name."""
-    wf_spec = dep_tree[package].get(wf_name, {})
-    general = dep_tree[package]
-    if wf_spec.get(var_name) is not None:
-        return wf_spec[var_name]
-    if general.get(var_name) is not None:
-        return general[var_name]
-    return default
-
-
-def get_type_deps(
-    package: str, dep_tree: dict, wf_name, type: Literal["cmake", "python"]
-):
+def get_type_deps(package: str, dep_tree: dict, wf_name, type: Literal["cmake", "python"]) -> list[str]:
     package_deps = get_package_deps(package, dep_tree, wf_name)
     type_deps = []
     for dep in package_deps:
@@ -78,28 +58,26 @@ def get_type_deps(
 
 
 def is_input(package, dep_tree, wf_name, wf_private) -> bool:
-    is_input = tree_get_package_var(
-        "input", dep_tree, package, wf_name) is not False
-    is_pkg_private = tree_get_package_var(
-        "private", dep_tree, package, wf_name, False)
+    is_input = get_required_package_var("input", dep_tree, package, wf_name, True)
+    is_pkg_private = get_required_package_var("private", dep_tree, package, wf_name, False)
     # add private packages as inputs to private wfs only
     # add non-private packages to all wfs
-    return is_input and (is_pkg_private is False or is_pkg_private == wf_private)
+    return is_input and (not is_pkg_private or is_pkg_private == wf_private)
 
 
 @dataclass
 class Job:
     name: str
-    needs: str | list[str] = None
-    condition: str = None
-    strategy: dict = None
-    env: dict = None
+    needs: str | list[str] | None = None
+    condition: str | None = None
+    strategy: dict[str, Any] | None = None
+    env: dict[str, Any] | None = None
     runs_on: str | list[str] = "ubuntu-latest"
-    steps: list[dict] = field(default_factory=list)
-    outputs: dict = None
+    steps: list[dict[str, Any]] = field(default_factory=list)
+    outputs: dict[str, Any] | None = None
 
-    def __getstate__(self) -> object:
-        d = {"name": self.name}
+    def __getstate__(self) -> dict[str, Any]:
+        d: dict[str, Any] = {"name": self.name}
         if self.needs:
             d["needs"] = self.needs
         if self.condition:
@@ -124,12 +102,12 @@ class Workflow:
     jobs: dict[str, Job] = field(default_factory=dict)
     private: bool = False
 
-    def add_job(self, job: Job):
+    def add_job(self, job: Job) -> None:
         self.jobs[job.name] = job
 
     # generate inputs - runner type specific inputs + list of packages
     #   read config for specific inputs and dep tree for packages
-    def generate_inputs(self, dep_tree: dict, wf_config: dict):
+    def generate_inputs(self, dep_tree: dict, wf_config: dict) -> None:
         wf_spec_inputs: dict = wf_config.get("inputs", {})
         self.inputs.update(wf_spec_inputs)
         self.inputs["ci_group"] = {"required": False, "type": "string"}
@@ -140,40 +118,33 @@ class Workflow:
             "description": "Python versions to build the test matrix with.",
             "type": "string",
             "required": False,
-            "default": yaml.dump(
-                wf_config["python_versions"], indent=2, default_flow_style=False
-            )+ "\n",
+            "default": yaml.dump(wf_config["python_versions"], indent=2, default_flow_style=False) + "\n",
         }
 
     # this setting ensures that multiple pushes to the same branch of a repo
     # will result in all but the latest ci workflows being cancelled
-    def concurrency(self) -> object:
-        c = {
-            "group": "${{ github.workflow }}-${{ (github.event_name == 'repository_dispatch' && format('{0}-{1}', github.event.client_payload.repository, github.event.client_payload.ref_name)) || github.ref }}-"
+    def concurrency(self) -> dict[Literal["group", "cancel-in-progress"], str | bool]:
+        return {
+            "group": "${{ github.workflow }}-${{ (github.event_name == 'repository_dispatch' && format('{0}-{1}', "
+            + "github.event.client_payload.repository, github.event.client_payload.ref_name)) || github.ref }}-"
             + self.name,
             "cancel-in-progress": True,
         }
 
-        return c
-
-    def __getstate__(self) -> object:
-        d = {
+    def __getstate__(self) -> dict[str, Any]:
+        d: dict[str, Any] = {
             "name": self.name,
             "on": {"workflow_call": {"inputs": self.inputs}},
             "concurrency": self.concurrency(),
             "jobs": self.jobs,
         }
         if self.private:
-            dispatch_type = (
-                "downstream-ci"
-                if self.wf_type == "build-package"
-                else "downstream-ci-hpc"
-            )
+            dispatch_type = "downstream-ci" if self.wf_type == "build-package" else "downstream-ci-hpc"
             d["on"]["repository_dispatch"] = {"types": [dispatch_type]}
 
         return d
 
-    def get_prepare_inputs_script(self, pkgs) -> str:
+    def get_prepare_inputs_script(self, pkgs) -> list[str]:
         lines = []
         if self.private:
             for pkg in pkgs:
@@ -185,22 +156,17 @@ class Workflow:
                 )
         else:
             for pkg in pkgs:
-                lines.append(
-                    f'echo {pkg}="'
-                    + "${{ "
-                    + f"inputs.{pkg}"
-                    + ' }}" >> $GITHUB_OUTPUT'
-                )
+                lines.append(f'echo {pkg}="' + "${{ " + f"inputs.{pkg}" + ' }}" >> $GITHUB_OUTPUT')
         return lines
 
-    def add_python_qa_job(self):
+    def add_python_qa_job(self) -> None:
         self.inputs["python_qa"] = {
             "description": "Whether to run code QA tasks.",
             "type": "boolean",
             "required": False,
         }
 
-        steps = [
+        steps: list[dict[str, Any]] = [
             {
                 "name": "Checkout Repository",
                 "uses": "actions/checkout@v4",
@@ -216,12 +182,10 @@ class Workflow:
             },
             {
                 "name": "Install Python Dependencies",
-                "run": (
-                    "python -m pip install --upgrade pip\n"
-                    "python -m pip install black flake8 isort\n"
-                ),
+                "run": ("python -m pip install --upgrade pip\npython -m pip install black flake8 isort ruff\n"),
             },
             {"name": "Check isort", "run": "isort --check --diff . --profile black"},
+            {"name": "Check ruff", "run": "ruff check ."},
             {"name": "Check black", "run": "black --check --diff ."},
             {"name": "Check flake8", "run": "flake8 ."},
         ]
@@ -234,7 +198,7 @@ class Workflow:
         )
         self.add_job(job)
 
-    def add_clang_format_job(self):
+    def add_clang_format_job(self) -> None:
         self.inputs["clang_format"] = {
             "description": "Whether to run clang-format QA.",
             "type": "boolean",
@@ -291,13 +255,11 @@ class Workflow:
             )
         )
 
-    def generate_package_jobs(self, dep_tree: dict):
+    def generate_package_jobs(self, dep_tree: dict) -> None:  # noqa: C901 - this function is too complex, but legacy
         for package, pkg_conf in dep_tree.items():
             if not is_input(package, dep_tree, self.name, self.private):
                 continue
-            if self.private != tree_get_package_var(
-                "private", dep_tree, package, self.name, False
-            ):
+            if self.private != get_required_package_var("private", dep_tree, package, self.name, False):
                 continue
             package_deps = get_package_deps(package, dep_tree, self.name)
             cmake_deps = [
@@ -311,18 +273,17 @@ class Workflow:
                     # Python deps need a default input value for ci-python
                     # because there's no ci-config for it. ==>
                     # input || (use_master == 'True' && master_branch) || develop_branch
-                    master_branch = tree_get_package_var(
-                        "master_branch", dep_tree, dep, self.name, "master"
-                    )
-                    develop_branch = tree_get_package_var(
-                        "develop_branch", dep_tree, dep, self.name, "develop"
-                    )
-                    dep_repo = tree_get_package_var(
-                        "repo",
-                        dep_tree,
-                        dep,
-                        self.name,
-                        dep,
+                    master_branch = get_required_package_var("master_branch", dep_tree, dep, self.name, "master")
+                    develop_branch = get_required_package_var("develop_branch", dep_tree, dep, self.name, "develop")
+                    dep_repo = ensure_type(
+                        str,
+                        get_required_package_var(
+                            "repo",
+                            dep_tree,
+                            dep,
+                            self.name,
+                            dep,
+                        ),
                     )
                     if not dep_repo.startswith("ecmwf/"):
                         dep_repo = f"ecmwf/{dep_repo}"
@@ -340,8 +301,7 @@ class Workflow:
                 dep
                 for dep in package_deps
                 if is_input(dep, dep_tree, self.name, self.private)
-                and self.private
-                == tree_get_package_var("private", dep_tree, dep, self.name, False)
+                and self.private == get_required_package_var("private", dep_tree, dep, self.name, False)
             ]
             condition_inputs = " || ".join(
                 [
@@ -363,53 +323,48 @@ class Workflow:
             )
             strategy = {
                 "fail-fast": False,
-                "matrix": "${{ "
-                + f"fromJson(needs.setup.outputs.{package}_matrix)"
-                + " }}",
+                "matrix": "${{ " + f"fromJson(needs.setup.outputs.{package}_matrix)" + " }}",
             }
-            runs_on = "${{ matrix.labels }}"
-            package_env = tree_get_package_var(
-                "env", dep_tree, package, self.name)
-            env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"}
-            env.update(package_env) if package_env else None
-            test_cmd = tree_get_package_var(
-                "test_cmd", dep_tree, package, self.name)
-            mkdir = tree_get_package_var(
-                "mkdir", dep_tree, package, self.name) or []
-            conda_deps = tree_get_package_var(
-                "conda_deps", dep_tree, package, self.name
+            runs_on: str | list[str] = "${{ matrix.labels }}"
+
+            package_env = ensure_type(
+                dict[str, str],
+                get_required_package_var("env", dep_tree, package, self.name, {}),
             )
-            build_package_python = tree_get_package_var(
-                "build-package-python", dep_tree, package, self.name
+            env = {"DEP_TREE": "${{ needs.setup.outputs.dep_tree }}"} | package_env
+
+            test_cmd = get_required_package_var("test_cmd", dep_tree, package, self.name, "")
+            mkdir = ensure_type(
+                list[str],
+                get_required_package_var("mkdir", dep_tree, package, self.name, []),
             )
-            github_token = tree_get_package_var(
-                "github_token", dep_tree, package, self.name
+            conda_deps = ensure_type(
+                str,
+                get_required_package_var("conda_deps", dep_tree, package, self.name, ""),
             )
-            steps = []
+            build_package_python = ensure_type(
+                list[str],
+                get_required_package_var("build-package-python", dep_tree, package, self.name, []),
+            )
+            github_token = get_required_package_var("github_token", dep_tree, package, self.name, "")
+            steps: list[dict[str, Any]] = []
             if self.wf_type == "build-package":
                 if pkg_conf.get("type", "cmake") == "cmake":
                     needs.append("clang-format")
-                    s = {
-                        "uses": (
-                            "ecmwf/reusable-workflows/build-package-with-config@v2"
-                        ),
+                    s: dict[str, Any] = {
+                        "uses": ("ecmwf/reusable-workflows/build-package-with-config@v2"),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
-                            "build_package_inputs": (
-                                "repository: ${{ matrix.owner_repo_ref }}"
-                            ),
+                            "build_package_inputs": ("repository: ${{ matrix.owner_repo_ref }}"),
                             "build_config": "${{ matrix.config_path }}",
                             "build_dependencies": "\n".join(cmake_deps),
                         },
                     }
                     if not self.private:
-                        s["with"]["codecov_token"] = (
-                            "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
-                        )
-                        s["with"]["codecov_upload"] = (
-                            "${{ contains(needs.setup.outputs.trigger_pkgs, "
-                            "github.job) && inputs.codecov_upload }}"
-                        )
+                        s["with"]["codecov_token"] = "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
+                        s["with"][
+                            "codecov_upload"
+                        ] = "${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}"
                     if self.private or github_token:
                         token_name = github_token or "GH_REPO_READ_TOKEN"
                         s["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
@@ -423,15 +378,11 @@ class Workflow:
                         s = {
                             "name": "Build dependencies",
                             "id": "build-deps",
-                            "uses": (
-                                "ecmwf/reusable-workflows/build-package-with-config@v2"
-                            ),
+                            "uses": ("ecmwf/reusable-workflows/build-package-with-config@v2"),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "codecov_upload": False,
-                                "build_package_inputs": (
-                                    "repository: ${{ matrix.owner_repo_ref }}"
-                                ),
+                                "build_package_inputs": ("repository: ${{ matrix.owner_repo_ref }}"),
                                 "build_config": "${{ matrix.config_path }}",
                                 "build_dependencies": "\n".join(cmake_deps),
                             },
@@ -444,27 +395,19 @@ class Workflow:
                         steps.append(s)
                         for path in mkdir:
                             steps.append({"run": f"mkdir -p {path}"})
-                        ci_python_step = {
+                        ci_python_step: dict[str, Any] = {
                             "uses": "ecmwf/reusable-workflows/ci-python@v2",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
-                                "lib_path": (
-                                    "${{ steps.build-deps.outputs.lib_path }}"
-                                ),
-                                "bin_paths": (
-                                    "${{ steps.build-deps.outputs.bin_paths }}"
-                                ),
+                                "lib_path": ("${{ steps.build-deps.outputs.lib_path }}"),
+                                "bin_paths": ("${{ steps.build-deps.outputs.bin_paths }}"),
                                 "python_dependencies": "\n".join(python_deps),
                             },
                         }
                         if pkg_conf.get("requirements_path"):
-                            ci_python_step["with"]["requirements_path"] = pkg_conf.get(
-                                "requirements_path"
-                            )
+                            ci_python_step["with"]["requirements_path"] = pkg_conf.get("requirements_path")
                         if pkg_conf.get("toml_opt_dep_sections"):
-                            ci_python_step["with"]["toml_opt_dep_sections"] = (
-                                pkg_conf.get("toml_opt_dep_sections")
-                            )
+                            ci_python_step["with"]["toml_opt_dep_sections"] = pkg_conf.get("toml_opt_dep_sections")
                         if test_cmd:
                             ci_python_step["with"]["test_cmd"] = test_cmd
                         upload_extra_artifact = pkg_conf.get("upload_extra_artifact")
@@ -479,9 +422,7 @@ class Workflow:
                                 "&& needs.setup.outputs.py_codecov_platform "
                                 "== matrix.name }}"
                             )
-                            ci_python_step["with"]["codecov_token"] = (
-                                "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
-                            )
+                            ci_python_step["with"]["codecov_token"] = "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
                         if self.private or github_token:
                             token_name = github_token or "GH_REPO_READ_TOKEN"
                             ci_python_step["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
@@ -497,13 +438,9 @@ class Workflow:
                             },
                         }
                         if pkg_conf.get("requirements_path"):
-                            ci_python_step["with"]["requirements_path"] = pkg_conf.get(
-                                "requirements_path"
-                            )
+                            ci_python_step["with"]["requirements_path"] = pkg_conf.get("requirements_path")
                         if pkg_conf.get("toml_opt_dep_sections"):
-                            ci_python_step["with"]["toml_opt_dep_sections"] = (
-                                pkg_conf.get("toml_opt_dep_sections")
-                            )
+                            ci_python_step["with"]["toml_opt_dep_sections"] = pkg_conf.get("toml_opt_dep_sections")
                         if test_cmd:
                             ci_python_step["with"]["test_cmd"] = test_cmd
                         if conda_deps:
@@ -515,9 +452,7 @@ class Workflow:
                                 "&& needs.setup.outputs.py_codecov_platform "
                                 "== matrix.name }}"
                             )
-                            ci_python_step["with"]["codecov_token"] = (
-                                "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
-                            )
+                            ci_python_step["with"]["codecov_token"] = "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
                         if self.private or github_token:
                             token_name = github_token or "GH_REPO_READ_TOKEN"
                             ci_python_step["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
@@ -542,42 +477,28 @@ class Workflow:
                     },
                 }
                 if pkg_conf.get("requirements_path"):
-                    s["with"]["python_requirements"] = pkg_conf.get(
-                        "requirements_path")
+                    s["with"]["python_requirements"] = pkg_conf.get("requirements_path")
                 if pkg_conf.get("toml_opt_dep_sections"):
-                    s["with"]["python_toml_opt_dep_sections"] = pkg_conf.get(
-                        "toml_opt_dep_sections"
-                    )
+                    s["with"]["python_toml_opt_dep_sections"] = pkg_conf.get("toml_opt_dep_sections")
                 if conda_deps:
                     s["with"]["conda_deps"] = conda_deps
                 steps.append(s)
-            self.add_job(Job(package, needs, condition,
-                         strategy, env, runs_on, steps))
+            self.add_job(Job(package, needs, condition, strategy, env, runs_on, steps))
 
-    def generate_setup_job(
-        self, dep_tree: dict, wf_config: dict, downstream_ci_ref: str
-    ):
+    def generate_setup_job(self, dep_tree: dict, wf_config: dict, downstream_ci_ref: str) -> None:
         outputs = {}
-        deps = [
-            dep for dep in dep_tree if is_input(dep, dep_tree, self.name, self.private)
-        ]
+        deps = [dep for dep in dep_tree if is_input(dep, dep_tree, self.name, self.private)]
         for dep in deps:
-            outputs[dep] = "${{ " + \
-                f"steps.prepare-inputs.outputs.{dep}" + " }}"
-            outputs[f"{dep}_matrix"] = "${{ " + \
-                f"steps.setup.outputs.{dep}" + " }}"
+            outputs[dep] = "${{ " + f"steps.prepare-inputs.outputs.{dep}" + " }}"
+            outputs[f"{dep}_matrix"] = "${{ " + f"steps.setup.outputs.{dep}" + " }}"
 
         if self.wf_type == "build-package":
             outputs["dep_tree"] = "${{ steps.setup.outputs.build_package_dep_tree }}"
             outputs["trigger_repo"] = "${{ steps.setup.outputs.trigger_repo }}"
             outputs["trigger_pkgs"] = "${{ steps.setup.outputs.trigger_pkgs }}"
-            outputs["py_codecov_platform"] = (
-                "${{ steps.setup.outputs.py_codecov_platform }}"
-            )
+            outputs["py_codecov_platform"] = "${{ steps.setup.outputs.py_codecov_platform }}"
         elif self.wf_type == "build-package-hpc":
-            outputs["dep_tree"] = (
-                "${{ steps.setup.outputs.build_package_hpc_dep_tree }}"
-            )
+            outputs["dep_tree"] = "${{ steps.setup.outputs.build_package_hpc_dep_tree }}"
         outputs["use_master"] = "${{ steps.setup.outputs.use_master }}"
         outputs["ci_group_pkgs"] = "${{ steps.setup.outputs.ci_group_pkgs }}"
         self.inputs.update(
@@ -589,7 +510,7 @@ class Workflow:
                 }
             }
         )
-        steps = []
+        steps: list[dict[str, Any]] = []
         if self.private:
             steps.append(
                 {
@@ -616,36 +537,22 @@ class Workflow:
             }
         )
         setup_config = {}
-        default_config_path = (
-            ".github/ci-config.yml"
-            if self.wf_type == "build-package"
-            else ".github/ci-hpc-config.yml"
+        default_config_path: Final = (
+            ".github/ci-config.yml" if self.wf_type == "build-package" else ".github/ci-hpc-config.yml"
         )
         for dep in dep_tree:
             if is_input(dep, dep_tree, self.name, self.private):
-                config_path = tree_get_package_var(
-                    "config_path", dep_tree, dep, self.name
-                )
-                if config_path is None:
-                    config_path = default_config_path
+                config_path = get_required_package_var("config_path", dep_tree, dep, self.name, default_config_path)
                 dep_repo = dep_tree[dep].get("repo", dep)
                 if not dep_repo.startswith("ecmwf/"):
                     dep_repo = f"ecmwf/{dep_repo}"
                 setup_config[f"{dep}:{dep_repo}"] = {
                     "path": config_path,
                     "python": dep_tree[dep].get("type", "cmake") == "python",
-                    "master_branch": tree_get_package_var(
-                        "master_branch", dep_tree, dep, self.name
-                    )
-                    or "master",
-                    "develop_branch": tree_get_package_var(
-                        "develop_branch", dep_tree, dep, self.name
-                    )
-                    or "develop",
+                    "master_branch": get_required_package_var("master_branch", dep_tree, dep, self.name, "master"),
+                    "develop_branch": get_required_package_var("develop_branch", dep_tree, dep, self.name, "develop"),
                     "input": "${{ " + f"steps.prepare-inputs.outputs.{dep}" + " }}",
-                    "optional_matrix": tree_get_package_var(
-                        "optional_matrix", dep_tree, dep, self.name
-                    ),
+                    "optional_matrix": get_optional_package_var("optional_matrix", dep_tree, dep, self.name),
                 }
 
         match self.name:
@@ -656,28 +563,16 @@ class Workflow:
             case _:
                 wf_name = self.name
 
-        s = {
+        s: dict[str, Any] = {
             "name": "Run setup script",
             "id": "setup",
             "env": {
                 "TOKEN": "${{ secrets.GH_REPO_READ_TOKEN }}",
-                "CONFIG": yaml.dump(
-                    setup_config,
-                    indent=2,
-                    default_flow_style=False,
-                    sort_keys=False,
-                ),
+                "CONFIG": yaml.dump(setup_config, indent=2, default_flow_style=False, sort_keys=False),
                 "PYTHON_VERSIONS": "${{ inputs.python_versions }}",
-                "PYTHON_JOBS": yaml.dump(
-                    wf_config.get("python_jobs", []),
-                    indent=2,
-                    default_flow_style=False,
-                )
-                + "\n",
+                "PYTHON_JOBS": yaml.dump(wf_config.get("python_jobs", []), indent=2, default_flow_style=False) + "\n",
                 "MATRIX": yaml.dump(wf_config["matrix"], indent=2),
-                "OPTIONAL_MATRIX": yaml.dump(
-                    wf_config["optional_matrix"], indent=2, default_flow_style=False
-                ),
+                "OPTIONAL_MATRIX": yaml.dump(wf_config["optional_matrix"], indent=2, default_flow_style=False),
                 "WORKFLOW_NAME": wf_name,
                 "DOWNSTREAM_CI_GROUP": "${{ inputs.ci_group }}",
             },
@@ -685,10 +580,7 @@ class Workflow:
         }
 
         s["env"]["SKIP_MATRIX_JOBS"] = (
-            (
-                "${{ inputs.skip_matrix_jobs || github.event.client_payload.inputs."
-                "skip_matrix_jobs}}"
-            )
+            ("${{ inputs.skip_matrix_jobs || github.event.client_payload.inputs.skip_matrix_jobs}}")
             if self.private
             else "${{ inputs.skip_matrix_jobs }}"
         )
@@ -696,24 +588,16 @@ class Workflow:
         self.add_job(Job("setup", steps=steps, outputs=outputs))
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--config", help="Path to configuration file", required=True)
-    parser.add_argument(
-        "--dep-tree", help="Path to dependency tree file.", required=True
-    )
+    parser.add_argument("--config", help="Path to configuration file", required=True)
+    parser.add_argument("--dep-tree", help="Path to dependency tree file.", required=True)
     parser.add_argument(
         "--output",
-        help=(
-            "Path to output directory. "
-            "Workflow files will be created/overwritten there."
-        ),
+        help=("Path to output directory. Workflow files will be created/overwritten there."),
         required=True,
     )
-    parser.add_argument(
-        "--ref", help="Downstream-ci repo ref", required=False, default="main"
-    )
+    parser.add_argument("--ref", help="Downstream-ci repo ref", required=False, default="main")
     parser.add_argument("workflows", nargs="*")
     args = parser.parse_args()
 
@@ -741,9 +625,7 @@ def main():
         print(yaml.dump(wf, indent=2, sort_keys=False, default_flow_style=False))
         print("=" * 10)
         with open(PurePath(args.output, name + ".yml"), "w") as f:
-            f.write(
-                f"{'#\n' * 3}# This is a file generated by generate-workflows.py - DO NOT EDIT!!\n{'#\n' * 3}"
-            )
+            f.write(f"{'#\n' * 3}# This is a file generated by generate-workflows.py - DO NOT EDIT!!\n{'#\n' * 3}")
             yaml.dump(
                 wf,
                 stream=f,

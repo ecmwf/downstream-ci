@@ -23,7 +23,15 @@ jobs:
         with:
           python-version: "3.x"
 
-      - run: pip install pyyaml
+      - name: Install dependencies
+        run: |
+          pip install pyyaml mypy types-PyYAML types-requests black ruff
+
+      - name: Verify
+        run: |
+          ruff check .
+          black --check --diff .
+          mypy .
 
       - name: Build
         run: >
@@ -80,7 +88,15 @@ jobs:
         with:
           python-version: "3.x"
 
-      - run: pip install pyyaml
+      - name: Install dependencies
+        run: |
+          pip install pyyaml mypy types-PyYAML types-requests black ruff
+
+      - name: Verify
+        run: |
+          ruff check .
+          black --check --diff .
+          mypy .
 
       - name: Build
         run: |
