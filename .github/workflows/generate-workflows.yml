@@ -95,6 +95,7 @@ jobs:
       - name: Verify
         run: |
           ruff check .
+          pwd
           black --check --diff .
           mypy .
 
