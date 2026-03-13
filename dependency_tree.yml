@@ -34,7 +34,6 @@ earthkit:
     - earthkit-data
     - earthkit-geo
     - earthkit-meteo
-    - earthkit-regrid
     - earthkit-utils
     - earthkit-hydro
 
@@ -83,21 +82,6 @@ earthkit-plots:
       make image-tests
   deps:
     - earthkit-data
-    - earthkit-regrid
-
-earthkit-regrid:
-  type: python
-  master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
-  downstream-ci:
-    test_cmd: |
-      pytest --cov=./ --cov-report=xml
-      python -m coverage report
-  shallow_deps:
-    - mir
-  deps:
-    - ecbuild
-
 
 earthkit-time:
   type: python
@@ -189,7 +173,6 @@ anemoi-transform:
   shallow_deps:
     - earthkit-utils
     - earthkit-data
-    - earthkit-regrid
     - earthkit-meteo
   downstream-ci:
     config_path: ""
