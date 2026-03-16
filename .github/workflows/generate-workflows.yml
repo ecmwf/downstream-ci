@@ -62,7 +62,7 @@ jobs:
           git push origin ${{ github.head_ref || github.ref  }}
 
   generate-private:
-    if: github.actor != 'github-actions[bot]' && !github.event.pull_request.head.repo.fork && github.ref_name == 'main'
+    if: github.actor != 'github-actions[bot]' && !github.event.pull_request.head.repo.fork
     runs-on: ubuntu-latest
     steps:
       - name: Checkout private-downstream-ci
