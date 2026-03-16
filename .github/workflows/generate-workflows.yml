@@ -94,10 +94,9 @@ jobs:
 
       - name: Verify
         run: |
-          ruff check .
-          pwd
-          black --check --diff .
-          mypy .
+          ruff check downstream-ci
+          black --config downstream-ci/pyproject.toml --check --diff downstream-ci
+          mypy downstream-ci
 
       - name: Build
         run: |
