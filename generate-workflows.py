@@ -30,7 +30,7 @@ def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str]
 
     package_config = dep_tree[package]
 
-    direct_deps = package_config.get(wf_name, {}).get("deps") or package_config.get("deps") or []
+    direct_deps = package_config.get(wf_name, {}).get("triggered_by") or package_config.get("triggered_by") or []
 
     for dep in direct_deps:
         if dep not in deps:
@@ -39,7 +39,7 @@ def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str]
         if dep in dep_tree:
             get_package_deps(dep, dep_tree, wf_name, deps)
 
-    shallow_deps = package_config.get("shallow_deps", [])
+    shallow_deps = package_config.get("shallow_triggered_by", [])
 
     for dep in shallow_deps:
         if dep not in deps:
@@ -362,9 +362,9 @@ class Workflow:
                     }
                     if not self.private:
                         s["with"]["codecov_token"] = "${{ secrets.CODECOV_UPLOAD_TOKEN }}"
-                        s["with"][
-                            "codecov_upload"
-                        ] = "${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}"
+                        s["with"]["codecov_upload"] = (
+                            "${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}"
+                        )
                     if self.private or github_token:
                         token_name = github_token or "GH_REPO_READ_TOKEN"
                         s["with"]["github_token"] = f"${{{{ secrets.{token_name} }}}}"
