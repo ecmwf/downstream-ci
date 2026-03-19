@@ -21,35 +21,37 @@ yaml.add_representer(str, str_presenter)
 yaml.emitter.Emitter.prepare_tag = lambda self, tag: ""  # type: ignore[method-assign] # noqa: ARG005
 
 
-def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str] | None = None) -> list[str]:
+def get_triggered_by(package: str, dep_tree: dict, wf_name: str, triggers: list[str] | None = None) -> list[str]:
+    """ "Get the list of packages that trigger the given package,
+    directly or indirectly, through the given workflow or generally (if wf_name specific list is not provided)."""
 
-    if deps is None:
-        deps = []
+    if triggers is None:
+        triggers = []
     if package not in dep_tree or dep_tree[package] is None:
-        return deps
+        return triggers
 
     package_config = dep_tree[package]
 
-    direct_deps = package_config.get(wf_name, {}).get("triggered_by") or package_config.get("triggered_by") or []
+    triggered_by = package_config.get(wf_name, {}).get("triggered_by") or package_config.get("triggered_by") or []
 
-    for dep in direct_deps:
-        if dep not in deps:
-            deps.append(dep)
+    for trigger in triggered_by:
+        if trigger not in triggers:
+            triggers.append(trigger)
 
-        if dep in dep_tree:
-            get_package_deps(dep, dep_tree, wf_name, deps)
+        if trigger in dep_tree:
+            get_triggered_by(trigger, dep_tree, wf_name, triggers)
 
-    shallow_deps = package_config.get("shallow_triggered_by", [])
+    shallow_triggered_by = package_config.get("shallow_triggered_by", [])
 
-    for dep in shallow_deps:
-        if dep not in deps:
-            deps.append(dep)
+    for trigger in shallow_triggered_by:
+        if trigger not in triggers:
+            triggers.append(trigger)
 
-    return deps
+    return triggers
 
 
 def get_type_deps(package: str, dep_tree: dict, wf_name, type: Literal["cmake", "python"]) -> list[str]:
-    package_deps = get_package_deps(package, dep_tree, wf_name)
+    package_deps = get_triggered_by(package, dep_tree, wf_name)
     type_deps = []
     for dep in package_deps:
         if dep_tree[dep].get("type", "cmake") == type:
@@ -261,7 +263,7 @@ class Workflow:
                 continue
             if self.private != get_required_package_var("private", dep_tree, package, self.name, False):
                 continue
-            package_deps = get_package_deps(package, dep_tree, self.name)
+            package_triggers = get_triggered_by(package, dep_tree, self.name)
             cmake_deps = [
                 "${{ " + f"needs.setup.outputs.{dep}" + " }}"
                 for dep in get_type_deps(package, dep_tree, self.name, "cmake")
@@ -299,14 +301,14 @@ class Workflow:
 
             needs = [
                 dep
-                for dep in package_deps
+                for dep in package_triggers
                 if is_input(dep, dep_tree, self.name, self.private)
                 and self.private == get_required_package_var("private", dep_tree, dep, self.name, False)
             ]
             condition_inputs = " || ".join(
                 [
                     f"needs.setup.outputs.{dep}"
-                    for dep in package_deps
+                    for dep in package_triggers
                     if is_input(dep, dep_tree, self.name, self.private)
                 ]
                 + [f"needs.setup.outputs.{package}"]
