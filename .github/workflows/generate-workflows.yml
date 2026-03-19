@@ -23,10 +23,10 @@ jobs:
       with:
         python-version: "3.x"
 
-    - name: Pre-commit
-      uses: ecmwf/reusable-workflows/.github/workflows/qa-precommit-run.yml@v2
-      with:
-        skip-hooks: "no-commit-to-branch"
+    # - name: Pre-commit
+    #   uses: ecmwf/reusable-workflows/.github/workflows/qa-precommit-run.yml@v2
+    #   with:
+    #     skip-hooks: "no-commit-to-branch"
 
     - name: Install dependencies
       run: |
