@@ -23,14 +23,17 @@ jobs:
       with:
         python-version: "3.x"
 
+    - name: Pre-commit
+      uses: ecmwf/reusable-workflows/.github/workflows/qa-precommit-run.yml@v2
+      with:
+        skip-hooks: "no-commit-to-branch"
+
     - name: Install dependencies
       run: |
-        pip install pyyaml mypy types-PyYAML types-requests black ruff
+        pip install pyyaml mypy types-PyYAML types-requests
 
-    - name: Verify
+    - name: Verify mypy
       run: |
-        ruff check .
-        black --check --diff .
         mypy .
 
     - name: Build
