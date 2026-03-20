@@ -2,26 +2,26 @@ atlas:
   type: cmake
   downstream-ci-hpc:
     modules:
-      - fftw
-      - qhull
-  deps:
-    - eckit
-    - fckit
+    - fftw
+    - qhull
+  triggered_by:
+  - eckit
+  - fckit
 
 atlas-orca:
   type: cmake
   master_branch: master
   develop_branch: develop
-  deps:
-    - atlas
+  triggered_by:
+  - atlas
 
 cfgrib:
   type: python
   master_branch: master
   develop_branch: master
   requirements_path: ci/requirements-tests.in
-  deps:
-    - eccodes-python
+  triggered_by:
+  - eccodes-python
 
 earthkit:
   type: python
@@ -30,24 +30,24 @@ earthkit:
   downstream-ci:
     test_cmd: |
       python -m pytest --forked -vv --cov=. --cov-report=html
-  deps:
-    - earthkit-data
-    - earthkit-geo
-    - earthkit-meteo
-    - earthkit-utils
-    - earthkit-hydro
+  triggered_by:
+  - earthkit-data
+  - earthkit-geo
+  - earthkit-meteo
+  - earthkit-utils
+  - earthkit-hydro
 
 earthkit-data:
   type: python
   master_branch: main
   toml_opt_dep_sections: all,test,ci
-  deps:
-    - cfgrib
-    - multiurl
-    - pdbufr
-    - pyodc
-    - pyfdb
-    - earthkit-utils
+  triggered_by:
+  - cfgrib
+  - multiurl
+  - pdbufr
+  - pyodc
+  - pyfdb
+  - earthkit-utils
   downstream-ci:
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' -k 'not netcdf' --cov=. --cov-report=xml
@@ -68,8 +68,8 @@ earthkit-meteo:
   requirements_path: tests/downstream-ci-requirements.txt
   downstream-ci:
     config_path: ""
-  deps:
-    - earthkit-utils
+  triggered_by:
+  - earthkit-utils
 
 earthkit-plots:
   type: python
@@ -80,9 +80,9 @@ earthkit-plots:
     test_cmd: |
       make unit-tests
       make image-tests
-  deps:
-    - earthkit-data
-    - earthkit-regrid
+  triggered_by:
+  - earthkit-data
+  - earthkit-regrid
 
 earthkit-regrid:
   type: python
@@ -92,8 +92,8 @@ earthkit-regrid:
     test_cmd: |
       pytest --cov=./ --cov-report=xml
       python -m coverage report
-  shallow_deps:
-    - mir
+  shallow_triggered_by:
+  - mir
 
 
 earthkit-time:
@@ -115,9 +115,9 @@ earthkit-transforms:
     config_path: ""
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no make unit-tests
-  shallow_deps:
-    - earthkit-data
-    - earthkit-utils
+  shallow_triggered_by:
+  - earthkit-data
+  - earthkit-utils
 
 
 earthkit-utils:
@@ -131,9 +131,9 @@ earthkit-hydro:
   type: python
   master_branch: main
   toml_opt_dep_sections: all,tests
-  shallow_deps:
-    - earthkit-data
-    - earthkit-utils
+  shallow_triggered_by:
+  - earthkit-data
+  - earthkit-utils
   conda_deps: "rust"
   env:
     CARGO_TARGET_DIR: /var/tmp
@@ -150,15 +150,15 @@ anemoi-datasets:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   skip:
-    - downstream-ci-hpc
-  shallow_deps:
-    - earthkit-utils
-    - earthkit-data
-    - earthkit-geo
-    - earthkit-meteo
-  deps:
-    - anemoi-utils
-    - anemoi-transform
+  - downstream-ci-hpc
+  shallow_triggered_by:
+  - earthkit-utils
+  - earthkit-data
+  - earthkit-geo
+  - earthkit-meteo
+  triggered_by:
+  - anemoi-utils
+  - anemoi-transform
   downstream-ci:
     config_path: ""
     env:
@@ -182,11 +182,11 @@ anemoi-transform:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   skip:
-    - downstream-ci-hpc
-  shallow_deps:
-    - earthkit-utils
-    - earthkit-data
-    - earthkit-meteo
+  - downstream-ci-hpc
+  shallow_triggered_by:
+  - earthkit-utils
+  - earthkit-data
+  - earthkit-meteo
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -198,9 +198,9 @@ anemoi-graphs:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
-  deps:
-    - anemoi-datasets
-    - anemoi-utils
+  triggered_by:
+  - anemoi-datasets
+  - anemoi-utils
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -212,8 +212,8 @@ anemoi-models:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
-  deps:
-    - anemoi-utils
+  triggered_by:
+  - anemoi-utils
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -225,12 +225,12 @@ anemoi-training:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
-  deps:
-    - anemoi-utils
-    - anemoi-models
-    - anemoi-datasets
-    - anemoi-graphs
-    - anemoi-transform
+  triggered_by:
+  - anemoi-utils
+  - anemoi-models
+  - anemoi-datasets
+  - anemoi-graphs
+  - anemoi-transform
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -242,14 +242,14 @@ anemoi-inference:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   skip:
-    - downstream-ci-hpc
-  shallow_deps:
-    - earthkit-utils
-    - earthkit-data
-    - earthkit-plots
-  deps:
-    - anemoi-utils
-    - anemoi-transform
+  - downstream-ci-hpc
+  shallow_triggered_by:
+  - earthkit-utils
+  - earthkit-data
+  - earthkit-plots
+  triggered_by:
+  - anemoi-utils
+  - anemoi-transform
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -260,8 +260,8 @@ anemoi-plugins:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
-  deps:
-    - anemoi-utils
+  triggered_by:
+  - anemoi-utils
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -278,9 +278,9 @@ earthkit-workflows:
   type: python
   master_branch: main
   toml_opt_dep_sections: tests
-  shallow_deps:
-    - earthkit-data
-    - earthkit-utils
+  shallow_triggered_by:
+  - earthkit-data
+  - earthkit-utils
 
 ecbuild:
   type: cmake
@@ -289,45 +289,45 @@ eccodes:
   type: cmake
   downstream-ci-hpc:
     modules:
-      - aec/1.1.4
-    deps:
-      - ecbuild
+    - aec/1.1.4
+    triggered_by:
+    - ecbuild
   downstream-ci:
-    deps:
-      - libaec
-      - ecbuild
+    triggered_by:
+    - libaec
+    - ecbuild
 
 eccodes-python:
   type: python
   env:
     ECCODES_PYTHON_TRACE_LIB_SEARCH: 1
-  deps:
-    - eccodes
-    - findlibs
+  triggered_by:
+  - eccodes
+  - findlibs
 
 ecflow:
   type: cmake
   master_branch: main
-  deps:
-    - ecbuild
+  triggered_by:
+  - ecbuild
   optional_matrix:
-    - clang@macos-13-arm
-    - clang@macos-13-x86
-    - gnu@debian-12
-    - gnu-14.2.0
-    - nvidia-24.11
-    - intel-2025.0.1
+  - clang@macos-13-arm
+  - clang@macos-13-x86
+  - gnu@debian-12
+  - gnu-14.2.0
+  - nvidia-24.11
+  - intel-2025.0.1
 
 ecflow-light:
   type: cmake
   master_branch: main
-  deps:
-    - eckit
+  triggered_by:
+  - eckit
 
 eckit:
   type: cmake
-  deps:
-    - ecbuild
+  triggered_by:
+  - ecbuild
 
 ecmwf-toolbox:
   type: cmake
@@ -335,13 +335,13 @@ ecmwf-toolbox:
 
 fckit:
   type: cmake
-  deps:
-    - eckit
+  triggered_by:
+  - eckit
 
 fdb:
   type: cmake
-  deps:
-    - metkit
+  triggered_by:
+  - metkit
 
 polytope:
   type: python
@@ -351,9 +351,9 @@ polytope:
   conda_deps: "rust"
   env:
     CARGO_TARGET_DIR: /var/tmp
-  deps:
-    - pygribjump
-    - conflator
+  triggered_by:
+  - pygribjump
+  - conflator
   downstream-ci:
     config_path: ".github/ci-config.yml"
     test_cmd: |
@@ -389,24 +389,24 @@ findlibs:
 dhskit:
   type: cmake
   private: true
-  deps:
-    - eckit
+  triggered_by:
+  - eckit
 
 gribjump:
   type: cmake
-  deps:
-    - fdb
+  triggered_by:
+  - fdb
   downstream-ci-hpc:
     modules:
-      - aec
+    - aec
 
 pygribjump:
   type: python
   repo: ecmwf/gribjump
   toml_opt_dep_sections: dev
-  deps:
-    - gribjump
-    - findlibs
+  triggered_by:
+  - gribjump
+  - findlibs
   downstream-ci:
     config_path: ".github/ci-config-pygribjump.yml"
   downstream-ci-hpc:
@@ -423,110 +423,110 @@ infero:
   type: cmake
   master_branch: master
   develop_branch: develop
-  deps:
-    - eckit
-    - fckit
+  triggered_by:
+  - eckit
+  - fckit
 
 kronos:
   type: cmake
-  deps:
-    - ecbuild
+  triggered_by:
+  - ecbuild
 
 libaec:
   type: cmake
   input: false
-  deps:
-    - ecbuild
+  triggered_by:
+  - ecbuild
 
 mars-client:
   type: cmake
   private: true
-  deps:
-    - odc
-    - metkit
-    - atlas
-    - mir
-    - fdb
+  triggered_by:
+  - odc
+  - metkit
+  - atlas
+  - mir
+  - fdb
   downstream-ci-hpc:
     skip:
-      - nvidia-22.11
+    - nvidia-22.11
 
 mars-client-cpp:
   type: cmake
   private: true
-  deps:
-    - ecbuild
-    - libaec
-    - eccodes
-    - eckit
-    - odc
-    - metkit
-    - atlas
-    - atlas-orca
-    - mir
-    - fdb
-    - gribjump
+  triggered_by:
+  - ecbuild
+  - libaec
+  - eccodes
+  - eckit
+  - odc
+  - metkit
+  - atlas
+  - atlas-orca
+  - mir
+  - fdb
+  - gribjump
   downstream-ci-hpc:
     skip:
-      - nvidia-22.11
+    - nvidia-22.11
 
 mars-server:
   type: cmake
   private: true
-  deps:
-    - eccodes
-    - dhskit
-    - metkit
-    - fdb
+  triggered_by:
+  - eccodes
+  - dhskit
+  - metkit
+  - fdb
   downstream-ci-hpc:
     skip:
-      - nvidia-22.11
+    - nvidia-22.11
 
 mars-server-bundle:
   type: cmake
   private: true
   private-downstream-ci:
     optional_matrix:
-      - gnu@rocky-9.5
+    - gnu@rocky-9.5
   private-downstream-ci-hpc:
     env:
       GITHUB_TOKEN: ${{ secrets.GH_REPO_READ_TOKEN }}
 
 metkit:
   type: cmake
-  deps:
-    - eccodes
-    - eckit
-    - odc
+  triggered_by:
+  - eccodes
+  - eckit
+  - odc
 
 mir:
   type: cmake
-  deps:
-    - eckit
-    - atlas
-    - eccodes
+  triggered_by:
+  - eckit
+  - atlas
+  - eccodes
 
 multio:
   type: cmake
   master_branch: master
   develop_branch: develop
-  deps:
-    - atlas
-    - atlas-orca
-    - eccodes
-    - eckit
-    - fckit
-    - fdb
-    - metkit
-    - mir
+  triggered_by:
+  - atlas
+  - atlas-orca
+  - eccodes
+  - eckit
+  - fckit
+  - fdb
+  - metkit
+  - mir
 
 pymultio:
   type: python
   repo: ecmwf/multio
   env:
     FINDLIBS_DISABLE_PACKAGE: "yes"
-  deps:
-    - multio
+  triggered_by:
+  - multio
   downstream-ci:
     config_path: ".github/ci-config-pymultio.yml"
   downstream-ci-hpc:
@@ -541,8 +541,8 @@ multiurl:
 
 odc:
   type: cmake
-  deps:
-    - eckit
+  triggered_by:
+  - eckit
 
 pdbufr:
   type: python
@@ -552,23 +552,23 @@ pdbufr:
     test_cmd: |
       python -m pytest --cov=./ --cov-report=xml -k 'not test_notebooks'
       python -m pytest -v -k 'test_notebooks'
-  deps:
-    - eccodes-python
+  triggered_by:
+  - eccodes-python
 
 pgen:
   type: cmake
   private: true
-  deps:
-    - eccodes
-    - eckit
-    - odc
-    - metkit
-    - atlas
-    - atlas-orca
-    - mir
+  triggered_by:
+  - eccodes
+  - eckit
+  - odc
+  - metkit
+  - atlas
+  - atlas-orca
+  - mir
   downstream-ci-hpc:
     skip:
-      - nvidia-22.11
+    - nvidia-22.11
 
 pgen-bundle:
   type: cmake
@@ -576,10 +576,10 @@ pgen-bundle:
 
 plume:
   type: cmake
-  deps:
-    - eckit
-    - atlas
-    - fckit
+  triggered_by:
+  - eckit
+  - atlas
+  - fckit
 
 plume-plugin-extreme-events:
   type: cmake
@@ -595,20 +595,20 @@ plume-plugin-axe:
 
 pyfdb:
   type: python
-  deps:
-    - fdb
-    - findlibs
+  triggered_by:
+  - fdb
+  - findlibs
   downstream-ci:
     env:
       FDB5_CONFIG: >
         {"type":"local","engine":"toc","schema":"${{ github.workspace }}/tests/default_fdb_schema","spaces":[{"handler":"Default","roots":[{"path":"${{ github.workspace }}/data/fdb"}]}]}
     mkdir:
-      - data/fdb
+    - data/fdb
 pyodc:
   type: python
-  deps:
-    - odc
-    - findlibs
+  triggered_by:
+  - odc
+  - findlibs
 
 skinnywms:
   type: python
@@ -650,12 +650,12 @@ hermes-server:
   master_branch: develop
   develop_branch: develop
   private: true
-  deps:
-    - eckit
-    - dhskit
-    - eccodes
-    - metkit
-    - mars-client-cpp
+  triggered_by:
+  - eckit
+  - dhskit
+  - eccodes
+  - metkit
+  - mars-client-cpp
   downstream-ci-hpc:
     skip:
-      - nvidia-22.11
+    - nvidia-22.11
