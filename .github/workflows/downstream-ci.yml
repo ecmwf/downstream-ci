@@ -403,7 +403,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: rename_deps_to_trigger
+        ref: main
     - name: Run setup script
       id: setup
       env:
