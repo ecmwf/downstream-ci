@@ -403,7 +403,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: test-fam
     - name: Run setup script
       id: setup
       env:
@@ -615,7 +615,7 @@ jobs:
             path: .github/ci-config.yml
             python: false
             master_branch: master
-            develop_branch: develop
+            develop_branch: feature/ECKIT-635_fam-backend-map
             input: ${{ steps.prepare-inputs.outputs.eckit }}
             optional_matrix: null
           fckit:ecmwf/fckit:
