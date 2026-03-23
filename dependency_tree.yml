@@ -326,6 +326,7 @@ ecflow-light:
 
 eckit:
   type: cmake
+  develop_branch: feature/ECKIT-635_fam-backend-map
   triggered_by:
   - ecbuild
 
