@@ -1,5 +1,6 @@
 atlas:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   downstream-ci-hpc:
     modules:
     - fftw
@@ -10,6 +11,7 @@ atlas:
 
 atlas-orca:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: master
   develop_branch: develop
   triggered_by:
@@ -287,6 +289,7 @@ ecbuild:
 
 eccodes:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   downstream-ci-hpc:
     modules:
     - aec/1.1.4
@@ -307,6 +310,7 @@ eccodes-python:
 
 ecflow:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: main
   triggered_by:
   - ecbuild
@@ -320,26 +324,31 @@ ecflow:
 
 ecflow-light:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: main
   triggered_by:
   - eckit
 
 eckit:
+  github_token: GH_REPO_READ_TOKEN
   type: cmake
   triggered_by:
   - ecbuild
 
 ecmwf-toolbox:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
 
 fckit:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   triggered_by:
   - eckit
 
 fdb:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   triggered_by:
   - metkit
 
@@ -388,12 +397,14 @@ findlibs:
 
 dhskit:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
   triggered_by:
   - eckit
 
 gribjump:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   triggered_by:
   - fdb
   downstream-ci-hpc:
@@ -421,6 +432,7 @@ hyve:
 
 infero:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: master
   develop_branch: develop
   triggered_by:
@@ -429,6 +441,7 @@ infero:
 
 kronos:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   triggered_by:
   - ecbuild
 
@@ -440,6 +453,7 @@ libaec:
 
 mars-client:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
   triggered_by:
   - odc
@@ -453,6 +467,7 @@ mars-client:
 
 mars-client-cpp:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
   triggered_by:
   - ecbuild
@@ -472,6 +487,7 @@ mars-client-cpp:
 
 mars-server:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
   triggered_by:
   - eccodes
@@ -484,6 +500,7 @@ mars-server:
 
 mars-server-bundle:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
   private-downstream-ci:
     optional_matrix:
@@ -494,6 +511,7 @@ mars-server-bundle:
 
 metkit:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   triggered_by:
   - eccodes
   - eckit
@@ -501,6 +519,7 @@ metkit:
 
 mir:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   triggered_by:
   - eckit
   - atlas
@@ -508,6 +527,7 @@ mir:
 
 multio:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: master
   develop_branch: develop
   triggered_by:
@@ -541,6 +561,7 @@ multiurl:
 
 odc:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   triggered_by:
   - eckit
 
@@ -557,6 +578,7 @@ pdbufr:
 
 pgen:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
   triggered_by:
   - eccodes
@@ -572,6 +594,7 @@ pgen:
 
 pgen-bundle:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   private: true
 
 plume:
@@ -583,14 +606,17 @@ plume:
 
 plume-plugin-extreme-events:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: main
 
 plume-plugin-wind-farm:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: main
 
 plume-plugin-axe:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: main
 
 pyfdb:
@@ -647,6 +673,7 @@ danu:
 
 hermes-server:
   type: cmake
+  github_token: GH_REPO_READ_TOKEN
   master_branch: develop
   develop_branch: develop
   private: true
