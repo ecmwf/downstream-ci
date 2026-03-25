@@ -329,6 +329,11 @@ eckit:
   triggered_by:
   - ecbuild
 
+eckit-cd-test:
+  type: cmake
+  triggered_by:
+  - ecbuild
+
 ecmwf-toolbox:
   type: cmake
   private: true
