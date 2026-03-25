@@ -103,6 +103,9 @@ name: downstream-ci
       eckit:
         required: false
         type: string
+      eckit-cd-test:
+        required: false
+        type: string
       fckit:
         required: false
         type: string
@@ -276,6 +279,8 @@ jobs:
       ecflow-light_matrix: ${{ steps.setup.outputs.ecflow-light }}
       eckit: ${{ steps.prepare-inputs.outputs.eckit }}
       eckit_matrix: ${{ steps.setup.outputs.eckit }}
+      eckit-cd-test: ${{ steps.prepare-inputs.outputs.eckit-cd-test }}
+      eckit-cd-test_matrix: ${{ steps.setup.outputs.eckit-cd-test }}
       fckit: ${{ steps.prepare-inputs.outputs.fckit }}
       fckit_matrix: ${{ steps.setup.outputs.fckit }}
       fdb: ${{ steps.prepare-inputs.outputs.fdb }}
@@ -371,6 +376,7 @@ jobs:
         echo ecflow="${{ inputs.ecflow }}" >> $GITHUB_OUTPUT
         echo ecflow-light="${{ inputs.ecflow-light }}" >> $GITHUB_OUTPUT
         echo eckit="${{ inputs.eckit }}" >> $GITHUB_OUTPUT
+        echo eckit-cd-test="${{ inputs.eckit-cd-test }}" >> $GITHUB_OUTPUT
         echo fckit="${{ inputs.fckit }}" >> $GITHUB_OUTPUT
         echo fdb="${{ inputs.fdb }}" >> $GITHUB_OUTPUT
         echo polytope="${{ inputs.polytope }}" >> $GITHUB_OUTPUT
@@ -403,7 +409,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: feature/stack-dependencies
+        ref: feature/stack-dependencies-eckit-cd-test
     - name: Run setup script
       id: setup
       env:
@@ -617,6 +623,13 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.eckit }}
+            optional_matrix: null
+          eckit-cd-test:ecmwf/eckit-cd-test:
+            path: .github/ci-config.yml
+            python: false
+            master_branch: master
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.eckit-cd-test }}
             optional_matrix: null
           fckit:ecmwf/fckit:
             path: .github/ci-config.yml
@@ -1917,6 +1930,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.eckit_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on: ${{ matrix.labels }}
+    steps:
+    - uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      with:
+        repository: ${{ matrix.owner_repo_ref }}
+        build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
+        build_config: ${{ matrix.config_path }}
+        build_dependencies: ${{ needs.setup.outputs.ecbuild }}
+        codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
+        codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+  eckit-cd-test:
+    name: eckit-cd-test
+    needs:
+    - ecbuild
+    - setup
+    - clang-format
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.eckit-cd-test_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit-cd-test)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'eckit-cd-test') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.eckit-cd-test_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
