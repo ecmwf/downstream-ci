@@ -469,7 +469,7 @@ class Workflow:
                 s = {
                     "uses": "ecmwf/reusable-workflows/ci-hpc@v2",
                     "with": {
-                        "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
+                        "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}"),
                         "github_token": f"${{{{ secrets.{token_name} }}}}",
                         "troika_user": "${{ secrets.HPC_TEST_USER }}",
                         "repository": "${{ matrix.owner_repo_ref }}",
