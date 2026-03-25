@@ -1011,7 +1011,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
+    - uses: ecmwf/reusable-workflows/build-package-with-config@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
@@ -1070,7 +1070,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -1123,7 +1123,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -1189,7 +1189,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -1299,7 +1299,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -1352,7 +1352,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -1838,7 +1838,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -2006,7 +2006,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -2142,7 +2142,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -2362,7 +2362,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -2452,7 +2452,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -2592,7 +2592,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
@@ -2633,7 +2633,7 @@ jobs:
     steps:
     - name: Build dependencies
       id: build-deps
-      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         codecov_upload: false
