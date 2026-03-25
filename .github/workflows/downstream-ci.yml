@@ -1011,7 +1011,7 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
-    - uses: ecmwf/reusable-workflows/build-package-with-config@v2
+    - uses: ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by
       with:
         repository: ${{ matrix.owner_repo_ref }}
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
