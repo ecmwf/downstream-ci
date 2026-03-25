@@ -403,7 +403,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/stack-dependencies
     - name: Run setup script
       id: setup
       env:
@@ -1022,6 +1022,7 @@ jobs:
           ${{ needs.setup.outputs.fckit }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   atlas-orca:
     name: atlas-orca
     needs:
@@ -1051,6 +1052,7 @@ jobs:
           ${{ needs.setup.outputs.fckit }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   cfgrib:
     name: cfgrib
     needs:
@@ -1819,6 +1821,7 @@ jobs:
         build_dependencies: ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   eccodes-python:
     name: eccodes-python
     needs:
@@ -1877,6 +1880,7 @@ jobs:
         build_dependencies: ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   ecflow-light:
     name: ecflow-light
     needs:
@@ -1902,6 +1906,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   eckit:
     name: eckit
     needs:
@@ -1924,6 +1929,7 @@ jobs:
         build_dependencies: ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   fckit:
     name: fckit
     needs:
@@ -1949,6 +1955,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   fdb:
     name: fdb
     needs:
@@ -1980,6 +1987,7 @@ jobs:
           ${{ needs.setup.outputs.odc }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   polytope:
     name: polytope
     needs:
@@ -2119,6 +2127,7 @@ jobs:
           ${{ needs.setup.outputs.odc }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   pygribjump:
     name: pygribjump
     needs:
@@ -2212,6 +2221,7 @@ jobs:
           ${{ needs.setup.outputs.fckit }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   kronos:
     name: kronos
     needs:
@@ -2234,6 +2244,7 @@ jobs:
         build_dependencies: ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   metkit:
     name: metkit
     needs:
@@ -2263,6 +2274,7 @@ jobs:
           ${{ needs.setup.outputs.odc }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   mir:
     name: mir
     needs:
@@ -2294,6 +2306,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   multio:
     name: multio
     needs:
@@ -2335,6 +2348,7 @@ jobs:
           ${{ needs.setup.outputs.mir }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   pymultio:
     name: pymultio
     needs:
@@ -2433,6 +2447,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   pdbufr:
     name: pdbufr
     needs:
@@ -2525,6 +2540,7 @@ jobs:
         build_dependencies: ''
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   plume-plugin-wind-farm:
     name: plume-plugin-wind-farm
     needs:
@@ -2546,6 +2562,7 @@ jobs:
         build_dependencies: ''
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   plume-plugin-axe:
     name: plume-plugin-axe
     needs:
@@ -2567,6 +2584,7 @@ jobs:
         build_dependencies: ''
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
   pyfdb:
     name: pyfdb
     needs:
