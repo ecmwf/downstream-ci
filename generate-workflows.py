@@ -380,7 +380,7 @@ class Workflow:
                         s = {
                             "name": "Build dependencies",
                             "id": "build-deps",
-                            "uses": ("ecmwf/reusable-workflows/build-package-with-config@v2"),
+                            "uses": ("ecmwf/reusable-workflows/build-package-with-config@fix_triggered_by"),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "codecov_upload": False,
