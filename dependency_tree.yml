@@ -333,6 +333,7 @@ eckit-cd-test:
   type: cmake
   triggered_by:
   - ecbuild
+  github_token: GH_REPO_READ_TOKEN
 
 ecmwf-toolbox:
   type: cmake
