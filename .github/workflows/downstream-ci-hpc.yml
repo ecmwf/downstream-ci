@@ -914,7 +914,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -945,7 +945,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -977,7 +977,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1024,7 +1024,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1081,7 +1081,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1120,7 +1120,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1146,7 +1146,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1188,7 +1188,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1231,7 +1231,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1256,7 +1256,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1282,7 +1282,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1309,7 +1309,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1337,7 +1337,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1371,7 +1371,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1402,7 +1402,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1430,7 +1430,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1465,7 +1465,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1498,7 +1498,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1532,7 +1532,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1572,7 +1572,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1604,7 +1604,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1629,7 +1629,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1655,7 +1655,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1682,7 +1682,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1707,7 +1707,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1735,7 +1735,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1762,7 +1762,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1788,7 +1788,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1815,7 +1815,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1840,7 +1840,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1866,7 +1866,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1897,7 +1897,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1937,7 +1937,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -1974,7 +1974,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2000,7 +2000,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2031,7 +2031,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2069,7 +2069,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2101,7 +2101,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2128,7 +2128,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2156,7 +2156,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2184,7 +2184,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2217,7 +2217,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2256,7 +2256,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2302,7 +2302,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2337,7 +2337,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2363,7 +2363,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2393,7 +2393,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2426,7 +2426,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2454,7 +2454,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2478,7 +2478,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2502,7 +2502,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2533,7 +2533,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2567,7 +2567,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2594,7 +2594,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2618,7 +2618,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2642,7 +2642,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2666,7 +2666,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
@@ -2690,7 +2690,7 @@ jobs:
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
-        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER || 'x-access-token' }}
         github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
         troika_user: ${{ secrets.HPC_TEST_USER }}
         repository: ${{ matrix.owner_repo_ref }}
