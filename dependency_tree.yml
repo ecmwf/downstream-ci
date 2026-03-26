@@ -82,6 +82,7 @@ earthkit-plots:
       make image-tests
   deps:
   - earthkit-data
+  - earthkit-regrid
 
 earthkit-regrid:
   type: python
