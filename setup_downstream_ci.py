@@ -217,16 +217,16 @@ for package, conf in dep_tree.items():
     build_package_dep_tree[package] = {}
     if bp_deps := ensure_type(
         list[str],
-        get_required_package_var("triggered_by", dep_tree, package, "downstream-ci", []),
+        get_required_package_var("deps", dep_tree, package, "downstream-ci", []),
     ):
-        build_package_dep_tree[package]["triggered_by"] = bp_deps
+        build_package_dep_tree[package]["deps"] = bp_deps
 
     build_package_hpc_dep_tree[package] = {}
     if hpc_deps := ensure_type(
         list[str],
-        get_required_package_var("triggered_by", dep_tree, package, "downstream-ci-hpc", []),
+        get_required_package_var("deps", dep_tree, package, "downstream-ci-hpc", []),
     ):
-        build_package_hpc_dep_tree[package]["triggered_by"] = hpc_deps
+        build_package_hpc_dep_tree[package]["deps"] = hpc_deps
 
     if hpc_modules := ensure_type(
         list[str],
