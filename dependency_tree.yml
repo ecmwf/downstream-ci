@@ -58,14 +58,14 @@ earthkit-data:
 earthkit-geo:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     config_path: ""
 
 earthkit-meteo:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     config_path: ""
   deps:
@@ -83,17 +83,6 @@ earthkit-plots:
   deps:
   - earthkit-data
   - earthkit-regrid
-
-earthkit-regrid:
-  type: python
-  master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
-  downstream-ci:
-    test_cmd: |
-      pytest --cov=./ --cov-report=xml
-      python -m coverage report
-  shallow_deps:
-  - mir
 
 
 earthkit-time:
@@ -123,7 +112,7 @@ earthkit-transforms:
 earthkit-utils:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     config_path: ""
 
