@@ -36,6 +36,8 @@ earthkit:
   - earthkit-meteo
   - earthkit-utils
   - earthkit-hydro
+  - earthkit-transforms
+  - earthkit-plots
 
 earthkit-data:
   type: python
@@ -82,7 +84,6 @@ earthkit-plots:
       make image-tests
   deps:
   - earthkit-data
-  - earthkit-regrid
 
 
 earthkit-time:
