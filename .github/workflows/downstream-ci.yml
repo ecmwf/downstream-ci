@@ -403,7 +403,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: remove_earthkit_from_anemoi_deps
+        ref: main
     - name: Run setup script
       id: setup
       env:
