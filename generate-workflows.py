@@ -352,7 +352,7 @@ class Workflow:
                 if pkg_conf.get("type", "cmake") == "cmake":
                     needs.append("clang-format")
                     s: dict[str, Any] = {
-                        "uses": ("ecmwf/reusable-workflows/build-package-with-config@v2"),
+                        "uses": ("ecmwf/reusable-workflows/build-package-with-config@upgrade-and-pin-actions"),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
                             "build_package_inputs": ("repository: ${{ matrix.owner_repo_ref }}"),
@@ -378,7 +378,7 @@ class Workflow:
                         s = {
                             "name": "Build dependencies",
                             "id": "build-deps",
-                            "uses": ("ecmwf/reusable-workflows/build-package-with-config@v2"),
+                            "uses": ("ecmwf/reusable-workflows/build-package-with-config@upgrade-and-pin-actions"),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "codecov_upload": False,
@@ -396,7 +396,7 @@ class Workflow:
                         for path in mkdir:
                             steps.append({"run": f"mkdir -p {path}"})
                         ci_python_step: dict[str, Any] = {
-                            "uses": "ecmwf/reusable-workflows/ci-python@v2",
+                            "uses": "ecmwf/reusable-workflows/ci-python@upgrade-and-pin-actions",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "lib_path": ("${{ steps.build-deps.outputs.lib_path }}"),
@@ -430,7 +430,7 @@ class Workflow:
                     else:
                         # pure python package
                         ci_python_step = {
-                            "uses": "ecmwf/reusable-workflows/ci-python@v2",
+                            "uses": "ecmwf/reusable-workflows/ci-python@upgrade-and-pin-actions",
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "checkout": True,
@@ -465,7 +465,7 @@ class Workflow:
                 ]
                 token_name = github_token or "GH_REPO_READ_TOKEN"
                 s = {
-                    "uses": "ecmwf/reusable-workflows/ci-hpc@v2",
+                    "uses": "ecmwf/reusable-workflows/ci-hpc@upgrade-and-pin-actions",
                     "with": {
                         "github_user": ("${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}"),
                         "github_token": f"${{{{ secrets.{token_name} }}}}",
