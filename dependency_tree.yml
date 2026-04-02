@@ -86,6 +86,18 @@ earthkit-plots:
       make image-tests
   deps:
   - earthkit-data
+  - earthkit-geo
+
+earthkit-regrid:
+  type: python
+  master_branch: main
+  requirements_path: tests/downstream-ci-requirements.txt
+  downstream-ci:
+    test_cmd: |
+      pytest --cov=./ --cov-report=xml
+      python -m coverage report
+  shallow_deps:
+  - mir
 
 
 earthkit-time:
@@ -143,11 +155,6 @@ anemoi-datasets:
   toml_opt_dep_sections: all,tests
   skip:
   - downstream-ci-hpc
-  shallow_deps:
-  - earthkit-utils
-  - earthkit-data
-  - earthkit-geo
-  - earthkit-meteo
   deps:
   - anemoi-utils
   - anemoi-transform
@@ -175,10 +182,6 @@ anemoi-transform:
   toml_opt_dep_sections: all,tests
   skip:
   - downstream-ci-hpc
-  shallow_deps:
-  - earthkit-utils
-  - earthkit-data
-  - earthkit-meteo
   downstream-ci:
     config_path: ""
     test_cmd: |
@@ -235,10 +238,6 @@ anemoi-inference:
   toml_opt_dep_sections: all,tests
   skip:
   - downstream-ci-hpc
-  shallow_deps:
-  - earthkit-utils
-  - earthkit-data
-  - earthkit-plots
   deps:
   - anemoi-utils
   - anemoi-transform
