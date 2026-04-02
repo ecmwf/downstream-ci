@@ -63,6 +63,8 @@ earthkit-geo:
   toml_opt_dep_sections: all,test,ci
   downstream-ci:
     config_path: ""
+  shallow_deps:
+  - mir
 
 earthkit-meteo:
   type: python
