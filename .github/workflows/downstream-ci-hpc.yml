@@ -36,6 +36,9 @@ name: downstream-ci-hpc
       earthkit-plots:
         required: false
         type: string
+      earthkit-regrid:
+        required: false
+        type: string
       earthkit-time:
         required: false
         type: string
@@ -215,6 +218,8 @@ jobs:
       earthkit-meteo_matrix: ${{ steps.setup.outputs.earthkit-meteo }}
       earthkit-plots: ${{ steps.prepare-inputs.outputs.earthkit-plots }}
       earthkit-plots_matrix: ${{ steps.setup.outputs.earthkit-plots }}
+      earthkit-regrid: ${{ steps.prepare-inputs.outputs.earthkit-regrid }}
+      earthkit-regrid_matrix: ${{ steps.setup.outputs.earthkit-regrid }}
       earthkit-time: ${{ steps.prepare-inputs.outputs.earthkit-time }}
       earthkit-time_matrix: ${{ steps.setup.outputs.earthkit-time }}
       earthkit-transforms: ${{ steps.prepare-inputs.outputs.earthkit-transforms }}
@@ -326,6 +331,7 @@ jobs:
         echo earthkit-geo="${{ inputs.earthkit-geo }}" >> $GITHUB_OUTPUT
         echo earthkit-meteo="${{ inputs.earthkit-meteo }}" >> $GITHUB_OUTPUT
         echo earthkit-plots="${{ inputs.earthkit-plots }}" >> $GITHUB_OUTPUT
+        echo earthkit-regrid="${{ inputs.earthkit-regrid }}" >> $GITHUB_OUTPUT
         echo earthkit-time="${{ inputs.earthkit-time }}" >> $GITHUB_OUTPUT
         echo earthkit-transforms="${{ inputs.earthkit-transforms }}" >> $GITHUB_OUTPUT
         echo earthkit-utils="${{ inputs.earthkit-utils }}" >> $GITHUB_OUTPUT
@@ -439,6 +445,13 @@ jobs:
             master_branch: main
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.earthkit-plots }}
+            optional_matrix: null
+          earthkit-regrid:ecmwf/earthkit-regrid:
+            path: .github/ci-hpc-config.yml
+            python: true
+            master_branch: main
+            develop_branch: develop
+            input: ${{ steps.prepare-inputs.outputs.earthkit-regrid }}
             optional_matrix: null
           earthkit-time:ecmwf/earthkit-time:
             path: .github/ci-hpc-config.yml
@@ -1153,14 +1166,10 @@ jobs:
     - fdb
     - metkit
     - earthkit-utils
-<<<<<<< HEAD
-    - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-plots_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-plots)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-plots') }}
-=======
     - earthkit-geo
+    - mir
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-plots_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-plots)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-plots') }}
->>>>>>> main
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-plots_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.mir || needs.setup.outputs.earthkit-plots)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-plots') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-plots_matrix) }}
@@ -1185,6 +1194,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.mir }}
         python_dependencies: |-
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
           ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
@@ -1195,11 +1205,34 @@ jobs:
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
           ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-<<<<<<< HEAD
-=======
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
->>>>>>> main
         python_toml_opt_dep_sections: healpix,test
+  earthkit-regrid:
+    name: earthkit-regrid
+    needs:
+    - mir
+    - setup
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-regrid_matrix && (needs.setup.outputs.mir || needs.setup.outputs.earthkit-regrid)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-regrid') }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup.outputs.earthkit-regrid_matrix) }}
+    env:
+      DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+    runs-on:
+    - self-hosted
+    - linux
+    - hpc
+    steps:
+    - uses: ecmwf/reusable-workflows/ci-hpc@v2
+      with:
+        github_user: ${{ secrets.BUILD_PACKAGE_HPC_GITHUB_USER }}
+        github_token: ${{ secrets.GH_REPO_READ_TOKEN }}
+        troika_user: ${{ secrets.HPC_TEST_USER }}
+        repository: ${{ matrix.owner_repo_ref }}
+        build_config: ${{ matrix.config_path }}
+        dependencies: ${{ needs.setup.outputs.mir }}
+        python_dependencies: ''
+        python_requirements: tests/downstream-ci-requirements.txt
   earthkit-time:
     name: earthkit-time
     needs:
