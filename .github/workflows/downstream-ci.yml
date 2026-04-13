@@ -403,7 +403,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feat/consolidate_earthkit
     - name: Run setup script
       id: setup
       env:
@@ -1109,11 +1109,14 @@ jobs:
     - metkit
     - earthkit-utils
     - earthkit-geo
+    - mir
     - earthkit-meteo
     - earthkit-hydro
+    - earthkit-transforms
+    - earthkit-plots
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-hydro || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.mir || needs.setup.outputs.earthkit-meteo || needs.setup.outputs.earthkit-hydro || needs.setup.outputs.earthkit-transforms || needs.setup.outputs.earthkit-plots || needs.setup.outputs.earthkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit_matrix) }}
@@ -1136,6 +1139,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.mir }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
@@ -1154,6 +1158,8 @@ jobs:
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
           ${{ needs.setup.outputs.earthkit-meteo || (needs.setup.outputs.use_master == 'True' && 'earthkit-meteo:ecmwf/earthkit-meteo@main') || 'earthkit-meteo:ecmwf/earthkit-meteo@develop' }}
           ${{ needs.setup.outputs.earthkit-hydro || (needs.setup.outputs.use_master == 'True' && 'earthkit-hydro:ecmwf/earthkit-hydro@main') || 'earthkit-hydro:ecmwf/earthkit-hydro@develop' }}
+          ${{ needs.setup.outputs.earthkit-transforms || (needs.setup.outputs.use_master == 'True' && 'earthkit-transforms:ecmwf/earthkit-transforms@main') || 'earthkit-transforms:ecmwf/earthkit-transforms@main' }}
+          ${{ needs.setup.outputs.earthkit-plots || (needs.setup.outputs.use_master == 'True' && 'earthkit-plots:ecmwf/earthkit-plots@main') || 'earthkit-plots:ecmwf/earthkit-plots@develop' }}
         toml_opt_dep_sections: all,test,ci
         test_cmd: 'python -m pytest --forked -vv --cov=. --cov-report=html
 
@@ -1227,9 +1233,10 @@ jobs:
   earthkit-geo:
     name: earthkit-geo
     needs:
+    - mir
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-geo_matrix && (needs.setup.outputs.earthkit-geo)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-geo') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-geo_matrix && (needs.setup.outputs.mir || needs.setup.outputs.earthkit-geo)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-geo') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-geo_matrix) }}
@@ -1237,12 +1244,22 @@ jobs:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
     runs-on: ${{ matrix.labels }}
     steps:
+    - name: Build dependencies
+      id: build-deps
+      uses: ecmwf/reusable-workflows/build-package-with-config@v2
+      with:
+        repository: ${{ matrix.owner_repo_ref }}
+        codecov_upload: false
+        build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
+        build_config: ${{ matrix.config_path }}
+        build_dependencies: ${{ needs.setup.outputs.mir }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
-        checkout: true
+        lib_path: ${{ steps.build-deps.outputs.lib_path }}
+        bin_paths: ${{ steps.build-deps.outputs.bin_paths }}
         python_dependencies: ''
-        requirements_path: tests/downstream-ci-requirements.txt
+        toml_opt_dep_sections: all,test,ci
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-meteo:
@@ -1264,7 +1281,7 @@ jobs:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
         python_dependencies: ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-        requirements_path: tests/downstream-ci-requirements.txt
+        toml_opt_dep_sections: all,test,ci
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-plots:
@@ -1286,9 +1303,10 @@ jobs:
     - metkit
     - earthkit-utils
     - earthkit-geo
+    - mir
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-plots_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.earthkit-plots)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-plots') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-plots_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.earthkit-geo || needs.setup.outputs.mir || needs.setup.outputs.earthkit-plots)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-plots') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-plots_matrix) }}
@@ -1311,6 +1329,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.fdb }}
           ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.mir }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
@@ -1438,7 +1457,7 @@ jobs:
         repository: ${{ matrix.owner_repo_ref }}
         checkout: true
         python_dependencies: ''
-        requirements_path: tests/downstream-ci-requirements.txt
+        toml_opt_dep_sections: all,test,ci
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
   earthkit-hydro:

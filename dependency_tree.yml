@@ -36,6 +36,8 @@ earthkit:
   - earthkit-meteo
   - earthkit-utils
   - earthkit-hydro
+  - earthkit-transforms
+  - earthkit-plots
 
 earthkit-data:
   type: python
@@ -58,14 +60,16 @@ earthkit-data:
 earthkit-geo:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     config_path: ""
+  shallow_deps:
+  - mir
 
 earthkit-meteo:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     config_path: ""
   deps:
@@ -123,7 +127,7 @@ earthkit-transforms:
 earthkit-utils:
   type: python
   master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
+  toml_opt_dep_sections: all,test,ci
   downstream-ci:
     config_path: ""
 
