@@ -583,8 +583,10 @@ jobs:
             - clang@macos-13-x86
             - gnu@debian-12
             - gnu-14.2.0
+            - gnu-15.2.0
             - nvidia-24.11
             - intel-2025.0.1
+            - intel-2025.3.1
           ecflow-light:ecmwf/ecflow-light:
             path: .github/ci-hpc-config.yml
             python: false
@@ -850,6 +852,13 @@ jobs:
             compiler_modules: gcc/14.2.0
             name: gnu-14.2.0
             site: atos
+          - compiler: gnu-15.2.0
+            compiler_cc: gcc
+            compiler_cxx: g++
+            compiler_fc: gfortran
+            compiler_modules: gcc/15.2.0
+            name: gnu-15.2.0
+            site: atos
           - compiler: nvidia-24.11
             compiler_cc: nvc
             compiler_cxx: nvc++
@@ -864,6 +873,13 @@ jobs:
             compiler_modules: prgenv/intel-llvm,intel/2025.0.1
             name: intel-2025.0.1
             site: atos
+          - compiler: intel-2025.3.1
+            compiler_cc: icx
+            compiler_cxx: icpx
+            compiler_fc: ifx
+            compiler_modules: prgenv/intel-llvm,intel/2025.3.1
+            name: intel-2025.3.1
+            site: atos
           - compiler: aocc-4.0.0
             compiler_cc: clang
             compiler_cxx: clang++
@@ -874,8 +890,10 @@ jobs:
           name:
           - lumi
           - gnu-14.2.0
+          - gnu-15.2.0
           - nvidia-24.11
           - intel-2025.0.1
+          - intel-2025.3.1
           - aocc-4.0.0
         WORKFLOW_NAME: downstream-ci-hpc
         DOWNSTREAM_CI_GROUP: ${{ inputs.ci_group }}

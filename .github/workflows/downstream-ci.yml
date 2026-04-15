@@ -601,9 +601,6 @@ jobs:
             - clang@macos-13-arm
             - clang@macos-13-x86
             - gnu@debian-12
-            - gnu-14.2.0
-            - nvidia-24.11
-            - intel-2025.0.1
           ecflow-light:ecmwf/ecflow-light:
             path: .github/ci-config.yml
             python: false
