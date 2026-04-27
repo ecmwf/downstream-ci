@@ -349,7 +349,7 @@ polytope:
       python -m pytest -m 'not fdb' tests --cov=./ --cov-report=xml
       python -m coverage report
     env:
-      CARGO_TARGET_DIR: $RUNNER_TEMP/cargo
+      CARGO_TARGET_DIR: /opt/actions-runner/work/_work/_temp/cargo
   downstream-ci-hpc:
     config_path: ".github/ci-hpc-config.yml"
     env:
