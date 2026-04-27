@@ -403,7 +403,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: cargo-runner-temp-fix
     - name: Run setup script
       id: setup
       env:
@@ -1980,7 +1980,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.polytope_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
-      CARGO_TARGET_DIR: $RUNNER_TEMP/cargo
+      CARGO_TARGET_DIR: /opt/actions-runner/work/_work/_temp/cargo
     runs-on: ${{ matrix.labels }}
     steps:
     - name: Build dependencies
