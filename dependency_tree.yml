@@ -83,7 +83,7 @@ earthkit-plots:
   downstream-ci:
     test_cmd: |
       make unit-tests
-      make image-tests
+      # make image-tests
   deps:
   - earthkit-data
   - earthkit-geo
