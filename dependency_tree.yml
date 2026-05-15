@@ -61,7 +61,7 @@ earthkit-geo:
   type: python
   master_branch: main
   toml_opt_dep_sections: all,test,ci
-  deps:
+  shallow_deps:
   - mir
 
 earthkit-meteo:
