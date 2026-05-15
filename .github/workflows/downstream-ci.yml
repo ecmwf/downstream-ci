@@ -445,7 +445,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.earthkit-data }}
             optional_matrix: null
           earthkit-geo:ecmwf/earthkit-geo:
-            path: ''
+            path: .github/ci-config.yml
             python: true
             master_branch: main
             develop_branch: develop
