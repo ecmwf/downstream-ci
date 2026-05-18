@@ -331,6 +331,11 @@ fdb:
   type: cmake
   deps:
   - metkit
+  optional_matrix:
+  - gnu@debian-12
+  - gnu@rocky-9.5
+  - clang@macos-13-arm
+  - clang@macos-13-x86
 
 polytope:
   type: python
