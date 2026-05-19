@@ -452,7 +452,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.earthkit-geo }}
             optional_matrix: null
           earthkit-meteo:ecmwf/earthkit-meteo:
-            path: ''
+            path: .github/ci-config.yml
             python: true
             master_branch: main
             develop_branch: develop
