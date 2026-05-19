@@ -68,8 +68,6 @@ earthkit-meteo:
   type: python
   master_branch: main
   toml_opt_dep_sections: all,test,ci
-  downstream-ci:
-    config_path: ""
   deps:
   - earthkit-utils
 
@@ -102,7 +100,7 @@ earthkit-time:
   type: python
   master_branch: main
   downstream-ci:
-    config_path: ""
+    : ""
     test_cmd: |
       python -m pytest --cov=./ --cov-report=xml
       python -m coverage report
@@ -114,7 +112,7 @@ earthkit-transforms:
   develop_branch: main
   toml_opt_dep_sections: all
   downstream-ci:
-    config_path: ""
+    : ""
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no make unit-tests
   shallow_deps:
@@ -127,7 +125,7 @@ earthkit-utils:
   master_branch: main
   toml_opt_dep_sections: all,test,ci
   downstream-ci:
-    config_path: ""
+    : ""
 
 earthkit-hydro:
   type: python
@@ -140,7 +138,7 @@ earthkit-hydro:
   env:
     CARGO_TARGET_DIR: /var/tmp
   downstream-ci:
-    config_path: ""
+    : ""
     test_cmd: |
       echo $(pwd)
       python -m pytest --cov-report term --cov-report xml:coverage.xml --cov ./
@@ -157,7 +155,7 @@ anemoi-datasets:
   - anemoi-utils
   - anemoi-transform
   downstream-ci:
-    config_path: ""
+    : ""
     env:
       RUNNER_TYPE: "self-hosted"
     test_cmd: |
@@ -169,7 +167,7 @@ anemoi-utils:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   downstream-ci:
-    config_path: ""
+    : ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init'
 
@@ -181,7 +179,7 @@ anemoi-transform:
   skip:
   - downstream-ci-hpc
   downstream-ci:
-    config_path: ""
+    : ""
     test_cmd: |
       FINDLIBS_DISABLE_PACKAGE=no python -m pytest -vv -m 'not notebook and not no_cache_init'
 
@@ -195,7 +193,7 @@ anemoi-graphs:
   - anemoi-datasets
   - anemoi-utils
   downstream-ci:
-    config_path: ""
+    : ""
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init'
 
