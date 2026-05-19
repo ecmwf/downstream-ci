@@ -70,6 +70,7 @@ earthkit-meteo:
   toml_opt_dep_sections: all,test,ci
   deps:
   - earthkit-utils
+  - earthkit-data
 
 earthkit-plots:
   type: python
