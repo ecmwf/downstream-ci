@@ -719,7 +719,7 @@ jobs:
             input: ${{ steps.prepare-inputs.outputs.pymultio }}
             optional_matrix: null
           multiurl:ecmwf/multiurl:
-            path: .github/ci-config.yml
+            path: ''
             python: true
             master_branch: main
             develop_branch: main
