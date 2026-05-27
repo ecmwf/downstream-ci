@@ -384,7 +384,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: task/additional_compiler_toolchains
     - name: Run setup script
       id: setup
       env:
@@ -585,7 +585,6 @@ jobs:
             - gnu-15.2.0
             - gnu-14.2.0
             - nvidia-24.11
-            - intel-2021.4.0
             - intel-2025.0.1
             - intel-2025.3.1
           ecflow-light:ecmwf/ecflow-light:
