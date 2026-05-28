@@ -172,7 +172,10 @@ for owner_repo, val in ci_config.items():
     path = val.get("path", "")
     config = get_config(owner, repo, pkg_name, ref, path)
 
+    print("config for", pkg_name, ":", config)
+
     if not config["setup_matrix"]:
+        print("continue: no matrix setup for package", pkg_name)
         continue
 
     # is this whole workflow to be skipped by the package?
@@ -182,7 +185,6 @@ for owner_repo, val in ci_config.items():
         continue
 
     matrices[pkg_name] = copy.deepcopy(matrix)
-    # ensure lists exist even if loaded YAML left them as None
     matrices[pkg_name].setdefault("name", [])
     matrices[pkg_name].setdefault("include", [])
 
