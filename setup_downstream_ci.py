@@ -49,10 +49,10 @@ import yaml
 from shared_util import ensure_not_none, ensure_type, get_required_package_var
 
 # Load inputs
-ci_config: dict = yaml.safe_load(os.getenv("CONFIG", ""))
-python_versions = yaml.safe_load(os.getenv("PYTHON_VERSIONS", ""))
-python_jobs = yaml.safe_load(os.getenv("PYTHON_JOBS", ""))
-matrix = yaml.safe_load(os.getenv("MATRIX", ""))
+ci_config: dict = yaml.safe_load(os.getenv("CONFIG", "")) or {}
+python_versions = yaml.safe_load(os.getenv("PYTHON_VERSIONS", "")) or []
+python_jobs = yaml.safe_load(os.getenv("PYTHON_JOBS", "")) or []
+matrix = yaml.safe_load(os.getenv("MATRIX", "")) or {"name": [], "include": []}
 optional_matrix: dict = yaml.safe_load(os.getenv("OPTIONAL_MATRIX", "")) or {}
 skip_jobs = os.getenv("SKIP_MATRIX_JOBS", "").splitlines()
 token = os.getenv("TOKEN", "")
@@ -85,7 +85,8 @@ def get_config(owner, repo, pkg_name, ref, path):
         return return_obj
 
     url = f"https://raw.githubusercontent.com/{owner}/{repo}/{ref}/{path}"
-    response = requests.get(url, headers={"Authorization": f"token {token}"})
+    headers = {"Authorization": f"token {token}"} if token else {}
+    response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         content = response.content.decode()
@@ -171,7 +172,10 @@ for owner_repo, val in ci_config.items():
     path = val.get("path", "")
     config = get_config(owner, repo, pkg_name, ref, path)
 
+    print("config for", pkg_name, ":", config)
+
     if not config["setup_matrix"]:
+        print("continue: no matrix setup for package", pkg_name)
         continue
 
     # is this whole workflow to be skipped by the package?
@@ -181,6 +185,8 @@ for owner_repo, val in ci_config.items():
         continue
 
     matrices[pkg_name] = copy.deepcopy(matrix)
+    matrices[pkg_name].setdefault("name", [])
+    matrices[pkg_name].setdefault("include", [])
 
     for opt in optional_matrix.get("name", []):
         if val.get("optional_matrix", []) and opt in val.get("optional_matrix", []):
