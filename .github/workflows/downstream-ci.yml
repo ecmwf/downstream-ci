@@ -1973,13 +1973,13 @@ jobs:
     name: fdb
     needs:
     - ecbuild
-    - eccodes
     - eckit
+    - eccodes
     - odc
     - metkit
     - setup
     - clang-format
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.fdb_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'fdb') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.fdb_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'fdb') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.fdb_matrix) }}
@@ -1994,8 +1994,8 @@ jobs:
         build_config: ${{ matrix.config_path }}
         build_dependencies: |-
           ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.metkit }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
@@ -2004,8 +2004,8 @@ jobs:
     name: polytope
     needs:
     - ecbuild
-    - eccodes
     - eckit
+    - eccodes
     - odc
     - metkit
     - fdb
@@ -2015,7 +2015,7 @@ jobs:
     - conflator
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.gribjump || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump || needs.setup.outputs.conflator || needs.setup.outputs.polytope)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.polytope_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.gribjump || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump || needs.setup.outputs.conflator || needs.setup.outputs.polytope)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'polytope') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.polytope_matrix) }}
@@ -2034,8 +2034,8 @@ jobs:
         build_config: ${{ matrix.config_path }}
         build_dependencies: |-
           ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.fdb }}
@@ -2110,14 +2110,14 @@ jobs:
     name: gribjump
     needs:
     - ecbuild
-    - eccodes
     - eckit
+    - eccodes
     - odc
     - metkit
     - fdb
     - setup
     - clang-format
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.gribjump_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.gribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'gribjump') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.gribjump_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.gribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'gribjump') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.gribjump_matrix) }}
@@ -2132,8 +2132,8 @@ jobs:
         build_config: ${{ matrix.config_path }}
         build_dependencies: |-
           ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.fdb }}
@@ -2143,8 +2143,8 @@ jobs:
     name: pygribjump
     needs:
     - ecbuild
-    - eccodes
     - eckit
+    - eccodes
     - odc
     - metkit
     - fdb
@@ -2152,7 +2152,7 @@ jobs:
     - findlibs
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pygribjump_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.gribjump || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pygribjump') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pygribjump_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.gribjump || needs.setup.outputs.findlibs || needs.setup.outputs.pygribjump)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pygribjump') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pygribjump_matrix) }}
@@ -2170,8 +2170,8 @@ jobs:
         build_config: ${{ matrix.config_path }}
         build_dependencies: |-
           ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.fdb }}
@@ -2258,12 +2258,12 @@ jobs:
     name: metkit
     needs:
     - ecbuild
-    - eccodes
     - eckit
+    - eccodes
     - odc
     - setup
     - clang-format
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.metkit_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.metkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'metkit') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.metkit_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.metkit)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'metkit') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.metkit_matrix) }}
@@ -2278,8 +2278,8 @@ jobs:
         build_config: ${{ matrix.config_path }}
         build_dependencies: |-
           ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload }}
@@ -2591,15 +2591,15 @@ jobs:
     name: pyfdb
     needs:
     - ecbuild
-    - eccodes
     - eckit
+    - eccodes
     - odc
     - metkit
     - fdb
     - findlibs
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyfdb_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eccodes || needs.setup.outputs.eckit || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.findlibs || needs.setup.outputs.pyfdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyfdb') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.pyfdb_matrix && (needs.setup.outputs.ecbuild || needs.setup.outputs.eckit || needs.setup.outputs.eccodes || needs.setup.outputs.odc || needs.setup.outputs.metkit || needs.setup.outputs.fdb || needs.setup.outputs.findlibs || needs.setup.outputs.pyfdb)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'pyfdb') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.pyfdb_matrix) }}
@@ -2620,8 +2620,8 @@ jobs:
         build_config: ${{ matrix.config_path }}
         build_dependencies: |-
           ${{ needs.setup.outputs.ecbuild }}
-          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.metkit }}
           ${{ needs.setup.outputs.fdb }}
