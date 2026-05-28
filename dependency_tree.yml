@@ -449,8 +449,8 @@ mars-client-cpp:
   deps:
   - ecbuild
   - libaec
-  - eccodes
   - eckit
+  - eccodes
   - odc
   - metkit
   - atlas
