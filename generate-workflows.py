@@ -33,11 +33,10 @@ def get_package_deps(package: str, dep_tree: dict, wf_name: str, deps: list[str]
     direct_deps = package_config.get(wf_name, {}).get("deps") or package_config.get("deps") or []
 
     for dep in direct_deps:
-        if dep not in deps:
-            deps.append(dep)
-
         if dep in dep_tree:
             get_package_deps(dep, dep_tree, wf_name, deps)
+        if dep not in deps:
+            deps.append(dep)
 
     shallow_deps = package_config.get("shallow_deps", [])
 
