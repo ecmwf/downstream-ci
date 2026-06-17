@@ -384,7 +384,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feature/downstream-runner-fdb-update
     - name: Run setup script
       id: setup
       env:
@@ -614,7 +614,11 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.fdb }}
-            optional_matrix: null
+            optional_matrix:
+            - gnu@debian-12
+            - gnu@rocky-9.5
+            - clang@macos-13-arm
+            - clang@macos-13-x86
           polytope:ecmwf/polytope:
             path: .github/ci-hpc-config.yml
             python: true
