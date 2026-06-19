@@ -85,17 +85,6 @@ earthkit-plots:
   - earthkit-data
   - earthkit-geo
 
-earthkit-regrid:
-  type: python
-  master_branch: main
-  requirements_path: tests/downstream-ci-requirements.txt
-  downstream-ci:
-    test_cmd: |
-      pytest --cov=./ --cov-report=xml
-      python -m coverage report
-  shallow_deps:
-  - mir
-
 
 earthkit-time:
   type: python
