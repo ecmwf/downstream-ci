@@ -206,6 +206,7 @@ anemoi-models:
   toml_opt_dep_sections: all,tests
   deps:
   - anemoi-utils
+  - anemoi-graphs
   downstream-ci:
     config_path: ""
     test_cmd: |
