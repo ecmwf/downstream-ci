@@ -18,10 +18,14 @@ name: test-direct-login-slurm
 jobs:
   submit-two-slurm-scripts:
     name: Submit two SLURM scripts from hpc2020-login
+    # Use the `hpc-dev` runner: it carries the dev build-package-hpc that
+    # tracks feature branches (here `enable_login_direct`), which is the only
+    # version that knows the new `direct` sites (`hpc2020-login`/`lumi-login`).
+    # The stable `hpc` runner rejects `--site=hpc2020-login`.
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - name: Submit two SLURM scripts via the direct login node
       uses: ecmwf/reusable-workflows/ci-hpc-generic@v2
