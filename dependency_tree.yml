@@ -50,6 +50,7 @@ earthkit-data:
   - pyodc
   - pyfdb
   - earthkit-utils
+  env:
   downstream-ci:
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' -k 'not netcdf' --cov=. --cov-report=xml
@@ -61,6 +62,8 @@ earthkit-geo:
   type: python
   master_branch: main
   toml_opt_dep_sections: all,test,ci
+  env:
+    UV_PRERELEASE: allow
   shallow_deps:
   - mir
 
