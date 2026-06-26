@@ -50,7 +50,6 @@ earthkit-data:
   - pyodc
   - pyfdb
   - earthkit-utils
-  env:
   downstream-ci:
     test_cmd: |
       python -m pytest -vv -m 'not notebook and not no_cache_init' -k 'not netcdf' --cov=. --cov-report=xml
