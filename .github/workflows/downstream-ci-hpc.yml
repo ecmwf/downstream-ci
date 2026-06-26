@@ -1125,6 +1125,7 @@ jobs:
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-geo_matrix) }}
     env:
       DEP_TREE: ${{ needs.setup.outputs.dep_tree }}
+      UV_PRERELEASE: allow
     runs-on:
     - self-hosted
     - linux
