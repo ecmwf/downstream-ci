@@ -61,6 +61,8 @@ earthkit-geo:
   type: python
   master_branch: main
   toml_opt_dep_sections: all,test,ci
+  env:
+    UV_PRERELEASE: allow
   shallow_deps:
   - mir
 
@@ -195,6 +197,7 @@ anemoi-models:
   toml_opt_dep_sections: all,tests
   deps:
   - anemoi-utils
+  - anemoi-graphs
   downstream-ci:
     config_path: ""
     test_cmd: |
