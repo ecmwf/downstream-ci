@@ -352,7 +352,7 @@ class Workflow:
                 if pkg_conf.get("type", "cmake") == "cmake":
                     needs.append("clang-format")
                     s: dict[str, Any] = {
-                        "uses": ("ecmwf/reusable-workflows/build-package-with-config@v2"),
+                        "uses": ("ecmwf/reusable-workflows/build-package-with-config@test-build-package-node-24"),
                         "with": {
                             "repository": "${{ matrix.owner_repo_ref }}",
                             "build_package_inputs": ("repository: ${{ matrix.owner_repo_ref }}"),
@@ -378,7 +378,7 @@ class Workflow:
                         s = {
                             "name": "Build dependencies",
                             "id": "build-deps",
-                            "uses": ("ecmwf/reusable-workflows/build-package-with-config@v2"),
+                            "uses": ("ecmwf/reusable-workflows/build-package-with-config@test-build-package-node-24"),
                             "with": {
                                 "repository": "${{ matrix.owner_repo_ref }}",
                                 "codecov_upload": False,
