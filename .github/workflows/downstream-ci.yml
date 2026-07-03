@@ -1222,11 +1222,25 @@ jobs:
   earthkit-geo:
     name: earthkit-geo
     needs:
-    - mir
     - earthkit-data
+    - cfgrib
+    - eccodes-python
+    - eccodes
+    - ecbuild
+    - findlibs
+    - multiurl
+    - pdbufr
+    - pyodc
+    - odc
+    - eckit
+    - pyfdb
+    - fdb
+    - metkit
+    - earthkit-utils
+    - mir
     - setup
     - python-qa
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-geo_matrix && (needs.setup.outputs.mir || needs.setup.outputs.earthkit-data || needs.setup.outputs.earthkit-geo)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-geo') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.earthkit-geo_matrix && (needs.setup.outputs.earthkit-data || needs.setup.outputs.cfgrib || needs.setup.outputs.eccodes-python || needs.setup.outputs.eccodes || needs.setup.outputs.ecbuild || needs.setup.outputs.findlibs || needs.setup.outputs.multiurl || needs.setup.outputs.pdbufr || needs.setup.outputs.pyodc || needs.setup.outputs.odc || needs.setup.outputs.eckit || needs.setup.outputs.pyfdb || needs.setup.outputs.fdb || needs.setup.outputs.metkit || needs.setup.outputs.earthkit-utils || needs.setup.outputs.mir || needs.setup.outputs.earthkit-geo)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'earthkit-geo') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.earthkit-geo_matrix) }}
@@ -1243,13 +1257,29 @@ jobs:
         codecov_upload: false
         build_package_inputs: 'repository: ${{ matrix.owner_repo_ref }}'
         build_config: ${{ matrix.config_path }}
-        build_dependencies: ${{ needs.setup.outputs.mir }}
+        build_dependencies: |-
+          ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.ecbuild }}
+          ${{ needs.setup.outputs.odc }}
+          ${{ needs.setup.outputs.eckit }}
+          ${{ needs.setup.outputs.fdb }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.mir }}
     - uses: ecmwf/reusable-workflows/ci-python@v2
       with:
         repository: ${{ matrix.owner_repo_ref }}
         lib_path: ${{ steps.build-deps.outputs.lib_path }}
         bin_paths: ${{ steps.build-deps.outputs.bin_paths }}
-        python_dependencies: ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+        python_dependencies: |-
+          ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
+          ${{ needs.setup.outputs.cfgrib || (needs.setup.outputs.use_master == 'True' && 'cfgrib:ecmwf/cfgrib@master') || 'cfgrib:ecmwf/cfgrib@master' }}
+          ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
+          ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
+          ${{ needs.setup.outputs.multiurl || (needs.setup.outputs.use_master == 'True' && 'multiurl:ecmwf/multiurl@main') || 'multiurl:ecmwf/multiurl@main' }}
+          ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
+          ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
+          ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
+          ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
         toml_opt_dep_sections: all,test,ci
         codecov_upload: ${{ contains(needs.setup.outputs.trigger_pkgs, github.job) && inputs.codecov_upload && needs.setup.outputs.py_codecov_platform == matrix.name }}
         codecov_token: ${{ secrets.CODECOV_UPLOAD_TOKEN }}
