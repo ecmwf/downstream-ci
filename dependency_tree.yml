@@ -63,9 +63,10 @@ earthkit-geo:
   toml_opt_dep_sections: all,test,ci
   env:
     UV_PRERELEASE: allow
+  deps:
+  - earthkit-data
   shallow_deps:
   - mir
-  - earthkit-data
 
 earthkit-meteo:
   type: python
