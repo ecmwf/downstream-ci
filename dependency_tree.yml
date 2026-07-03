@@ -65,6 +65,7 @@ earthkit-geo:
     UV_PRERELEASE: allow
   shallow_deps:
   - mir
+  - earthkit-data
 
 earthkit-meteo:
   type: python
