@@ -21,7 +21,7 @@ cfgrib:
   develop_branch: master
   requirements_path: ci/requirements-tests.in
   deps:
-  - eccodes-python
+  - eccodes
 
 earthkit:
   type: python
@@ -279,7 +279,7 @@ eccodes:
     - libaec
     - ecbuild
 
-eccodes-python:
+eccodes:
   type: python
   env:
     ECCODES_PYTHON_TRACE_LIB_SEARCH: 1
@@ -312,6 +312,16 @@ eckit:
   type: cmake
   deps:
   - ecbuild
+
+eckit-python:
+  type: python
+  repo: ecmwf/eckit/python/eckit
+  deps:
+  - eckit
+  downstream-ci:
+    config_path: ".github/ci-config-eckit-python.yml"
+  downstream-ci-hpc:
+    config_path: ".github/ci-hpc-config-eckit-python.yml"
 
 ecmwf-toolbox:
   type: cmake
@@ -539,7 +549,7 @@ pdbufr:
       python -m pytest --cov=./ --cov-report=xml -k 'not test_notebooks'
       python -m pytest -v -k 'test_notebooks'
   deps:
-  - eccodes-python
+  - eccodes
 
 pgen:
   type: cmake
