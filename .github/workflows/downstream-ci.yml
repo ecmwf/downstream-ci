@@ -397,7 +397,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ecmwf/downstream-ci
-        ref: fix/update-danu-conda-deps
+        ref: main
     - name: Run setup script
       id: setup
       env:
