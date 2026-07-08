@@ -625,7 +625,7 @@ danu:
   master_branch: main
   requirements_path: requirements.txt
   test_cmd: "python -m pytest"
-  conda_deps: "'numpy<2' scipy pcraster gdal netCDF4 pandas dask lz4 eccodes magics"
+  conda_deps: "'numpy<2.4' scipy pcraster=4.4.2 libjxl=0.11 gdal libnetcdf 'netcdf4<=1.7.2' magics rasterio bottleneck pyproj numba"
   downstream-ci:
     config_path: ""
   downstream-ci-hpc:
