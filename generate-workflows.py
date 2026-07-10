@@ -169,7 +169,7 @@ class Workflow:
         steps: list[dict[str, Any]] = [
             {
                 "name": "Checkout Repository",
-                "uses": "actions/checkout@v4",
+                "uses": "actions/checkout@v7",
                 "with": {
                     "repository": "${{ inputs.repository }}",
                     "ref": "${{ inputs.ref }}",
@@ -177,7 +177,7 @@ class Workflow:
             },
             {
                 "name": "Setup Python",
-                "uses": "actions/setup-python@v4",
+                "uses": "actions/setup-python@v6",
                 "with": {"python-version": "3.x"},
             },
             {
@@ -212,7 +212,7 @@ class Workflow:
 
         steps = r"""
                 - name: Checkout repository
-                  uses: actions/checkout@v4
+                  uses: actions/checkout@v7
 
                 - name: Install clang-format
                   run: |
@@ -529,7 +529,7 @@ class Workflow:
         steps.append(
             {
                 "name": "checkout reusable wfs repo",
-                "uses": "actions/checkout@v4",
+                "uses": "actions/checkout@v7",
                 "with": {
                     "repository": "ecmwf/downstream-ci",
                     "ref": downstream_ci_ref,

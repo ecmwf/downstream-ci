@@ -14,7 +14,7 @@ jobs:
     if: github.actor != 'github-actions[bot]' && !github.event.pull_request.head.repo.fork
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         ref: ${{ github.head_ref || github.ref  }}
         token: ${{ secrets.REBUILD_PUSH_TOKEN }}
@@ -24,7 +24,7 @@ jobs:
         git config --global user.email "github-actions@example.com"
         git config --global user.name "github-actions[bot]"
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: "3.x"
 
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout private-downstream-ci
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: ecmwf/private-downstream-ci
         ref: main
@@ -77,7 +77,7 @@ jobs:
         path: private-downstream-ci
 
     - name: Checkout self
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         ref: ${{ github.head_ref || github.ref  }}
         path: downstream-ci
@@ -87,7 +87,7 @@ jobs:
         git config --global user.email "github-actions@example.com"
         git config --global user.name "github-actions[bot]"
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: "3.x"
 

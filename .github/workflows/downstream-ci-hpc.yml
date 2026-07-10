@@ -375,10 +375,10 @@ jobs:
         echo covjsonkit="${{ inputs.covjsonkit }}" >> $GITHUB_OUTPUT
         echo danu="${{ inputs.danu }}" >> $GITHUB_OUTPUT
     - name: checkout reusable wfs repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: bump-actions
     - name: Run setup script
       id: setup
       env:
