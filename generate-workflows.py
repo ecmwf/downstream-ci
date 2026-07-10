@@ -474,7 +474,7 @@ class Workflow:
                         "build_config": "${{ matrix.config_path }}",
                         "dependencies": "\n".join(cmake_deps),
                         "python_dependencies": "\n".join(python_deps),
-                        "dev_runner": True,
+                        "dev-runner": True,
                     },
                 }
                 if pkg_conf.get("requirements_path"):
