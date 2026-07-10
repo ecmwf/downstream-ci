@@ -394,10 +394,10 @@ jobs:
         echo covjsonkit="${{ inputs.covjsonkit }}" >> $GITHUB_OUTPUT
         echo danu="${{ inputs.danu }}" >> $GITHUB_OUTPUT
     - name: checkout reusable wfs repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: bump-actions
     - name: Run setup script
       id: setup
       env:
@@ -924,12 +924,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
     - name: Setup Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
         python-version: 3.x
     - name: Install Python Dependencies
@@ -952,7 +952,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
     - name: Install clang-format
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
