@@ -461,7 +461,7 @@ class Workflow:
                 runs_on = [
                     "self-hosted",
                     "linux",
-                    "hpc",
+                    "hpc-dev",
                 ]
                 token_name = github_token or "GH_REPO_READ_TOKEN"
                 s = {
@@ -474,7 +474,6 @@ class Workflow:
                         "build_config": "${{ matrix.config_path }}",
                         "dependencies": "\n".join(cmake_deps),
                         "python_dependencies": "\n".join(python_deps),
-                        "dev-runner": True,
                     },
                 }
                 if pkg_conf.get("requirements_path"):
