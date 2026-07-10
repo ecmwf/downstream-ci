@@ -916,7 +916,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.fckit }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   atlas-orca:
     name: atlas-orca
     needs:
@@ -949,7 +949,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.fckit }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   cfgrib:
     name: cfgrib
     needs:
@@ -982,7 +982,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_requirements: ci/requirements-tests.in
   earthkit:
     name: earthkit
@@ -1050,7 +1050,7 @@ jobs:
           ${{ needs.setup.outputs.earthkit-hydro || (needs.setup.outputs.use_master == 'True' && 'earthkit-hydro:ecmwf/earthkit-hydro@main') || 'earthkit-hydro:ecmwf/earthkit-hydro@develop' }}
           ${{ needs.setup.outputs.earthkit-transforms || (needs.setup.outputs.use_master == 'True' && 'earthkit-transforms:ecmwf/earthkit-transforms@main') || 'earthkit-transforms:ecmwf/earthkit-transforms@main' }}
           ${{ needs.setup.outputs.earthkit-plots || (needs.setup.outputs.use_master == 'True' && 'earthkit-plots:ecmwf/earthkit-plots@main') || 'earthkit-plots:ecmwf/earthkit-plots@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,test,ci
   earthkit-data:
     name: earthkit-data
@@ -1104,7 +1104,7 @@ jobs:
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
           ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,test,ci
   earthkit-geo:
     name: earthkit-geo
@@ -1163,7 +1163,7 @@ jobs:
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
           ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,test,ci
   earthkit-meteo:
     name: earthkit-meteo
@@ -1219,7 +1219,7 @@ jobs:
           ${{ needs.setup.outputs.pdbufr || (needs.setup.outputs.use_master == 'True' && 'pdbufr:ecmwf/pdbufr@master') || 'pdbufr:ecmwf/pdbufr@develop' }}
           ${{ needs.setup.outputs.pyodc || (needs.setup.outputs.use_master == 'True' && 'pyodc:ecmwf/pyodc@master') || 'pyodc:ecmwf/pyodc@develop' }}
           ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,test,ci
   earthkit-plots:
     name: earthkit-plots
@@ -1279,7 +1279,7 @@ jobs:
           ${{ needs.setup.outputs.pyfdb || (needs.setup.outputs.use_master == 'True' && 'pyfdb:ecmwf/pyfdb@master') || 'pyfdb:ecmwf/pyfdb@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
           ${{ needs.setup.outputs.earthkit-geo || (needs.setup.outputs.use_master == 'True' && 'earthkit-geo:ecmwf/earthkit-geo@main') || 'earthkit-geo:ecmwf/earthkit-geo@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: healpix,test
   earthkit-time:
     name: earthkit-time
@@ -1305,7 +1305,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   earthkit-transforms:
     name: earthkit-transforms
     needs:
@@ -1334,7 +1334,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all
   earthkit-utils:
     name: earthkit-utils
@@ -1360,7 +1360,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,test,ci
   earthkit-hydro:
     name: earthkit-hydro
@@ -1391,7 +1391,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
         conda_deps: rust
   anemoi-datasets:
@@ -1422,7 +1422,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   anemoi-utils:
     name: anemoi-utils
@@ -1448,7 +1448,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   anemoi-transform:
     name: anemoi-transform
@@ -1474,7 +1474,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   anemoi-graphs:
     name: anemoi-graphs
@@ -1506,7 +1506,7 @@ jobs:
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   anemoi-models:
     name: anemoi-models
@@ -1540,7 +1540,7 @@ jobs:
           ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   anemoi-training:
     name: anemoi-training
@@ -1576,7 +1576,7 @@ jobs:
           ${{ needs.setup.outputs.anemoi-graphs || (needs.setup.outputs.use_master == 'True' && 'anemoi-graphs:ecmwf/anemoi-core/graphs@main') || 'anemoi-graphs:ecmwf/anemoi-core/graphs@main' }}
           ${{ needs.setup.outputs.anemoi-datasets || (needs.setup.outputs.use_master == 'True' && 'anemoi-datasets:ecmwf/anemoi-datasets@main') || 'anemoi-datasets:ecmwf/anemoi-datasets@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   anemoi-inference:
     name: anemoi-inference
@@ -1606,7 +1606,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
           ${{ needs.setup.outputs.anemoi-transform || (needs.setup.outputs.use_master == 'True' && 'anemoi-transform:ecmwf/anemoi-transform@main') || 'anemoi-transform:ecmwf/anemoi-transform@main' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   anemoi-plugins:
     name: anemoi-plugins
@@ -1633,7 +1633,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ${{ needs.setup.outputs.anemoi-utils || (needs.setup.outputs.use_master == 'True' && 'anemoi-utils:ecmwf/anemoi-utils@main') || 'anemoi-utils:ecmwf/anemoi-utils@main' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: all,tests
   conflator:
     name: conflator
@@ -1659,7 +1659,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   earthkit-workflows:
     name: earthkit-workflows
     needs:
@@ -1688,7 +1688,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.earthkit-data || (needs.setup.outputs.use_master == 'True' && 'earthkit-data:ecmwf/earthkit-data@main') || 'earthkit-data:ecmwf/earthkit-data@develop' }}
           ${{ needs.setup.outputs.earthkit-utils || (needs.setup.outputs.use_master == 'True' && 'earthkit-utils:ecmwf/earthkit-utils@main') || 'earthkit-utils:ecmwf/earthkit-utils@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: tests
   ecbuild:
     name: ecbuild
@@ -1714,7 +1714,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   eccodes:
     name: eccodes
     needs:
@@ -1740,7 +1740,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   eccodes-python:
     name: eccodes-python
     needs:
@@ -1771,7 +1771,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-        dev_runner: true
+        dev-runner: true
   ecflow:
     name: ecflow
     needs:
@@ -1797,7 +1797,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   ecflow-light:
     name: ecflow-light
     needs:
@@ -1826,7 +1826,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   eckit:
     name: eckit
     needs:
@@ -1852,7 +1852,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   fckit:
     name: fckit
     needs:
@@ -1881,7 +1881,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   fdb:
     name: fdb
     needs:
@@ -1916,7 +1916,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   polytope:
     name: polytope
     needs:
@@ -1962,7 +1962,7 @@ jobs:
           ${{ needs.setup.outputs.pygribjump || (needs.setup.outputs.use_master == 'True' && 'pygribjump:ecmwf/gribjump@master') || 'pygribjump:ecmwf/gribjump@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
           ${{ needs.setup.outputs.conflator || (needs.setup.outputs.use_master == 'True' && 'conflator:ecmwf/conflator@main') || 'conflator:ecmwf/conflator@main' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: tests
         conda_deps: rust
   qubed:
@@ -1990,7 +1990,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: dev
         conda_deps: rust
   findlibs:
@@ -2017,7 +2017,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
         python_requirements: tests/downstream-ci-requirements.txt
   gribjump:
     name: gribjump
@@ -2055,7 +2055,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   pygribjump:
     name: pygribjump
     needs:
@@ -2095,7 +2095,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
         python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_toml_opt_dep_sections: dev
   hyve:
     name: hyve
@@ -2121,7 +2121,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   infero:
     name: infero
     needs:
@@ -2152,7 +2152,7 @@ jobs:
           ${{ needs.setup.outputs.ecbuild }}
           ${{ needs.setup.outputs.fckit }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   kronos:
     name: kronos
     needs:
@@ -2178,7 +2178,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   metkit:
     name: metkit
     needs:
@@ -2211,7 +2211,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   mir:
     name: mir
     needs:
@@ -2246,7 +2246,7 @@ jobs:
           ${{ needs.setup.outputs.fckit }}
           ${{ needs.setup.outputs.eccodes }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   multio:
     name: multio
     needs:
@@ -2291,7 +2291,7 @@ jobs:
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.mir }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   pymultio:
     name: pymultio
     needs:
@@ -2339,7 +2339,7 @@ jobs:
           ${{ needs.setup.outputs.odc }}
           ${{ needs.setup.outputs.mir }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   multiurl:
     name: multiurl
     needs:
@@ -2364,7 +2364,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   odc:
     name: odc
     needs:
@@ -2393,7 +2393,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   pdbufr:
     name: pdbufr
     needs:
@@ -2426,7 +2426,7 @@ jobs:
         python_dependencies: |-
           ${{ needs.setup.outputs.eccodes-python || (needs.setup.outputs.use_master == 'True' && 'eccodes-python:ecmwf/eccodes-python@master') || 'eccodes-python:ecmwf/eccodes-python@develop' }}
           ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-        dev_runner: true
+        dev-runner: true
         python_requirements: tests/downstream-ci-requirements.txt
   plume:
     name: plume
@@ -2460,7 +2460,7 @@ jobs:
           ${{ needs.setup.outputs.atlas }}
           ${{ needs.setup.outputs.fckit }}
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   plume-plugin-extreme-events:
     name: plume-plugin-extreme-events
     needs:
@@ -2485,7 +2485,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   plume-plugin-wind-farm:
     name: plume-plugin-wind-farm
     needs:
@@ -2510,7 +2510,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   plume-plugin-axe:
     name: plume-plugin-axe
     needs:
@@ -2535,7 +2535,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   pyfdb:
     name: pyfdb
     needs:
@@ -2573,7 +2573,7 @@ jobs:
           ${{ needs.setup.outputs.eccodes }}
           ${{ needs.setup.outputs.odc }}
         python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-        dev_runner: true
+        dev-runner: true
   pyodc:
     name: pyodc
     needs:
@@ -2605,7 +2605,7 @@ jobs:
           ${{ needs.setup.outputs.eckit }}
           ${{ needs.setup.outputs.ecbuild }}
         python_dependencies: ${{ needs.setup.outputs.findlibs || (needs.setup.outputs.use_master == 'True' && 'findlibs:ecmwf/findlibs@main') || 'findlibs:ecmwf/findlibs@develop' }}
-        dev_runner: true
+        dev-runner: true
   skinnywms:
     name: skinnywms
     needs:
@@ -2630,7 +2630,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   thermofeel:
     name: thermofeel
     needs:
@@ -2655,7 +2655,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   troika:
     name: troika
     needs:
@@ -2680,7 +2680,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   covjsonkit:
     name: covjsonkit
     needs:
@@ -2705,7 +2705,7 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
   danu:
     name: danu
     needs:
@@ -2730,6 +2730,6 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        dev_runner: true
+        dev-runner: true
         python_requirements: requirements.txt
         conda_deps: '''numpy<2.4'' scipy pcraster=4.4.2 libjxl=0.11 gdal libnetcdf ''netcdf4<=1.7.2'' magics rasterio bottleneck pyproj numba'
