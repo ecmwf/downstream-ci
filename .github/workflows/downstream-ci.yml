@@ -607,7 +607,7 @@ jobs:
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.eckit-cd-test }}
             optional_matrix:
-            - lumi
+            - lumi-gnu-12.2.0
           fckit:ecmwf/fckit:
             path: .github/ci-config.yml
             python: false
