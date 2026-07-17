@@ -606,7 +606,8 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.eckit-cd-test }}
-            optional_matrix: null
+            optional_matrix:
+            - lumi
           fckit:ecmwf/fckit:
             path: .github/ci-config.yml
             python: false
