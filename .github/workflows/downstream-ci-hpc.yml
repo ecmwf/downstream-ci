@@ -830,7 +830,7 @@ jobs:
             compiler_cc: gcc
             compiler_cxx: g++
             compiler_fc: gfortran
-            compiler_modules: LUMI/23.09,cpeGNU/23.09
+            compiler_modules: LUMI/25.09,cpeGNU/25.09
             name: lumi-gnu-12.2.0
             site: lumi
           - compiler: gnu-14.2.0
