@@ -310,6 +310,8 @@ ecflow-light:
 
 eckit-cd-test:
   type: cmake
+  optional_matrix:
+  - lumi
   deps:
   - ecbuild
 
