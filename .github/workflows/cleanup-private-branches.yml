@@ -1,0 +1,33 @@
+name: Cleanup private-downstream-ci branch
+
+on: delete
+
+jobs:
+  cleanup:
+    if: github.event.ref_type == 'branch' && github.event.ref != 'main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: private-downstream-ci-mirror-${{ github.event.ref }}
+      cancel-in-progress: true
+    steps:
+    - name: Delete matching branch in private-downstream-ci
+      env:
+        GH_TOKEN: ${{ secrets.REBUILD_PUSH_TOKEN }}
+        DELETED_REF: ${{ github.event.ref }}
+      run: |
+        if [[ "$DELETED_REF" == "main" ]]; then
+          echo "Refusing to delete the main mirror branch." >&2
+          exit 1
+        fi
+
+        encoded_ref="$(jq -rn --arg ref "heads/$DELETED_REF" '$ref | @uri | gsub("%2F"; "/")')"
+        expected_ref="refs/heads/$DELETED_REF"
+        api_base="repos/ecmwf/private-downstream-ci/git"
+
+        matching_refs="$(gh api "$api_base/matching-refs/$encoded_ref")"
+
+        if jq -e --arg ref "$expected_ref" 'any(.[]; .ref == $ref)' <<<"$matching_refs" >/dev/null; then
+          gh api --method DELETE "$api_base/refs/$encoded_ref"
+        else
+          echo "Mirror branch is already absent: $expected_ref"
+        fi
