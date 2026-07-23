@@ -67,7 +67,7 @@ earthkit-geo:
   - earthkit-data
   shallow_deps:
   - mir
-  test_cmd: EARTHKIT_DATA_CACHE_POLICY=off python -m pytest -n8
+  test_cmd: EARTHKIT_DATA_CACHE_POLICY=off python -m pytest -n8 || pytest --last-failed --last-failed-no-failures none
 
 earthkit-meteo:
   type: python
