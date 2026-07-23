@@ -67,6 +67,8 @@ earthkit-geo:
   - earthkit-data
   shallow_deps:
   - mir
+  downstream-ci:
+    test_cmd: python -m pytest -n8
 
 earthkit-meteo:
   type: python
