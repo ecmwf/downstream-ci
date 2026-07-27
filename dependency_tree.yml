@@ -492,6 +492,7 @@ mir:
   - eckit
   - atlas
   - eccodes
+  - metkit
 
 multio:
   type: cmake
