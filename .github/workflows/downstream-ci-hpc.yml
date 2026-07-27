@@ -2181,8 +2181,10 @@ jobs:
     - atlas
     - fckit
     - eccodes
+    - metkit
+    - odc
     - setup
-    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.mir_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.eccodes || needs.setup.outputs.mir)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'mir') }}
+    if: ${{ (always() && !cancelled()) && contains(join(needs.*.result, ','), 'success') && needs.setup.outputs.mir_matrix && (needs.setup.outputs.eckit || needs.setup.outputs.ecbuild || needs.setup.outputs.atlas || needs.setup.outputs.fckit || needs.setup.outputs.eccodes || needs.setup.outputs.metkit || needs.setup.outputs.odc || needs.setup.outputs.mir)&& contains(fromJson(needs.setup.outputs.ci_group_pkgs), 'mir') }}
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.mir_matrix) }}
@@ -2206,6 +2208,8 @@ jobs:
           ${{ needs.setup.outputs.atlas }}
           ${{ needs.setup.outputs.fckit }}
           ${{ needs.setup.outputs.eccodes }}
+          ${{ needs.setup.outputs.metkit }}
+          ${{ needs.setup.outputs.odc }}
         python_dependencies: ''
   multio:
     name: multio
