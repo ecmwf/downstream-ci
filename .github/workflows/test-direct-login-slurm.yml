@@ -1,0 +1,91 @@
+# Manual test workflow for the new `direct` site type in build-package-hpc
+# (sites `hpc-login` / `lumi-login`, branch `enable_login_direct`).
+#
+# Unlike the `slurm` sites, a `direct` site makes Troika run the job script
+# *directly on the login node* instead of wrapping it in `sbatch`. This is
+# exactly where you would call `sbatch` yourself, so here we land a single
+# generic job on `hpc-login` and have it submit two SLURM batch scripts.
+#
+# This file is hand-written (NOT produced by generate-workflows.py).
+name: test-direct-login-slurm
+
+'on':
+  workflow_dispatch:
+  push:
+    branches:
+    - test-direct-login-slurm
+
+jobs:
+  submit-two-slurm-scripts:
+    name: Submit two SLURM scripts from hpc-login
+    # Use the `hpc-dev` runner: it carries the dev build-package-hpc that
+    # tracks feature branches (here `enable_login_direct`), which is the only
+    # version that knows the new `direct` sites (`hpc-login`/`lumi-login`).
+    # The stable `hpc` runner rejects `--site=hpc-login`.
+    runs-on:
+    - self-hosted
+    - linux
+    - hpc-dev
+    steps:
+    - name: Submit two SLURM scripts via the direct login node
+      uses: ecmwf/reusable-workflows/ci-hpc-generic@v2
+      with:
+        troika_user: ${{ secrets.HPC_TEST_USER }}
+        # New `direct` site type: the job below runs directly on the login
+        # node, so it can drive `sbatch` itself. Leave sbatch_options unset
+        # so no SBATCH directives are attached to this wrapper job.
+        site: hpc-login
+        workdir: $SCRATCH
+        template: |
+          echo "Running on the login node: $(hostname)"
+
+          # --- Write the two SLURM batch scripts ------------------------------
+          cat > slurm_job_1.sh <<'SLURM1'
+          #!/bin/bash
+          #SBATCH --job-name=downstream-direct-1
+          #SBATCH --qos=nf
+          #SBATCH --time=00:05:00
+          #SBATCH --ntasks=1
+          #SBATCH --mem=1G
+          #SBATCH --output=slurm_job_1.%j.out
+          set -ex
+          echo "Hello from SLURM job 1 on $(hostname)"
+          srun hostname
+          SLURM1
+
+          cat > slurm_job_2.sh <<'SLURM2'
+          #!/bin/bash
+          #SBATCH --job-name=downstream-direct-2
+          #SBATCH --qos=nf
+          #SBATCH --time=00:05:00
+          #SBATCH --ntasks=1
+          #SBATCH --mem=1G
+          #SBATCH --output=slurm_job_2.%j.out
+          set -ex
+          echo "Hello from SLURM job 2 on $(hostname)"
+          srun hostname
+          SLURM2
+
+          # --- Submit both via SLURM and block until they finish --------------
+          # `sbatch --wait` returns the job's exit code, so the CI step fails
+          # if either SLURM job fails. Run them concurrently.
+          echo "Submitting slurm_job_1.sh and slurm_job_2.sh via sbatch --wait"
+          sbatch --wait slurm_job_1.sh &
+          PID1=$!
+          sbatch --wait slurm_job_2.sh &
+          PID2=$!
+
+          RC=0
+          wait $PID1 || RC=1
+          wait $PID2 || RC=1
+
+          echo "==== slurm_job_1 output ===="
+          cat slurm_job_1.*.out || true
+          echo "==== slurm_job_2 output ===="
+          cat slurm_job_2.*.out || true
+
+          if [ "$RC" -ne 0 ]; then
+            echo "One or more SLURM jobs failed"
+            exit 1
+          fi
+          echo "Both SLURM jobs completed successfully"
