@@ -74,7 +74,7 @@ downstream-ci: &downstream_ci
     name:
     - gnu@debian-12
     - gnu@rocky-9.5
-    - clang@macos-13-arm
+    - clang@macos-26-arm
     - clang@macos-13-x86
     include:
     - name: gnu@debian-12
@@ -91,8 +91,8 @@ downstream-ci: &downstream_ci
       compiler_cc: gcc
       compiler_cxx: g++
       compiler_fc: gfortran
-    - name: clang@macos-13-arm
-      labels: [self-hosted, platform-builder-macosx-13.4.1-arm64]
+    - name: clang@macos-26-arm
+      labels: [self-hosted, platform-builder-MacOSX-26.6.1-arm64]
       os: macos-13-arm
       compiler: clang
       compiler_cc: clang
