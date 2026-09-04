@@ -270,6 +270,8 @@ ecbuild:
 
 eccodes:
   type: cmake
+  shallow_deps:
+  - eckit
   downstream-ci-hpc:
     modules:
     - aec/1.1.4
