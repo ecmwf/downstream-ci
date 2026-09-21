@@ -587,8 +587,7 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.eckit-cd-test }}
-            optional_matrix:
-            - lumi-gnu-12.2.0
+            optional_matrix: null
           fckit:ecmwf/fckit:
             path: .github/ci-hpc-config.yml
             python: false
@@ -876,7 +875,7 @@ jobs:
             name: aocc-4.0.0
             site: atos
           name:
-          - lumi-gnu-12.2.0
+          - lumi
           - gnu-14.2.0
           - gnu-15.2.0
           - nvidia-24.11
@@ -1815,7 +1814,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc-dev
+    - hpc
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:
