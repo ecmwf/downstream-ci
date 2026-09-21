@@ -378,7 +378,7 @@ jobs:
       uses: actions/checkout@v7
       with:
         repository: ecmwf/downstream-ci
-        ref: eckit-cd-test
+        ref: test/fail-on-ssh-error
     - name: Run setup script
       id: setup
       env:
@@ -587,7 +587,8 @@ jobs:
             master_branch: master
             develop_branch: develop
             input: ${{ steps.prepare-inputs.outputs.eckit-cd-test }}
-            optional_matrix: null
+            optional_matrix:
+            - lumi-gnu-12.2.0
           fckit:ecmwf/fckit:
             path: .github/ci-hpc-config.yml
             python: false
@@ -875,7 +876,7 @@ jobs:
             name: aocc-4.0.0
             site: atos
           name:
-          - lumi
+          - lumi-gnu-12.2.0
           - gnu-14.2.0
           - gnu-15.2.0
           - nvidia-24.11
@@ -1814,7 +1815,7 @@ jobs:
     runs-on:
     - self-hosted
     - linux
-    - hpc
+    - hpc-dev
     steps:
     - uses: ecmwf/reusable-workflows/ci-hpc@v2
       with:

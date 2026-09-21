@@ -14,3 +14,7 @@ core:
 - fckit
 - atlas
 - mir
+
+# Temporary: build-package-hpc PR #107 (fail_on_ssh_error) test
+fail-on-ssh-error-test:
+- eckit-cd-test
