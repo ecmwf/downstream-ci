@@ -161,6 +161,8 @@ anemoi-utils:
   master_branch: main
   develop_branch: main
   toml_opt_dep_sections: all,tests
+  deps:
+  - pymetkit
   downstream-ci:
     config_path: ""
     test_cmd: |
