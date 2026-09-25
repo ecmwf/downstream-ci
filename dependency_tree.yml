@@ -162,7 +162,7 @@ anemoi-utils:
   develop_branch: main
   toml_opt_dep_sections: all,tests
   deps:
-  - pymetkit
+  - metkit
   downstream-ci:
     config_path: ""
     test_cmd: |
