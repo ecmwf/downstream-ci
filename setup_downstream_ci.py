@@ -114,6 +114,7 @@ def get_ci_group_pkgs(ci_group: str, dep_tree: dict) -> list[str]:
     # "all" -> all packages
     # "all_python" -> all python packages
     # "all_cmake" -> all cmake packages
+    # "only-self" -> only the triggering packages
 
     if ci_group == "all":
         return list(dep_tree.keys())
@@ -121,6 +122,8 @@ def get_ci_group_pkgs(ci_group: str, dep_tree: dict) -> list[str]:
         return [k for k, v in dep_tree.items() if v.get("type", "") == "python"]
     if ci_group == "all_cmake":
         return [k for k, v in dep_tree.items() if v.get("type", "") == "cmake"]
+    if ci_group == "only-self":
+        return trigger_pkgs
 
     with open("ci-groups.yml", "r") as f:
         ci_groups = yaml.safe_load(f)
