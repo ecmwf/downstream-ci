@@ -575,6 +575,7 @@ class Workflow:
                 "OPTIONAL_MATRIX": yaml.dump(wf_config["optional_matrix"], indent=2, default_flow_style=False),
                 "WORKFLOW_NAME": wf_name,
                 "DOWNSTREAM_CI_GROUP": "${{ inputs.ci_group }}",
+                "DISPATCH_REF_NAME": "${{ github.event.workflow_run.head_branch }}",
             },
             "run": "python setup_downstream_ci.py",
         }

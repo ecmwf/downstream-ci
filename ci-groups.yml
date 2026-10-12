@@ -5,6 +5,7 @@
 all:   # magic group name, matches all packages
 all_python:   # magic group name, matches all python packages
 all_cmake:   # magic group name, matches all cmake packages
+only-self:   # magic group name, matches only the triggering packages
 
 core:
 - eccodes
