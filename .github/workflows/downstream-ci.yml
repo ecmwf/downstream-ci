@@ -397,7 +397,7 @@ jobs:
       uses: actions/checkout@v7
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: remove-debian-11
     - name: Run setup script
       id: setup
       env:
@@ -815,15 +815,6 @@ jobs:
             compiler_fc: gfortran
             labels:
             - self-hosted
-            - platform-builder-debian-11
-            name: gnu@debian-11
-            os: debian-11
-          - compiler: gnu
-            compiler_cc: gcc
-            compiler_cxx: g++
-            compiler_fc: gfortran
-            labels:
-            - self-hosted
             - platform-builder-rocky-8.6
             name: gnu@rocky-8.6
             os: rocky-8.6
@@ -856,7 +847,6 @@ jobs:
             name: gnu@fedora-37
             os: fedora-37
           name:
-          - gnu@debian-11
           - gnu@rocky-8.6
           - clang@rocky-8.6
           - gnu@ubuntu-22.04
