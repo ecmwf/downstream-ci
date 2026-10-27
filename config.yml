@@ -12,7 +12,7 @@ downstream-ci: &downstream_ci
   - "3.11"
   matrix:
     name:
-    - gnu@debian-11
+      # - gnu@debian-11
       # - gnu-7@centos-7.9
       # - gnu-8@centos-7.9
     - gnu@rocky-8.6
@@ -20,13 +20,13 @@ downstream-ci: &downstream_ci
     - gnu@ubuntu-22.04
     - gnu@fedora-37
     include:
-    - name: gnu@debian-11
-      labels: [self-hosted, platform-builder-debian-11]
-      os: debian-11
-      compiler: gnu
-      compiler_cc: gcc
-      compiler_cxx: g++
-      compiler_fc: gfortran
+      # - name: gnu@debian-11
+      #   labels: [self-hosted, platform-builder-debian-11]
+      #   os: debian-11
+      #   compiler: gnu
+      #   compiler_cc: gcc
+      #   compiler_cxx: g++
+      #   compiler_fc: gfortran
       # - name: gnu-7@centos-7.9
       #   labels: [self-hosted, platform-builder-centos-7.9]
       #   os: centos-7.9
