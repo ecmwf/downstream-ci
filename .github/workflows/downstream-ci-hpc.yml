@@ -378,7 +378,7 @@ jobs:
       uses: actions/checkout@v7
       with:
         repository: ecmwf/downstream-ci
-        ref: main
+        ref: feat/conda-env-file
     - name: Run setup script
       id: setup
       env:
@@ -2685,5 +2685,4 @@ jobs:
         build_config: ${{ matrix.config_path }}
         dependencies: ''
         python_dependencies: ''
-        python_requirements: requirements.txt
-        conda_deps: '''numpy<2.4'' scipy pcraster=4.4.2 libjxl=0.11 gdal libnetcdf ''netcdf4<=1.7.2'' magics rasterio bottleneck pyproj numba'
+        conda_env_file: environment-linux-64.yml

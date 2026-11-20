@@ -18,3 +18,5 @@ Alternatively see one of the repositories which is already in the downstream CI.
 ## Dependency tree
 
 Defines dependencies for each package to allow efficient caching. It's used to create the cache key by build-package and build-package-hpc to allow efficient caching.
+
+Python packages can set `conda_deps_path` to the path of a conda environment file in the package repository (e.g. `environment.yml`). The conda environment is then created from that file, including the Python version, and is passed to `ci-python` and `ci-hpc` as `conda_env_file`. Packages listed in `conda_deps` are installed on top.

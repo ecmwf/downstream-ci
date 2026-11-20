@@ -342,6 +342,10 @@ class Workflow:
                 str,
                 get_required_package_var("conda_deps", dep_tree, package, self.name, ""),
             )
+            conda_deps_path = ensure_type(
+                str,
+                get_required_package_var("conda_deps_path", dep_tree, package, self.name, ""),
+            )
             build_package_python = ensure_type(
                 list[str],
                 get_required_package_var("build-package-python", dep_tree, package, self.name, []),
@@ -415,6 +419,8 @@ class Workflow:
                             ci_python_step["with"]["upload_extra_artifact"] = upload_extra_artifact
                         if conda_deps:
                             ci_python_step["with"]["conda_install"] = conda_deps
+                        if conda_deps_path:
+                            ci_python_step["with"]["conda_env_file"] = conda_deps_path
                         if not self.private:
                             ci_python_step["with"]["codecov_upload"] = (
                                 "${{ contains(needs.setup.outputs.trigger_pkgs, "
@@ -445,6 +451,8 @@ class Workflow:
                             ci_python_step["with"]["test_cmd"] = test_cmd
                         if conda_deps:
                             ci_python_step["with"]["conda_install"] = conda_deps
+                        if conda_deps_path:
+                            ci_python_step["with"]["conda_env_file"] = conda_deps_path
                         if not self.private:
                             ci_python_step["with"]["codecov_upload"] = (
                                 "${{ contains(needs.setup.outputs.trigger_pkgs, "
@@ -482,6 +490,8 @@ class Workflow:
                     s["with"]["python_toml_opt_dep_sections"] = pkg_conf.get("toml_opt_dep_sections")
                 if conda_deps:
                     s["with"]["conda_deps"] = conda_deps
+                if conda_deps_path:
+                    s["with"]["conda_env_file"] = conda_deps_path
                 steps.append(s)
             self.add_job(Job(package, needs, condition, strategy, env, runs_on, steps))
 
